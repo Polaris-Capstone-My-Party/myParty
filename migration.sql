@@ -84,9 +84,6 @@ CREATE TABLE tags(
                      PRIMARY KEY (id)
 );
 
-
-
-
 CREATE TABLE party_tags(
                           party_id INT UNSIGNED,
                           tag_id INT UNSIGNED,
