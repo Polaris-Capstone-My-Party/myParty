@@ -71,11 +71,14 @@ CREATE TABLE party_items(
 );
 
 CREATE TABLE party_members(
+                              id INT UNSIGNED NOT NULL AUTO_INCREMENT,
                               party_id INT UNSIGNED,
                               member_id INT UNSIGNED,
                               rsvp_status VARCHAR(240) NOT NULL,
                               FOREIGN KEY (party_id) REFERENCES parties(id),
-                              FOREIGN KEY (member_id) REFERENCES members(id)
+                              FOREIGN KEY (member_id) REFERENCES members(id),
+                              PRIMARY KEY (id)
+
 );
 
 CREATE TABLE tags(
