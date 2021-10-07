@@ -1,37 +1,39 @@
 package com.myParty.models;
 
+import lombok.*;
 import javax.persistence.*;
 import java.lang.reflect.Member;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "parties")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Party {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Getter @Setter private Long id;
 
     @Column(nullable = false)
-    private String title;
+    @Getter @Setter private String title;
 
     @Column(nullable = false, columnDefinition = "TEXT")
-    private String description;
+    @Getter @Setter private String description;
 
     @Column(nullable = false)
-    private Timestamp start_time;
+    @Getter @Setter private Timestamp start_time;
 
     @Column(nullable = false)
-    private Timestamp end_time;
+    @Getter @Setter private Timestamp end_time;
 
     @Column(nullable = false)
-    private String url_key;
+    @Getter @Setter private String url_key;
 
     @ManyToOne
     @JoinColumn (name = "member_id")
-    private Member owner;
+    @Getter @Setter private Member owner;
 
     @OneToOne
     @JoinColumn(name = "location_id")
-    private Location location;
-
+    @Getter @Setter private Location location;
 }

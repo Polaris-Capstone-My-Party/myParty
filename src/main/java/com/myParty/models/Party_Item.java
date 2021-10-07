@@ -1,35 +1,41 @@
 package com.myParty.models;
 
+import lombok.*;
 import javax.persistence.*;
 
 @Entity
 @Table(name = "party_items")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Party_Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Getter @Setter private Long id;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String name;
+    @Column(nullable = false)
+    @Getter @Setter private String name;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private Integer quantity;
+    @Column(nullable = false)
+    @Getter @Setter private Integer quantity;
 
     @ManyToOne
     @JoinColumn(name = "party_id")
-    private Party party;
+    @Getter @Setter private Party party;
 
     @ManyToOne
     @JoinColumn(name = "guest_id")
-    private Guest guest;
+    @Getter @Setter private Guest guest;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
-    private Member member;
+    @Getter @Setter private Member member;
 
     @ManyToOne
     @JoinColumn(name = "item_id")
-    private Item item;
+    @Getter @Setter private Item item;
+
+
+
 
 }
