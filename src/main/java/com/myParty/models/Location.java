@@ -7,12 +7,13 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-public class location {
+@Entity
+@Table(name="locations")
+@NoArgsConstructor
+@AllArgsConstructor
 
-    @Entity
-    @Table(name="locations")
-    @NoArgsConstructor
-    @AllArgsConstructor
+
+public class Location {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
