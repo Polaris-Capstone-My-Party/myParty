@@ -14,7 +14,7 @@ public class Item {
     @Getter @Setter
     private Long id;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false)
     private String name;
 
 }

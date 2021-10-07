@@ -35,7 +35,4 @@ public class Party_Item {
     @JoinColumn(name = "item_id")
     @Getter @Setter private Item item;
 
-
-
-
 }
