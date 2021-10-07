@@ -1,4 +1,4 @@
-package com.myParty;
+package com.myParty.models;
 
 import lombok.*;
 
