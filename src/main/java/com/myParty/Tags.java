@@ -1,18 +1,20 @@
 package com.myParty;
 
-import javax.persistence.*;
+import lombok.*;
 
+import javax.persistence.*;
 
 @Entity
 @Table(name="tags")
+@NoArgsConstructor
 public class Tags {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @Getter @Setter private long id;
 
     @Column(nullable = false)
-    private String name;
+    @Getter @Setter private String name;
 
     @ManyToMany(mappedBy = "tags")
-    private List<Party> parties;
+    @Getter @Setter private List<Party> parties;
 }
