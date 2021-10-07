@@ -45,7 +45,7 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
-</dependencies>
+    </dependencies>
 
     <build>
         <plugins>

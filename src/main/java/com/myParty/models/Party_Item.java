@@ -14,9 +14,6 @@ public class Party_Item {
     @Getter @Setter private Long id;
 
     @Column(nullable = false)
-    @Getter @Setter private String name;
-
-    @Column(nullable = false)
     @Getter @Setter private Integer quantity;
 
     @ManyToOne
@@ -35,4 +32,10 @@ public class Party_Item {
     @JoinColumn(name = "item_id")
     @Getter @Setter private Item item;
 
+//    //example of how to call this when doing this stuff later
+//    public static void main(String[] args) {
+//        Party_Item party_item = new Party_Item(
+//                null, 30L, 12, null, etc. basically anything we dont know refer to as null
+//        );
+//    }
 }

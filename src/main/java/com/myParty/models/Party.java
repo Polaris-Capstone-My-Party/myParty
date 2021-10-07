@@ -2,7 +2,6 @@ package com.myParty.models;
 
 import lombok.*;
 import javax.persistence.*;
-import java.lang.reflect.Member;
 import java.sql.Timestamp;
 
 @Entity
