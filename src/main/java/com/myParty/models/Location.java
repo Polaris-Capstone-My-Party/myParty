@@ -22,7 +22,7 @@ public class Location {
     @Column(nullable = false)
     @Getter @Setter private String address_one;
 
-    @Column(nullable = false)
+    @Column
     @Getter @Setter private String address_two;
 
     @Column(nullable = false)
