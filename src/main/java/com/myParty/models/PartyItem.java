@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Table(name = "party_items")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Party_Item {
+public class PartyItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +19,7 @@ public class Party_Item {
     @ManyToOne
     @JoinColumn(name = "party_id")
     @Getter @Setter private Party party;
+    //party item id
 
     @ManyToOne
     @JoinColumn(name = "guest_id")

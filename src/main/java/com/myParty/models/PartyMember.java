@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Table(name = "party_members")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Party_Member {
+public class PartyMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter @Setter private Long id;

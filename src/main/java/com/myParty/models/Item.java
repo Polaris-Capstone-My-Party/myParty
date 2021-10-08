@@ -15,6 +15,6 @@ public class Item {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    @Getter @Setter private String name;
 
 }
