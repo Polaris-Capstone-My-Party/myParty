@@ -28,7 +28,7 @@ public class MembersController {
 
         @GetMapping("/sign-up")
         public String showSignupForm(Model model){
-            model.addAttribute("user", new User());
+            model.addAttribute("user", new Member());
             return "user/sign-up";
         }
 
