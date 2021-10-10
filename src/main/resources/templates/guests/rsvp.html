@@ -1,48 +1,52 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Title</title>-->
+<!--</head>-->
+<!--<body>-->
 
-<h1>Complete Your RSVP!</h1>
-<div>
-    <div th:text="${party.id}">Id</div>
-    <div th:text="${party.title}"></div>
-    <div th:text="${party.description}"></div>
-    <div th:text="${party.start_time}"></div>
-    <div th:text="${party.end_time}"></div>
-    <div th:text="${party.member.first_name + ' ' + party.member.last_name}"></div>
-    <div th:text="${party.location.address_one}"></div>
+<!--<h1>Complete Your RSVP!</h1>-->
+<!--<div>-->
+<!--    <div th:text="${party.id}">Id</div>-->
+<!--    <div th:text="${party.title}"></div>-->
+<!--    <div th:text="${party.description}"></div>-->
+<!--    <div th:text="${party.start_time}"></div>-->
+<!--    <div th:text="${party.end_time}"></div>-->
+<!--    <div th:text="${party.member.first_name + ' ' + party.member.last_name}"></div>-->
+<!--    <div th:text="${party.location.address_one}"></div>-->
 
-    <!--TODO: show all items associated with party-->
-</div>
+<!--    &lt;!&ndash;TODO: show all items associated with party&ndash;&gt;-->
+<!--</div>-->
 
-<h2>Complete The Form</h2>
+<!--<h2>Complete The Form</h2>-->
 
-<form th:action="@{|/guests/rsvp|}" th:method="post" th:object="${guest}">
-    <div class="form-group">
-        <label for="firstName">First Name</label>
-        <input class="form-control" id="firstName" type="text" th:field="*{first_name}"/>
-    </div>
-    <div class="form-group">
-        <label for="lastName">Last Name</label>
-        <input class="form-control" id="lastName" type="text" th:field="*{last_name}"/>
-    </div>
-    <div class="form-group">
-        <label for="email">Email</label>
-        <input class="form-control" id="email" th:field="*{email}"/>
-    </div>
-    <!-- TODO rsvp?-->
+<!--<form th:action="@{|/guests/rsvp|}" th:method="post" th:object="${guest}">-->
 <!--    <div class="form-group">-->
-<!--        <label for="rsvp">RSVP</label>-->
-<!--        <input class="form-control" id="rsvp" th:field="*{rsvp_status}"/>-->
+<!--        <label for="firstName">First Name</label>-->
+<!--        <input class="form-control" id="firstName" type="text" th:field="*{first_name}"/>-->
 <!--    </div>-->
-<!--    TODO: How to attribute partyId to guest?-->
+<!--    <div class="form-group">-->
+<!--        <label for="lastName">Last Name</label>-->
+<!--        <input class="form-control" id="lastName" type="text" th:field="*{last_name}"/>-->
+<!--    </div>-->
+<!--    <div class="form-group">-->
+<!--        <label for="email">Email</label>-->
+<!--        <input class="form-control" id="email" th:field="*{email}"/>-->
+<!--    </div>-->
+<!--    &lt;!&ndash; TODO how to link rsvp enum&ndash;&gt;-->
+<!--&lt;!&ndash;    <div class="form-group">&ndash;&gt;-->
+<!--&lt;!&ndash;        <label for="rsvp">RSVP</label>&ndash;&gt;-->
+<!--&lt;!&ndash;        <input class="form-control" id="rsvp" th:field="*{rsvp_status}"/>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
 
-    <button class="btn btn-success">Submit</button>
-</form>
 
-</body>
-</html>
+<!--&lt;!&ndash;    TODO: How to attribute partyId to guest?&ndash;&gt;-->
+
+<!--&lt;!&ndash;    TODO: How to link party item sign up&ndash;&gt;-->
+
+<!--    <button class="btn btn-success">Submit</button>-->
+<!--</form>-->
+
+<!--</body>-->
+<!--</html>-->
