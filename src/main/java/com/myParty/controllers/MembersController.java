@@ -3,7 +3,6 @@ import com.myParty.models.Member;
 import com.myParty.repositories.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class MembersController {
 
-        @Autowired
+    @Autowired
         private final MemberRepository memberDao;
 
         private final PasswordEncoder passwordEncoder;
@@ -46,7 +45,7 @@ public class MembersController {
                 Model model
         ){
             Member memberToDisplay = memberDao.findByUsername(username);
-            model.addAttribute("memberr", memberToDisplay);
+            model.addAttribute("member", memberToDisplay);
 
             return "member/displayParties";
         }
@@ -65,4 +64,3 @@ public class MembersController {
         }
     }
 
-}
