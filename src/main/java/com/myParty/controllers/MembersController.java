@@ -28,40 +28,40 @@ public class MembersController {
 
         @GetMapping("/sign-up")
         public String showSignupForm(Model model){
-            model.addAttribute("user", new Member());
-            return "user/sign-up";
+            model.addAttribute("member", new Member());
+            return "member/sign-up";
         }
 
         @PostMapping("/sign-up")
-        public String saveUser(@ModelAttribute User user){
-            String hash = passwordEncoder.encode(user.getPassword());
-            user.setPassword(hash);
-            userDao.save(user);
+        public String saveUser(@ModelAttribute Member member){
+            String hash = passwordEncoder.encode(member.getPassword());
+            member.setPassword(hash);
+            memberDao.save(member);
             return "redirect:/login";
         }
 
-        @GetMapping("/user/{username}/ads")
-        public String showUserPosts(
+        @GetMapping("/member/{username}/ads")
+        public String showUserParties(
                 @PathVariable String username,
                 Model model
         ){
-            User userToDisplay = userDao.findByUsername(username);
-            model.addAttribute("user", userToDisplay);
+            Member memberToDisplay = memberDao.findByUsername(username);
+            model.addAttribute("memberr", memberToDisplay);
 
-            return "user/displayAds";
+            return "member/displayParties";
         }
 
 
-        @PostMapping("/user/create")
+        @PostMapping("/member/create")
         @ResponseBody
-        public String createUser(
+        public String createMember(
                 @RequestParam(name = "uname") String username,
                 @RequestParam(name = "psw") String password
         ) {
             System.out.println("Username" + username);
             System.out.println("Password" + password);
 
-            return "User created";
+            return "Member created";
         }
     }
 

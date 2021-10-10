@@ -1,6 +1,9 @@
 package com.myParty.repositories;
 
+import com.myParty.models.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<MemberRepository, Long> {
+
+    Member findByUsername(String username);
 }
