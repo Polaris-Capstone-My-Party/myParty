@@ -3,6 +3,7 @@ package com.myParty.models;
 import lombok.*;
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(name = "parties")
@@ -35,4 +36,14 @@ public class Party {
     @OneToOne
     @JoinColumn(name = "location_id")
     @Getter @Setter private Location location;
+
+    //added many to many
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name="parties_tags",
+            joinColumns={@JoinColumn(name="party_id")},
+            inverseJoinColumns={@JoinColumn(name="tag_id")}
+    )
+    private List<Tag> tags;
+
 }
