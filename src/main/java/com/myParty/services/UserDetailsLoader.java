@@ -1,6 +1,7 @@
 package com.myParty.services;
 
 import com.myParty.models.Member;
+import com.myParty.models.MembersWithRoles;
 import com.myParty.repositories.MemberRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,6 +23,6 @@ public class UserDetailsLoader implements UserDetailsService {
             throw new UsernameNotFoundException("No user found for " + username);
         }
 //          ASK ABOUT USERWITHROLES COMPARISON
-        return new Member(member);
+        return new MembersWithRoles(member);
     }
 }
