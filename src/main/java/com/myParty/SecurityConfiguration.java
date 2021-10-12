@@ -1,6 +1,7 @@
 package com.myParty;
 
 
+import com.myParty.services.UserDetailsLoader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,10 +13,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private UserDetailsLoader usersLoader;
+    private UserDetailsLoader membersLoader;
 
-    public SecurityConfiguration(UserDetailsLoader usersLoader) {
-        this.usersLoader = usersLoader;
+    public SecurityConfiguration(UserDetailsLoader membersLoader) {
+        this.membersLoader = membersLoader;
     }
 
     @Bean
@@ -26,7 +27,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .userDetailsService(usersLoader) // How to find users by their username
+                .userDetailsService(membersLoader) // How to find users by their username
                 .passwordEncoder(passwordEncoder()) // How to encode and verify passwords
         ;
     }
@@ -37,7 +38,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 /* Login configuration */
                 .formLogin()
                     .loginPage("/login")
-                    .defaultSuccessUrl("/posts") // user's home page, it can be any URL
+                    .defaultSuccessUrl("/posts") // user's home page, it can be any URL USER PROFILE PAGES
                     .permitAll() // Anyone can go to the login page
                 /* Logout configuration */
                 .and()
