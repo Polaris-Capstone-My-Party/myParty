@@ -12,16 +12,23 @@
   <label for="username">Username</label>
   <input id="username" th:field="*{username}" />
 
+  <label for="first_name">First Name</label>
+  <input id="first_name" type="text" th:field="*{first_name}" />
+
+  <label for="last_name">Last Name</label>
+  <input id="last_name" type="text" th:field="*{last_name}" />
+
   <label for="email">Email</label>
   <input id="email" th:field="*{email}" />
+
+
+  <label for="phone">Phone Number</label>
+  <input id="phone" type="number" th:field="*{phone}" />
 
   <label for="password">Password</label>
   <input id="password" type="password" th:field="*{password}" />
 
-  <label for="firstname">Password</label>
-  <input id="firstname" type="number" th:field="*{phone}" />
-
-  <input value="Sign me up!" type="submit" />
+  <input value="Let's Party!" type="submit" />
 </form>
 </body>
 </html>

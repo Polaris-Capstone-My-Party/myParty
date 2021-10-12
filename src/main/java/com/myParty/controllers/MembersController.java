@@ -27,6 +27,8 @@ public class MembersController {
 
     @PostMapping("/sign-up")
     public String saveMember(@ModelAttribute Member member) {
+        String hash = passwordEncoder.encode(member.getPassword());
+        member.setPassword(hash);
         memberDao.save(member);
         return "redirect:/login";
     }
