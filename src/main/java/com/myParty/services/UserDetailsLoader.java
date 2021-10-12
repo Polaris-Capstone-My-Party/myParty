@@ -22,7 +22,7 @@ public class UserDetailsLoader implements UserDetailsService {
         if (member == null) {
             throw new UsernameNotFoundException("No user found for " + username);
         }
-//          ASK ABOUT USERWITHROLES COMPARISON
+
         return new MembersWithRoles(member);
     }
 }
