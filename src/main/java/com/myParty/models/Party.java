@@ -20,10 +20,12 @@ public class Party {
     @Column(nullable = false, columnDefinition = "TEXT")
     @Getter @Setter private String description;
 
-    @Column(nullable = false)
+    //TODO: chance back to nullable false
+    @Column
     @Getter @Setter private Timestamp start_time;
 
-    @Column(nullable = false)
+    //TODO: chance back to nullable false
+    @Column
     @Getter @Setter private Timestamp end_time;
 
     @Column(nullable = false)

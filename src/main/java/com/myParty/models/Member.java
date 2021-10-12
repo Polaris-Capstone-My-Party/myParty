@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Table(name = "members")
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Member {
 
     @Id
