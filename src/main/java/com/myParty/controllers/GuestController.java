@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 @Controller
 public class GuestController {
@@ -32,9 +33,12 @@ public class GuestController {
         rsvpStatuses.add("yes");
         rsvpStatuses.add("maybe");
         rsvpStatuses.add("no");
+
         model.addAttribute("party", partyDAO.getByUrlKey(urlKey)); //gets party info for form
         model.addAttribute("guest", new Guest()); //thing to allow form to recognize new guest
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
+
+        //TODO: Show party items
         return "guests/rsvp";
     }
 
@@ -43,13 +47,30 @@ public class GuestController {
     public String createGuest(@PathVariable String urlKey, @ModelAttribute Guest guest, @RequestParam String rsvp){
         guest.setRsvpStatus(RsvpStatuses.valueOf(rsvp)); //set RSVP status enum
         guest.setParty(partyDAO.getByUrlKey(urlKey)); //sets Party linked to guest
-        //TODO: logic for guestKey
+
+        UUID uuid = UUID.randomUUID(); // creates UUID unique for given guest
+        guest.setGuestKey(uuid.toString()); //https://www.baeldung.com/java-uuid
 
         guestDAO.save(guest); //save guest information
+
         //TODO: Create New instance of Item Bringer to link guest & Items they've signed up for?
+            //make nullable, be separate part
         //TODO: Update Party Items after guests sign up for parties
+
         return "guests/successRsvp";
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
     //Shows Guest Info & Allows to Edit
     @GetMapping(path = "/rsvp/{urlKey}/{guestKey}")
@@ -60,7 +81,7 @@ public class GuestController {
         return "guests/editRsvp";
     }
 
-    //saves Guest information
+    //saves Guest edited information
     @PostMapping(path = "/rsvp/{url_key}/{guest_key}")
     public String saveEditRSVP(){
         //TODO: save updated guest info

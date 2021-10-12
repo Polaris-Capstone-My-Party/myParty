@@ -61,12 +61,8 @@ CREATE TABLE party_items(
                             quantity INT,
                             party_id INT UNSIGNED,
                             item_id INT UNSIGNED,
-                            guest_id INT UNSIGNED,
-                            member_id INT UNSIGNED,
                             FOREIGN KEY (party_id) REFERENCES parties(id),
                             FOREIGN KEY (item_id) REFERENCES items(id),
-                            FOREIGN KEY (guest_id) REFERENCES guests(id),
-                            FOREIGN KEY (member_id) REFERENCES members(id),
                             PRIMARY KEY (id)
 );
 
