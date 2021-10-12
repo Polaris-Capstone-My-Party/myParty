@@ -34,7 +34,7 @@ public class MembersController {
             return "redirect:/login";
         }
 
-        @GetMapping("/member/{username}/ads")
+        @GetMapping("/member/{username}/parties")
         public String showUserParties(
                 @PathVariable String username,
                 Model model
