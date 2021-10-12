@@ -27,7 +27,7 @@ public class MembersController {
         }
 
         @PostMapping("/sign-up")
-        public String saveUser(@ModelAttribute Member member){
+        public String saveMember(@ModelAttribute Member member){
             String hash = passwordEncoder.encode(member.getPassword());
             member.setPassword(hash);
             memberDao.save(member);
@@ -35,7 +35,7 @@ public class MembersController {
         }
 
         @GetMapping("/member/{username}/parties")
-        public String showUserParties(
+        public String showMemberParties(
                 @PathVariable String username,
                 Model model
         ){
@@ -55,7 +55,7 @@ public class MembersController {
             System.out.println("Username" + username);
             System.out.println("Password" + password);
 
-            return "Member created";
+            return "Member created. Let's party!";
         }
     }
 
