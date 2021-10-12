@@ -22,7 +22,7 @@ public class MembersController {
     @GetMapping("/sign-up")
     public String showSignupForm(Model model) {
         model.addAttribute("member", new Member());
-        return "member/sign-up";
+        return "member/signup";
     }
 
     @PostMapping("/sign-up")
@@ -43,16 +43,16 @@ public class MembersController {
     }
 
 
-    @PostMapping("/member/create")
-    @ResponseBody
-    public String createMember(
-            @RequestParam(name = "uname") String username,
-            @RequestParam(name = "psw") String password
-    ) {
-        System.out.println("Username" + username);
-        System.out.println("Password" + password);
-
-        return "Member created. Let's party!";
-    }
+//    @PostMapping("/member/create")
+//    @ResponseBody
+//    public String createMember(
+//            @RequestParam(name = "uname") String username,
+//            @RequestParam(name = "psw") String password
+//    ) {
+//        System.out.println("Username" + username);
+//        System.out.println("Password" + password);
+//
+//        return "Member created. Let's party!";
+//    }
 }
 
