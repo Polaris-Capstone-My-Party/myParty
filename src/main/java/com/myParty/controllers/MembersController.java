@@ -20,11 +20,6 @@ public class MembersController {
             this.passwordEncoder = passwordEncoder;
         }
 
-//    @GetMapping("/user/create")
-//    public String createUserForm() {
-//        return "user/create";
-//    }
-
         @GetMapping("/sign-up")
         public String showSignupForm(Model model){
             model.addAttribute("member", new Member());
