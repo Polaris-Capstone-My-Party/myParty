@@ -93,3 +93,15 @@ CREATE TABLE party_tags(
                           FOREIGN KEY (party_id) REFERENCES parties(id),
                           FOREIGN KEY (tag_id) REFERENCES tags(id)
 );
+
+CREATE TABLE item_bringer(
+                             id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                             quantity INT UNSIGNED,
+                             guest_id INT UNSIGNED,
+                             member_id INT UNSIGNED,
+                             party_item INT UNSIGNED,
+                             FOREIGN KEY (guest_id) REFERENCES guests(id),
+                             FOREIGN KEY (member_id) REFERENCES members(id),
+                             FOREIGN KEY (party_item) REFERENCES party_items(id),
+                             PRIMARY KEY (id)
+);

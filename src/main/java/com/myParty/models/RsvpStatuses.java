@@ -1,5 +1,5 @@
 package com.myParty.models;
 
 public enum RsvpStatuses {
-    yes, maybe, no
+    yes, maybe, no;
 }
