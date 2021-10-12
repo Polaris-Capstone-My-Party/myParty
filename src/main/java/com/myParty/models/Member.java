@@ -36,5 +36,11 @@ public class Member {
     @Column(nullable = false)
     @Getter @Setter private String last_name;
 
+    public Member (Member copy) {
+        id = copy.id; // This line is SUPER important! Many things won't work if it's absent
+        email = copy.email;
+        username = copy.username;
+        password = copy.password;
+    }
 
 }
