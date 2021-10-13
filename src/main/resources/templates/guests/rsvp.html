@@ -20,10 +20,6 @@
     <div th:text="${party.location.city}"></div>
     <div th:text="${party.location.state}"></div>
     <div th:text="${party.location.zipcode}"></div>
-    <div th:each="partyItem : ${partyItems}">
-        <div th:text="${'Item: ' + partyItem.item.name}"></div>
-        <div th:text="${'Quantity: ' + partyItem.quantityRequired}"></div>
-    </div>
 </div>
 
 <!--Form to RSVP for Party-->
@@ -55,15 +51,7 @@
             </div>
         </select>
     </div>
-
-    <!--Sign Up for Items-->
-    <!--TODO: List Party Items (forEach?) -->
-    <!--TODO: How to Add Party Items-->
-
-    <input type="submit" value="Log In"/>
-
+    <input type="submit" value="Submit"/>
 </form>
-
-
 </body>
 </html>

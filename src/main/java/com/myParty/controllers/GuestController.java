@@ -1,6 +1,7 @@
 package com.myParty.controllers;
 
 import com.myParty.models.Guest;
+import com.myParty.models.ItemBringer;
 import com.myParty.models.Party;
 import com.myParty.models.RsvpStatuses;
 import com.myParty.repositories.GuestRepository;
@@ -20,11 +21,14 @@ public class GuestController {
     private final PartyRepository partyDAO;
     private final GuestRepository guestDAO;
     private final PartyItemRepository partyItemDAO;
+    private final ItemBringerRepository itemBringerDAO;
 
-    public GuestController(PartyRepository partyDAO, GuestRepository guestDAO, PartyItemRepository partyItemDAO){
+
+    public GuestController(PartyRepository partyDAO, GuestRepository guestDAO, PartyItemRepository partyItemDAO, ItemBringerRepository itemBringerDAO){
         this.partyDAO = partyDAO;
         this.guestDAO = guestDAO;
         this.partyItemDAO = partyItemDAO;
+        this.itemBringerDAO = itemBringerDAO;
     }
 
     //show RSVP form with corresponding Party Information
@@ -40,11 +44,10 @@ public class GuestController {
         model.addAttribute("party", party); //sets party info for form
         model.addAttribute("guest", new Guest()); //thing to allow form to recognize new guest
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
-        model.addAttribute("partyItems", partyItemDAO.getByParty(party)); //gets & sets party Items for party
         return "guests/rsvp";
     }
 
-    //saves Guest information //check with herman about this
+    //saves Guest information
     @PostMapping(path = "/rsvp/{urlKey}")
     public String createGuest(@PathVariable String urlKey, @ModelAttribute Guest guest, @RequestParam String rsvp){
         guest.setRsvpStatus(RsvpStatuses.valueOf(rsvp)); //set RSVP status enum
@@ -55,6 +58,32 @@ public class GuestController {
 
         guestDAO.save(guest); //save guest information
 
+        return "redirect:/rsvp/" + urlKey + "/" + guest.getGuestKey() + "/items";
+    }
+
+    //shows Item sign up page
+    @GetMapping(path = "/rsvp/{urlKey}/{guestKey}/items")
+    public String showItemSignup(@PathVariable String urlKey, @PathVariable String guestKey, Model model){
+        Party party = partyDAO.getByUrlKey(urlKey); // gets party info for form
+
+        model.addAttribute("itemBringer", new ItemBringer()); //allows form to recognize new Item Bringer
+        model.addAttribute("party", party); //sets party info
+        model.addAttribute("guest", guestDAO.getByGuestKey(guestKey)); //sets guest info
+        model.addAttribute("partyItems", partyItemDAO.getByParty(party)); //gets & sets party Items for party
+
+        //TODO: Create New instance of Item Bringer to link guest & Items they've signed up for?
+        //TODO: Update Party Items after guests sign up for parties
+
+        return "guests/itemSignup";
+    }
+
+    //saves Item Bringer info
+    @PostMapping(path = "/rsvp/{urlKey}/{guestKey}/items")
+    public String createItemBringer(@PathVariable String urlKey, @PathVariable String guestKey, @ModelAttribute ItemBringer itemBringer){
+
+
+
+
         return "redirect:/guests/successRsvp";
     }
 
@@ -64,11 +93,14 @@ public class GuestController {
         return "guests/successRsvp";
     }
 
-    //TODO: Create New instance of Item Bringer to link guest & Items they've signed up for?  //make nullable, be separate part
-    //TODO: Update Party Items after guests sign up for parties
+
+
+
+
+
 
 //    //Shows Guest Info & Allows to Edit
-//    @GetMapping(path = "/rsvp/{urlKey}/{guestKey}")
+//    @GetMapping(path = "/rsvp/{urlKey}/{guestKey}/edit")
 //    public String showEditRSVP(@PathVariable String urlKey, @PathVariable String guestKey, Model model){
 //        model.addAttribute("party", partyDAO.getByUrl_key(urlKey)); //get party info
 //        model.addAttribute("guest", guestDAO.getByGuestKey(guestKey)); //get guest info
