@@ -20,21 +20,24 @@
     <div th:text="${party.location.city}"></div>
     <div th:text="${party.location.state}"></div>
     <div th:text="${party.location.zipcode}"></div>
-    <!--TODO: For loop each party tag -->
+    <div th:each="partyItem : ${partyItems}">
+        <div th:text="${'Item: ' + partyItem.item.name}"></div>
+        <div th:text="${'Quantity: ' + partyItem.quantityRequired}"></div>
+    </div>
 </div>
 
 <!--Form to RSVP for Party-->
-<form th:action="@{|guests/rsvp}" th:method="post" th:object="${guest}">
+<form th:action="@{|/rsvp/${party.urlKey}|}" th:method="post" th:object="${guest}">
     <!--Enter First Name-->
     <div class="form-group">
         <label for="firstName">First Name: </label>
-        <input class="form-control" id="firstName" type="text" th:field="*{first_name}"/>
+        <input class="form-control" id="firstName" type="text" th:field="*{firstName}"/>
     </div>
 
     <!--Enter Last Name-->
     <div class="form-group">
         <label for="lastName">Last Name: </label>
-        <input class="form-control" id="lastName" type="text" th:field="*{last_name}"/>
+        <input class="form-control" id="lastName" type="text" th:field="*{lastName}"/>
     </div>
 
     <!--Enter Email-->
@@ -53,12 +56,11 @@
         </select>
     </div>
 
-
     <!--Sign Up for Items-->
-
-
     <!--TODO: List Party Items (forEach?) -->
     <!--TODO: How to Add Party Items-->
+
+    <input type="submit" value="Log In"/>
 
 </form>
 
