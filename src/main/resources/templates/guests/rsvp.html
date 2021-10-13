@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>RSVP </title>
+</head>
+<body>
+
+<h1>Complete Your RSVP</h1>
+
+<!--Show The Party Info-->
+<div>
+    <div th:text="${party.id}"></div>
+    <div th:text="${party.title}"></div>
+    <div th:text="${party.description}"></div>
+    <div th:text="${party.start_time}"></div>
+    <div th:text="${party.end_time}"></div>
+    <div th:text="${party.owner.first_name + ' ' + party.owner.last_name}"></div>
+    <div th:text="${party.location.address_one}"></div>
+    <div th:text="${party.location.city}"></div>
+    <div th:text="${party.location.state}"></div>
+    <div th:text="${party.location.zipcode}"></div>
+    <div th:each="partyItem : ${partyItems}">
+        <div th:text="${'Item: ' + partyItem.item.name}"></div>
+        <div th:text="${'Quantity: ' + partyItem.quantityRequired}"></div>
+    </div>
+</div>
+
+<!--Form to RSVP for Party-->
+<form th:action="@{|/rsvp/${party.urlKey}|}" th:method="post" th:object="${guest}">
+    <!--Enter First Name-->
+    <div class="form-group">
+        <label for="firstName">First Name: </label>
+        <input class="form-control" id="firstName" type="text" th:field="*{firstName}"/>
+    </div>
+
+    <!--Enter Last Name-->
+    <div class="form-group">
+        <label for="lastName">Last Name: </label>
+        <input class="form-control" id="lastName" type="text" th:field="*{lastName}"/>
+    </div>
+
+    <!--Enter Email-->
+    <div class="form-group">
+        <label for="email">Email: </label>
+        <input class="form-control" id="email" type="text" th:field="*{email}"/>
+    </div>
+
+    <!--Enter RSVP Status-->
+    <div class="form-group">
+        <label for="rsvp">RSVP: </label>
+        <select id="rsvp" name="rsvp">
+            <div th:each="rsvp: ${rsvps}">
+                <option th:value="${rsvp}" th:text="${rsvp}"></option>
+            </div>
+        </select>
+    </div>
+
+    <!--Sign Up for Items-->
+    <!--TODO: List Party Items (forEach?) -->
+    <!--TODO: How to Add Party Items-->
+
+    <input type="submit" value="Log In"/>
+
+</form>
+
+
+</body>
+</html>
