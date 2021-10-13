@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>profile</title>
+</head>
+<body>
+<nav th:replace="partials/navbar :: navbar"></nav>
+<div>
+    <form th:action="@{|parties/${parties.id}/edit|}" th:method="GET">
+        <button>Edit</button>
+    </form>
+    <h1>This is the profile page</h1>
+
+</body>
+</html>
+
