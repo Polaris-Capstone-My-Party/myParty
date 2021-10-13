@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Success!</title>
+</head>
+<body>
+<form th:action="@{/parties/success}" th:method="post" th:object="${party}">
+    Custom Url:
+    <input th:field="*{custom url}" />
+    <br />
+    Custom Message:
+    <input th:field="*{custom message}" />
+    <br />
+    Email addresses:
+    <input th:field="*{email addresses}" />
+    <br />
+
+    <input th: field="*{Send Invites}" type="submit" />
+
+
+</body>
+</html>

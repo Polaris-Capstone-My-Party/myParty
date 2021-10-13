@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create your Party</title>
+</head>
+<body>
+
+<form th:action="@{/parties/create}" th:method="post" th:object="${party}">
+    Title:
+    <input th:field="*{title}" />
+    <br />
+    Description:
+    <input th:field="*{description}" />
+    <br />
+    Location:
+    <input th:field="*{location}" />
+    <br />
+    Theme:
+    <input th:field="*{Theme}" />
+    <br />
+    Tags:
+    <input th:field="*{Tags}" />
+    <br />
+    Schedule:
+    <input th:field="*{Schedule}" />
+    <br />
+    Add items:
+    <input th:field="*{Add items}" type="submit" />
+    <br />
+    <input th: field="*{Create Party}" type="submit" />
+</form>
+</body>
+</html>
+
+
+
+
+<!--<div class="container">-->
+<!--    <div class="row justify-content-between">-->
+<!--        <div class="col-4">-->
+<!--            Party Title-->
+<!--        </div>-->
+<!--        <div class="col-4">-->
+<!--            Description-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="row justify-content-between">-->
+<!--        <div class="col-4">-->
+<!--            Location-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
