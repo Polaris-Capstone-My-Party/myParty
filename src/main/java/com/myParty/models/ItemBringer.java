@@ -3,10 +3,9 @@ package com.myParty.models;
 
 import lombok.*;
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
-@Table(name = "party_bringer")
+@Table(name = "item_bringer")
 @AllArgsConstructor
 @NoArgsConstructor
 public class ItemBringer {

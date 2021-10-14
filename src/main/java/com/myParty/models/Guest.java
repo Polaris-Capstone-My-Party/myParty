@@ -13,7 +13,6 @@ import javax.persistence.*;
 @AllArgsConstructor
 
 public class Guest {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter @Setter private long id;
@@ -21,14 +20,18 @@ public class Guest {
     @Column(nullable = false)
     @Getter @Setter private String email;
 
-    @Column(nullable = false)
-    @Getter @Setter private String first_name;
+    @Column(nullable = false, name="first_name")
+    @Getter @Setter private String firstName;
+
+    @Column(nullable = false, name="last_name")
+    @Getter @Setter private String lastName;
 
     @Column(nullable = false)
-    @Getter @Setter private String last_name;
+    @Getter @Setter private RsvpStatuses rsvpStatus;
 
-    @Column(nullable = false)
-    @Getter @Setter private String rsvp_status;
+    //Added Guest key to identify it w/
+    @Column(nullable = false, name = "guest_key")
+    @Getter @Setter private String guestKey;
 
     @ManyToOne
     @JoinColumn (name = "party_id")
