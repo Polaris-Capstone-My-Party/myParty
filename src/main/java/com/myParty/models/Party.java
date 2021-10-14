@@ -4,7 +4,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
-
+@ToString
 @Entity
 @Table(name = "parties")
 @AllArgsConstructor
@@ -21,12 +21,12 @@ public class Party {
     @Getter @Setter private String description;
 
     @Column(nullable = false)
-    @Getter @Setter private Timestamp start_time;
+    @Getter @Setter private Timestamp startTime;
 
     @Column(nullable = false)
-    @Getter @Setter private Timestamp end_time;
+    @Getter @Setter private Timestamp endTime;
 
-    @Column(nullable = false, name="url_key")
+    @Column(nullable = true, name="url_key")
     @Getter @Setter private String urlKey;
 
     @ManyToOne
@@ -44,6 +44,6 @@ public class Party {
             joinColumns={@JoinColumn(name="party_id")},
             inverseJoinColumns={@JoinColumn(name="tag_id")}
     )
-    private List<Tag> tags;
+    @Getter @Setter private List<Tag> tags;
 
 }
