@@ -40,21 +40,7 @@ public class MembersController {
     ) {
         Member memberToDisplay = memberDao.findByUsername(username);
         model.addAttribute("member", memberToDisplay);
-
         return "member/displayParties";
     }
-
-
-//    @PostMapping("/member/create")
-//    @ResponseBody
-//    public String createMember(
-//            @RequestParam(name = "uname") String username,
-//            @RequestParam(name = "psw") String password
-//    ) {
-//        System.out.println("Username" + username);
-//        System.out.println("Password" + password);
-//
-//        return "Member created. Let's party!";
-//    }
 }
 
