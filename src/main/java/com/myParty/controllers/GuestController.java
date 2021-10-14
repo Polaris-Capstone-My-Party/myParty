@@ -70,9 +70,8 @@ public class GuestController {
         model.addAttribute("party", party); //sets party info
         model.addAttribute("guest", guestDAO.getByGuestKey(guestKey)); //sets guest info
         model.addAttribute("partyItems", partyItemDAO.getByParty(party)); //gets & sets party Items for party
+        //TODO: Ask for logic on list of it?
 
-        //TODO: Create New instance of Item Bringer to link guest & Items they've signed up for?
-        //TODO: Update Party Items after guests sign up for parties
 
         return "guests/itemSignup";
     }
@@ -80,7 +79,8 @@ public class GuestController {
     //saves Item Bringer info
     @PostMapping(path = "/rsvp/{urlKey}/{guestKey}/items")
     public String createItemBringer(@PathVariable String urlKey, @PathVariable String guestKey, @ModelAttribute ItemBringer itemBringer){
-
+        //TODO: Create New instance of Item Bringer to link guest & Items they've signed up for?
+        //TODO: Update Party Items after guests sign up for parties
 
 
 
@@ -92,28 +92,4 @@ public class GuestController {
     public String showRSVPSuccess(){
         return "guests/successRsvp";
     }
-
-
-
-
-
-
-
-//    //Shows Guest Info & Allows to Edit
-//    @GetMapping(path = "/rsvp/{urlKey}/{guestKey}/edit")
-//    public String showEditRSVP(@PathVariable String urlKey, @PathVariable String guestKey, Model model){
-//        model.addAttribute("party", partyDAO.getByUrl_key(urlKey)); //get party info
-//        model.addAttribute("guest", guestDAO.getByGuestKey(guestKey)); //get guest info
-//        //TODO: Should a new instance of guest be allowed or just save it?
-//        return "guests/editRsvp";
-//    }
-//
-//    //saves Guest edited information
-//    @PostMapping(path = "/rsvp/{url_key}/{guest_key}")
-//    public String saveEditRSVP(){
-//        //TODO: save updated guest info
-//        //TODO: Update ItemBringer information (?)
-//        //TODO: Update party items database
-//        return "guests/successRsvp";
-//    }
 }

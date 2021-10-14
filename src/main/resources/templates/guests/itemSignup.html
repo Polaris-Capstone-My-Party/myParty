@@ -22,7 +22,7 @@
     <div th:each="partyItem : ${partyItems}">
       <tr class="form-group">
         <td th:text="${partyItem.item.name}"></td>
-        <td th:text="${partyItem.quantityRequired}"></td> <!--TODO: Make drop down?-->
+        <td th:text="${partyItem.quantityRequired}"></td> <!--TODO: Make drop down eventually-->
         <td><input type="text" id="quantity" th:field="*{quantity}"></td>
       </tr>
     </div>
