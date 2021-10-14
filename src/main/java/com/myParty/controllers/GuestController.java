@@ -67,21 +67,21 @@ public class GuestController {
     //TODO: Create New instance of Item Bringer to link guest & Items they've signed up for?  //make nullable, be separate part
     //TODO: Update Party Items after guests sign up for parties
 
-//    //Shows Guest Info & Allows to Edit
-//    @GetMapping(path = "/rsvp/{urlKey}/{guestKey}")
-//    public String showEditRSVP(@PathVariable String urlKey, @PathVariable String guestKey, Model model){
-//        model.addAttribute("party", partyDAO.getByUrl_key(urlKey)); //get party info
-//        model.addAttribute("guest", guestDAO.getByGuestKey(guestKey)); //get guest info
-//        //TODO: Should a new instance of guest be allowed or just save it?
-//        return "guests/editRsvp";
-//    }
-//
-//    //saves Guest edited information
-//    @PostMapping(path = "/rsvp/{url_key}/{guest_key}")
-//    public String saveEditRSVP(){
-//        //TODO: save updated guest info
-//        //TODO: Update ItemBringer information (?)
-//        //TODO: Update party items database
-//        return "guests/successRsvp";
-//    }
+    //Shows Guest Info & Allows to Edit
+    @GetMapping(path = "/rsvp/{urlKey}/{guestKey}/edit")
+    public String showEditRSVP(@PathVariable String urlKey, @PathVariable String guestKey, Model model){
+        model.addAttribute("party", partyDAO.getByUrlKey(urlKey)); //get party info
+        model.addAttribute("guest", guestDAO.getByGuestKey(guestKey)); //get guest info
+        //TODO: Should a new instance of guest be allowed or just save it?
+        return "guests/editRsvp";
+    }
+
+    //saves Guest edited information
+    @PostMapping(path = "/rsvp/{urlKey}/{guestKey}/edit")
+    public String saveEditRSVP(@PathVariable String urlKey, @PathVariable String guestKey){
+        //TODO: save updated guest info
+        //TODO: Update ItemBringer information (?)
+        //TODO: Update party items database
+        return "guests/successRsvp";
+    }
 }
