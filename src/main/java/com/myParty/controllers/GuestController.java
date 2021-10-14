@@ -1,9 +1,6 @@
 package com.myParty.controllers;
 
-import com.myParty.models.Guest;
-import com.myParty.models.ItemBringer;
-import com.myParty.models.Party;
-import com.myParty.models.RsvpStatuses;
+import com.myParty.models.*;
 import com.myParty.repositories.GuestRepository;
 import com.myParty.repositories.ItemBringerRepository;
 import com.myParty.repositories.PartyItemRepository;
@@ -13,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 @Controller
@@ -66,26 +64,40 @@ public class GuestController {
     public String showItemSignup(@PathVariable String urlKey, @PathVariable String guestKey, Model model){
         Party party = partyDAO.getByUrlKey(urlKey); // gets party info for form
 
-        model.addAttribute("itemBringer", new ItemBringer()); //allows form to recognize new Item Bringer
         model.addAttribute("party", party); //sets party info
         model.addAttribute("guest", guestDAO.getByGuestKey(guestKey)); //sets guest info
         model.addAttribute("partyItems", partyItemDAO.getByParty(party)); //gets & sets party Items for party
-        //TODO: Ask for logic on list of it?
-
 
         return "guests/itemSignup";
     }
 
     //saves Item Bringer info
     @PostMapping(path = "/rsvp/{urlKey}/{guestKey}/items")
-    public String createItemBringer(@PathVariable String urlKey, @PathVariable String guestKey, @ModelAttribute ItemBringer itemBringer){
-        //TODO: Create New instance of Item Bringer to link guest & Items they've signed up for?
-        //TODO: Update Party Items after guests sign up for parties
+    public String createItemBringer(@PathVariable String urlKey, @PathVariable String guestKey, @RequestParam(name="partyItem[]") String[] myPartyItems, @RequestParam(name="quantity[]") String[] quantities) {
 
+        Guest guest = guestDAO.getByGuestKey(guestKey); //gets guest object
 
+        //Item bringer needs - quantity, guest object, partyItem object
+        for(int i = 0; i < myPartyItems.length; i++){
 
+            if(quantities[i].equals("0")){ //if quantity is 0, no need to create Item Bringer instance
+                continue;
+            }
+
+            ItemBringer itemBringer = new ItemBringer(); //new instance of Item Bringer
+            PartyItem partyItem = partyItemDAO.getById(Long.valueOf(myPartyItems[i])); //get partyItem object
+
+            itemBringer.setGuest(guest); //sets guest object
+            itemBringer.setQuantity(Long.valueOf(quantities[i])); //sets quantity
+            itemBringer.setPartyItem(partyItem); // sets partyItem object
+
+            itemBringerDAO.save(itemBringer); // saves item bringer
+
+            //TODO: Update Party Items after guests sign up for parties
+        }
         return "redirect:/guests/successRsvp";
     }
+
 
     //shows RSVPSuccess page
     @GetMapping(path = "/guests/successRsvp")
