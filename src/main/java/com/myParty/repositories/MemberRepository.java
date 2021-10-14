@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 //changed MemberRepository to Member
 public interface MemberRepository extends JpaRepository<Member, Long> {
+
+    Member findByUsername(String username);
 }

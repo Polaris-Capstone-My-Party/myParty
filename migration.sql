@@ -33,7 +33,7 @@ CREATE TABLE parties(
                         end_time DATETIME,
                         member_id INT UNSIGNED,
                         location_id INT UNSIGNED,
-                        url_key BINARY(30),
+                        url_key BINARY(100),
                         PRIMARY KEY (id),
                         FOREIGN KEY (member_id) REFERENCES members(id) ,
                         FOREIGN KEY (location_id) REFERENCES location(id)

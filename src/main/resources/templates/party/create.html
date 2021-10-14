@@ -13,23 +13,31 @@
     Description:
     <input th:field="*{description}" />
     <br />
-    Location:
-    <input th:field="*{location}" />
+    Start Time
+    <input name="start_time" type="datetime-local"/>
     <br />
-    Theme:
-    <input th:field="*{Theme}" />
+    End Time
+    <input name="end_time" type="datetime-local"/>
     <br />
-    Tags:
-    <input th:field="*{Tags}" />
-    <br />
-    Schedule:
-    <input th:field="*{Schedule}" />
-    <br />
-    Add items:
-    <input th:field="*{Add items}" type="submit" />
-    <br />
-    <input th: field="*{Create Party}" type="submit" />
+        Address one
+        <input name="address_one" type="text"/>
+        <br />
+        Address two
+        <input name="address_two" type="text"/>
+        <br />
+        City
+        <input name="city" type="text"/>
+        <br />
+        State
+        <input name="state" type="text"/>
+        <br />
+        Zipcode
+        <input name="zipcode" type="number"/>
+        <br />
+    <input type="submit" />
+
 </form>
+
 </body>
 </html>
 
