@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Guest Item Sign Up</title>
+</head>
+<body>
+
+<!--Multistage form, submission, redirects to party items that can sign up for-->
+<!--TODO: pop up modal eventually-->
+
+<!--Sign Up for Items-->
+<h1>Sign Up for Items</h1>
+<form th:action="@{|/rsvp/${party.urlKey}/${guest.guestKey}/items|}" th:method="post">
+  <table>
+    <tr>
+      <th>Item</th>
+      <th>Quantity Requested</th>
+      <th>Quantity You're Bringing</th>
+    </tr>
+
+    <div th:each="partyItem : ${partyItems}">
+      <tr class="form-group">
+        <td th:text="${partyItem.item.name}"></td>
+        <td th:text="${partyItem.quantityRequired}"></td> <!--TODO: Make drop down eventually-->
+        <td><input type="text" name="quantity[]"></td>
+        <input type="hidden" name="partyItem[]" th:value="${partyItem.id}">
+      </tr>
+    </div>
+
+
+<!--    Grab list of arrays from the form? -->
+
+  </table>
+  <input type="submit" value="Submit"/>
+</form>
+
+</body>
+</html>

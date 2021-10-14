@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "party_bringer")
+@Table(name = "item_bringer")
 @AllArgsConstructor
 @NoArgsConstructor
 public class ItemBringer {
