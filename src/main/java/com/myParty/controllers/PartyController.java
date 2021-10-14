@@ -93,7 +93,7 @@ public class PartyController {
         partyDao.save(party);
 
 
-        return "redirect:/";
+        return "redirect:/parties/success";
 
     }
 
@@ -104,7 +104,9 @@ public class PartyController {
     }
 
     @PostMapping("/parties/{urlKey}")
-    public String successParty(@ModelAttribute Party party, Model model) {
+    public String successParty(@RequestParam(name="customUrl") String customUrl,
+                               @RequestParam(name="customMessage") String customMessage,
+                               @RequestParam(name="emailAddress") String emailAddress)  {
 
         return "redirect:/success";
     }

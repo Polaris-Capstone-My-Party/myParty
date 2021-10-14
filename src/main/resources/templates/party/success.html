@@ -2,22 +2,23 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Success!</title>
+    <title>Success! <br/> Party has been created</title>
 </head>
 <body>
+gfjjhghjgjhghgjhg
 <form th:action="@{/parties/success}" th:method="post" th:object="${party}">
     Custom Url:
-    <input th:field="*{custom url}" />
+    <input name="customUrl" />
     <br />
     Custom Message:
-    <input th:field="*{custom message}" />
+    <input name="customMessage" />
     <br />
     Email addresses:
-    <input th:field="*{email addresses}" />
+    <input name="emailAddresses" />
     <br />
 
-    <input th: field="*{Send Invites}" type="submit" />
-
+    <input type="submit" />
+</form>
 
 </body>
 </html>

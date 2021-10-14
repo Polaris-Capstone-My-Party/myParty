@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>profile</title>
+</head>
+<body>
+<!--<nav th:replace="partials/navbar :: navbar"></nav>-->
+<h1>This is the profile page</h1>
+<div>
+<div th:text="${members.username}"></div>
+<div th:text="${members.email}"></div>
+</div>
+
+<button>Create A Party</button>
+<button>Edit Your Profile</button>
+<button>Change Your Password</button>
+<button>Delete Your Membership</button>
+    <!--TODO add buttons functionality-->
+    <!--TODO add ability to edit fields-->
+
+
+</body>
+</html>

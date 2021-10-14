@@ -27,6 +27,7 @@ public class Party {
     @Getter @Setter private Timestamp endTime;
 
     @Column(nullable = true)
+//    @Column(nullable = false, name="url_key")
     @Getter @Setter private String urlKey;
 
     @ManyToOne
