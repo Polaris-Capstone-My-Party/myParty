@@ -28,8 +28,12 @@
     <!--Enter First Name-->
     <div class="form-group">
         <label for="firstName">First Name: </label>
-        <input class="form-control" id="firstName" type="text" th:field="*{firstName}"/>
+        <input class="form-control" id="firstName" type="text" th:value="${party.location.zipcode}"/>
     </div>
+
+
+<!--    th:field="*{firstName}"-->
+<!--    by default feield - test & get back to them -->
 
     <!--Enter Last Name-->
     <div class="form-group">
