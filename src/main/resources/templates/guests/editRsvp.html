@@ -71,6 +71,7 @@
                    <input type="text" th:value="${itemBringer.quantity}" name="quantity[]">
                </td>
                <input type="hidden" name="itemBringer[]" th:value="${itemBringer.id}">
+               <input type="hidden" name="partyItem[]" th:value="${itemBringer.partyItem.id}">
            </tr>
        </div>
     </table>

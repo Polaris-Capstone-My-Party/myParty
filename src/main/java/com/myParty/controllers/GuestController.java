@@ -134,8 +134,10 @@ public class GuestController {
 
     //saves Guest edited information
     @PostMapping(path = "/rsvp/{urlKey}/{guestKey}/edit")
-    public String saveEditRSVP(@ModelAttribute Guest guest, @RequestParam String rsvp, @RequestParam(name="itemBringer[]") String[] itemBringer, @RequestParam(name="quantity[]") String[] quantities){
+    public String saveEditRSVP(@ModelAttribute Guest guest, @RequestParam String rsvp, @RequestParam(name="itemBringer[]") String[] itemBringer, @RequestParam(name="quantity[]") String[] quantities,
+                               @RequestParam(name="partyItem[]") String[] partyItem, @PathVariable String urlKey){
         guest.setRsvpStatus(RsvpStatuses.valueOf(rsvp));
+        guest.setParty(partyDAO.getByUrlKey(urlKey));
         guestDAO.save(guest); //save guest information
 
         for(int i = 0; i < itemBringer.length; i++){ //updates itemBringer quantity
@@ -143,9 +145,15 @@ public class GuestController {
             ItemBringer updatedItemBringer = itemBringerDAO.getById(Long.valueOf(itemBringer[i])); //get itemBringer object associated w/ itemBringerID
             updatedItemBringer.setQuantity((Long.valueOf(quantities[i]))); //sets updated quantity
             itemBringerDAO.save(updatedItemBringer); //saves & updates quantity
+//
+//            PartyItem updatedPartyItem = partyItemDAO.getById(Long.valueOf(partyItem[i])); //gets partyItem via partyItemID
+//
+//            Long currentQuantityRequired = updatedPartyItem.getQuantityRequired(); //constant of current quantity required for partyItem
+//            Long updatedQuantity = currentQuantityRequired - updatedItemBringer.getQuantity(); //constant of current quantity required - updated quantity guest/itemBringer signed up for
+//            updatedPartyItem.setQuantityRequired(updatedQuantity); //set updated quantityRequired
+//            partyItemDAO.save(updatedPartyItem); //save partyItem instance with updated quantityRequired
         }
-3
-        //TODO: Update party items database
+
         return "redirect:/guests/successRsvp";
     }
 }
