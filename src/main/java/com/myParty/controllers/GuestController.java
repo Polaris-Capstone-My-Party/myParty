@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -79,6 +79,7 @@ public class GuestController {
 
         for(int i = 0; i < myPartyItems.length; i++){
 
+            //TODO: Test This
             if(quantities[i].equals("0")){ //if quantity is 0, no need to create Item Bringer instance
                 continue;
             }
@@ -115,10 +116,17 @@ public class GuestController {
         rsvpStatuses.add("maybe");
         rsvpStatuses.add("no");
 
+        Party party = partyDAO.getByUrlKey(urlKey);
+        Guest guest = guestDAO.getByGuestKey(guestKey);
+
         //TODO: set default RSVP status to be one currently
-        model.addAttribute("party", partyDAO.getByUrlKey(urlKey)); //get party info
-        model.addAttribute("guest", guestDAO.getByGuestKey(guestKey)); //get guest info
+        model.addAttribute("party", party); //get party info
+        model.addAttribute("guest", guest); //get guest info
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
+        model.addAttribute("partyItems", partyItemDAO.getByParty(party)); //gets & sets partyItems for party
+
+        List<ItemBringer> itemBringers = itemBringerDAO.getByGuest(guest); //gets & sets list of item bringers associated w/ guest
+        model.addAttribute("itemBringers", itemBringers); //gets ItemBringer info associated with guestId
 
         return "guests/editRsvp";
     }
