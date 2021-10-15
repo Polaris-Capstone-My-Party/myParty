@@ -39,7 +39,7 @@ public class Member {
     @Column(nullable = false)
     @Getter @Setter private String last_name;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "member_id")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
     private List<Party> parties;
 
 

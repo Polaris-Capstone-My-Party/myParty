@@ -33,7 +33,7 @@ public class Party {
     @Column(nullable = false)
     @Getter @Setter private Timestamp endTime;
 
-    @Column(nullable = true)
+//    @Column(nullable = true)
 //    @Column(nullable = false, name="url_key")
     @Column(nullable = true, name="url_key")
     @Getter @Setter private String urlKey;

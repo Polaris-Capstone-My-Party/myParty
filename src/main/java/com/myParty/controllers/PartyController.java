@@ -103,10 +103,10 @@ public class PartyController {
     }
 
     @GetMapping("/parties/success")
-    public String showSuccessPartyForm(Model model) {
-//        Party party = partyDao.getById()
+    public String showSuccessPartyForm(@PathVariable String urlKey, Model model) {
+        Party party = partyDao.getByUrlKey(urlKey);
         model.addAttribute("party", new Party());
-//        model.addAttribute("urlKey",party.getUrlKey()),
+        model.addAttribute("urlKey", party.getUrlKey());
         return "party/success";
     }
 
