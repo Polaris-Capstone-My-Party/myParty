@@ -95,7 +95,7 @@ public class GuestController {
             Long currentQuantityRequired = partyItem.getQuantityRequired(); //constant of current quantity required for partyItem
             Long updatedQuantity = currentQuantityRequired - itemBringer.getQuantity(); //constant of current quantity required - quantity guest/itemBringer signed up for
             partyItem.setQuantityRequired(updatedQuantity); //set updated quantityRequired
-            partyItemDAO.save(partyItem); //save new partyItem instance
+            partyItemDAO.save(partyItem); //save new partyItem instance with updated quantityRequired
         }
 
         return "redirect:/guests/successRsvp";
@@ -105,5 +105,32 @@ public class GuestController {
     @GetMapping(path = "/guests/successRsvp")
     public String showRSVPSuccess(){
         return "guests/successRsvp";
+    }
+
+    //Shows Guest Info & Allows to Edit
+    @GetMapping(path = "/rsvp/{urlKey}/{guestKey}/edit")
+    public String showEditRSVP(@PathVariable String urlKey, @PathVariable String guestKey, Model model){
+        ArrayList<String> rsvpStatuses = new ArrayList<>(); //list of RSVP enum values/options
+        rsvpStatuses.add("yes");
+        rsvpStatuses.add("maybe");
+        rsvpStatuses.add("no");
+
+        //TODO: set default RSVP status to be one currently
+        model.addAttribute("party", partyDAO.getByUrlKey(urlKey)); //get party info
+        model.addAttribute("guest", guestDAO.getByGuestKey(guestKey)); //get guest info
+        model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
+
+        return "guests/editRsvp";
+    }
+
+    //saves Guest edited information
+    @PostMapping(path = "/rsvp/{urlKey}/{guestKey}/edit")
+    public String saveEditRSVP(@ModelAttribute Guest guest, @RequestParam String rsvp){
+        guest.setRsvpStatus(RsvpStatuses.valueOf(rsvp));
+        guestDAO.save(guest); //save guest information
+
+        //TODO: Update ItemBringer information (?)
+        //TODO: Update party items database
+        return "redirect:/guests/successRsvp";
     }
 }
