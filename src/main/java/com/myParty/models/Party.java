@@ -37,13 +37,12 @@ public class Party {
     @JoinColumn(name = "location_id")
     @Getter @Setter private Location location;
 
-    //added many to many
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name="parties_tags",
             joinColumns={@JoinColumn(name="party_id")},
             inverseJoinColumns={@JoinColumn(name="tag_id")}
     )
-    private List<Tag> tags;
+    @Getter @Setter private List<Tag> tags;
 
 }

@@ -77,7 +77,6 @@ public class GuestController {
 
         Guest guest = guestDAO.getByGuestKey(guestKey); //gets guest object
 
-        //Item bringer needs - quantity, guest object, partyItem object
         for(int i = 0; i < myPartyItems.length; i++){
 
             if(quantities[i].equals("0")){ //if quantity is 0, no need to create Item Bringer instance
@@ -90,14 +89,17 @@ public class GuestController {
             itemBringer.setGuest(guest); //sets guest object
             itemBringer.setQuantity(Long.valueOf(quantities[i])); //sets quantity
             itemBringer.setPartyItem(partyItem); // sets partyItem object
-
             itemBringerDAO.save(itemBringer); // saves item bringer
 
-            //TODO: Update Party Items after guests sign up for parties
+            //TODO: Add error message to avoid negative values in the database (someone signs up for stuff before you submit)
+            Long currentQuantityRequired = partyItem.getQuantityRequired(); //constant of current quantity required for partyItem
+            Long updatedQuantity = currentQuantityRequired - itemBringer.getQuantity(); //constant of current quantity required - quantity guest/itemBringer signed up for
+            partyItem.setQuantityRequired(updatedQuantity); //set updated quantityRequired
+            partyItemDAO.save(partyItem); //save new partyItem instance
         }
+
         return "redirect:/guests/successRsvp";
     }
-
 
     //shows RSVPSuccess page
     @GetMapping(path = "/guests/successRsvp")
