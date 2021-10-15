@@ -10,14 +10,21 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class MembersController {
 
-    private final MemberRepository memberDao;
+//        @Autowired
+        private final MemberRepository memberDao;
 
-    private final PasswordEncoder passwordEncoder;
+        private final PasswordEncoder passwordEncoder;
 
-    public MembersController(MemberRepository memberDao, PasswordEncoder passwordEncoder) {
-        this.memberDao = memberDao;
-        this.passwordEncoder = passwordEncoder;
+        public MembersController(MemberRepository memberDao, PasswordEncoder passwordEncoder) {
+            this.memberDao = memberDao;
+            this.passwordEncoder = passwordEncoder;
+        }
+
+    @GetMapping("/user/create")
+    public String createUserForm() {
+        return "user/create";
     }
+    
 
     @GetMapping("/sign-up")
     public String showSignupForm(Model model) {
@@ -45,6 +52,7 @@ public class MembersController {
     }
 
 
+
 //    @PostMapping("/member/create")
 //    @ResponseBody
 //    public String createMember(
@@ -57,4 +65,5 @@ public class MembersController {
 //        return "Member created. Let's party!";
 //    }
 }
+
 

@@ -1,10 +1,17 @@
 package com.myParty.models;
 
+import com.myParty.repositories.PartyRepository;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import lombok.*;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 
+@ToString
 @Entity
 @Table(name = "parties")
 @AllArgsConstructor
@@ -21,12 +28,12 @@ public class Party {
     @Getter @Setter private String description;
 
     @Column(nullable = false)
-    @Getter @Setter private Timestamp start_time;
+    @Getter @Setter private Timestamp startTime;
 
     @Column(nullable = false)
-    @Getter @Setter private Timestamp end_time;
+    @Getter @Setter private Timestamp endTime;
 
-    @Column(nullable = false, name="url_key")
+    @Column(nullable = true, name="url_key")
     @Getter @Setter private String urlKey;
 
     @ManyToOne
@@ -45,4 +52,8 @@ public class Party {
     )
     @Getter @Setter private List<Tag> tags;
 
+    public Party(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
 }
