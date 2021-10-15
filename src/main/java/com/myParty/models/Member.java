@@ -39,8 +39,12 @@ public class Member {
     @Column(nullable = false)
     @Getter @Setter private String last_name;
 
+    @Getter @Setter
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
-    @Getter @Setter private List<Party> parties;
+    private List<Party> parties;
+
+
+
 
     public Member (Member copy) {
         id = copy.id; // This line is SUPER important! Many things won't work if it's absent
@@ -49,7 +53,4 @@ public class Member {
         password = copy.password;
     }
 
-    public List<Party> getParties() {
-        return parties;
-    }
 }

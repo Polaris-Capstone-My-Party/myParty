@@ -46,8 +46,7 @@ public class PartyController {
             @ModelAttribute Party party,
             @RequestParam String start_time,
             @RequestParam String end_time,
-//            @ModelAttribute Location location
-//            @RequestParam  location
+
 
             @RequestParam String address_one,
             @RequestParam String address_two,
@@ -98,18 +97,20 @@ public class PartyController {
         partyDao.save(party);
 
 
-        return "redirect:/";
+        return "redirect:/parties/success?urlKey="+ uuid;
 
     }
 
     @GetMapping("/parties/success")
-    public String showSuccessPartyForm(Model model) {
-        model.addAttribute("party", new Party());
+    public String showSuccessPartyForm(@RequestParam String urlKey, Model model) {
+        Party party = partyDao.getByUrlKey(urlKey);
+        model.addAttribute("party", party);
         return "party/success";
     }
 
     @PostMapping("/parties/{urlKey}")
-    public String successParty(@ModelAttribute Party party, Model model) {
+    public String successParty(@RequestParam(name="customMessage") String customMessage,
+                               @RequestParam(name="emailAddress") String emailAddress)  {
 
         return "redirect:/success";
     }
