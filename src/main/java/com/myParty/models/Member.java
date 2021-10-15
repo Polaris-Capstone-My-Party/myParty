@@ -39,11 +39,8 @@ public class Member {
     @Column(nullable = false)
     @Getter @Setter private String last_name;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "member_id")
-    private List<Party> parties;
-
-
-
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
+    @Getter @Setter private List<Party> parties;
 
     public Member (Member copy) {
         id = copy.id; // This line is SUPER important! Many things won't work if it's absent

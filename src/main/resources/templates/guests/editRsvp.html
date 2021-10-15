@@ -24,27 +24,23 @@
 </div>
 
 <!--Form to RSVP for Party-->
-<form th:action="@{|/rsvp/${party.urlKey}|}" th:method="post" th:object="${guest}">
+<form th:action="@{|/rsvp/${party.urlKey}/${guest.guestKey}/edit|}" th:method="post" th:object="${guest}">
     <!--Enter First Name-->
     <div class="form-group">
         <label for="firstName">First Name: </label>
-        <input class="form-control" id="firstName" type="text" th:field="*{firstName}"/>
+        <input class="form-control" id="firstName" type="text" th:field="*{firstName}" th:placeholder="${guest.firstName}"/>
     </div>
-
-
-    <!--    th:value="${party.location.zipcode}"-->
-    <!--    by default feield - test & get back to them -->
 
     <!--Enter Last Name-->
     <div class="form-group">
         <label for="lastName">Last Name: </label>
-        <input class="form-control" id="lastName" type="text" th:field="*{lastName}"/>
+        <input class="form-control" id="lastName" type="text" th:field="*{lastName}" th:placeholder="${guest.lastName}"/>
     </div>
 
     <!--Enter Email-->
     <div class="form-group">
         <label for="email">Email: </label>
-        <input class="form-control" id="email" type="text" th:field="*{email}"/>
+        <input class="form-control" id="email" type="text" th:field="*{email}" th:placeholder="${guest.email}"/>
     </div>
 
     <!--Enter RSVP Status-->
@@ -56,6 +52,7 @@
             </div>
         </select>
     </div>
+    <input type="hidden" th:field="*{id}" th:placeholder="${guest.id}">
     <input type="submit" value="Submit"/>
 </form>
 </body>
