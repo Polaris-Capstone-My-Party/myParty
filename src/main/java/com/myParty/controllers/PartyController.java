@@ -30,6 +30,11 @@ public class PartyController {
     @Autowired
     LocationRepository locationDao;
 
+    public PartyController(PartyRepository partyDao, MemberRepository memberDao) {
+        this.partyDao = partyDao;
+        this.memberDao = memberDao;
+    }
+
     @GetMapping("/parties/create")
     public String showCreatePartyForm(Model model) {
         model.addAttribute("party", new Party());
@@ -109,4 +114,11 @@ public class PartyController {
         return "redirect:/success";
     }
 
+    @GetMapping("/parties")
+    public String showParties(Model model) {
+        List<Party> listOfParties = partyDao.findAll();
+        System.out.println(listOfParties);
+        model.addAttribute("listOfParties", listOfParties);
+        return "/parties/party_index";
+    }
 }
