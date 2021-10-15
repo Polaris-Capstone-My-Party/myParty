@@ -99,13 +99,14 @@ public class PartyController {
 
     @GetMapping("/parties/success")
     public String showSuccessPartyForm(Model model) {
+//        Party party = partyDao.getById()
         model.addAttribute("party", new Party());
+//        model.addAttribute("urlKey",party.getUrlKey()),
         return "party/success";
     }
 
     @PostMapping("/parties/{urlKey}")
-    public String successParty(@RequestParam(name="customUrl") String customUrl,
-                               @RequestParam(name="customMessage") String customMessage,
+    public String successParty(@RequestParam(name="customMessage") String customMessage,
                                @RequestParam(name="emailAddress") String emailAddress)  {
 
         return "redirect:/success";
