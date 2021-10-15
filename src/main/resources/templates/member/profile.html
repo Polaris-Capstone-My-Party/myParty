@@ -11,14 +11,46 @@
 <div th:text="${members.username}"></div>
 <div th:text="${members.email}"></div>
 </div>
+<div class="container">
 
-<button>Create A Party</button>
+    <div th:each="post : ${listOfPosts}">
+        <a th:href="'/posts/' + ${post.id}"><h3 th:text="${post.title}" /></a>
+        <p>Posted by: <span th:text="${post.poster.getUsername()}"></span></p>
+        <p th:text="${post.description}" />
+    </div>
+
+
+    <button>Create A Party</button>
 <button>Edit Your Profile</button>
 <button>Change Your Password</button>
 <button>Delete Your Membership</button>
     <!--TODO add buttons functionality-->
     <!--TODO add ability to edit fields-->
 
+
+<th:"@{|/rsvp/${party.urlKey}/${guest.guestKey}/items|}" th:method="post">
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>Quantity Requested</th>
+            <th>Quantity You're Bringing</th>
+        </tr>
+
+        <div th:each="partyItem : ${partyItems}">
+            <tr class="form-group">
+                <td th:text="${partyItem.item.name}"></td>
+                <td th:text="${partyItem.quantityRequired}"></td> <!--TODO: Make drop down eventually-->
+                <td><input type="text" name="quantity[]"></td>
+                <input type="hidden" name="partyItem[]" th:value="${partyItem.id}">
+            </tr>
+        </div>
+
+
+        <!--    Grab list of arrays from the form? -->
+
+    </table>
+    <input type="submit" value="Submit"/>
+</>
 
 </body>
 </html>

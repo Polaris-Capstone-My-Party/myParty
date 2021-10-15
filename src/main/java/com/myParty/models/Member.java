@@ -14,6 +14,10 @@ import javax.persistence.*;
 
 public class Member {
 
+    public User() {
+
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter @Setter private Long id;
@@ -36,6 +40,12 @@ public class Member {
     @Column(nullable = false)
     @Getter @Setter private String last_name;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "member_id")
+    private List<Party> parties;
+
+
+
+
     public Member (Member copy) {
         id = copy.id; // This line is SUPER important! Many things won't work if it's absent
         email = copy.email;
@@ -43,4 +53,7 @@ public class Member {
         password = copy.password;
     }
 
+    public List<Party> getParties() {
+        return parties;
+    }
 }
