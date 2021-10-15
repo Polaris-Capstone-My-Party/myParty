@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Party</title>
+<!--  <div th:replace="Partials :: header"></div>-->
+</head>
+<body>
+<div th:replace="Partials :: navbar"></div>
+
+<div class="container">
+
+  <h1 th:text="${party.getTitle()}"/>
+  <h4>Posted by: <span th:text="${party.getOwner().getUsername()}"></span></h4>
+  <p th:text="${party.getOwner().getEmail()}"/>
+  <p th:text="${party.getDescription()}"/>
+
+</div>
+
+<!--<div th:replace="Partials :: scripts"></div>-->
+</body>
+</html>

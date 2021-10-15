@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "members")
@@ -13,6 +14,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 
 public class Member {
+
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +39,12 @@ public class Member {
     @Column(nullable = false)
     @Getter @Setter private String last_name;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "member_id")
+    private List<Party> parties;
+
+
+
+
     public Member (Member copy) {
         id = copy.id; // This line is SUPER important! Many things won't work if it's absent
         email = copy.email;
@@ -43,4 +52,7 @@ public class Member {
         password = copy.password;
     }
 
+    public List<Party> getParties() {
+        return parties;
+    }
 }

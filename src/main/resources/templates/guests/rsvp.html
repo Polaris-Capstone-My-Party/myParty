@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>RSVP </title>
+    <title>My Party | RSVP</title>
 </head>
 <body>
 
@@ -13,8 +13,8 @@
     <div th:text="${party.id}"></div>
     <div th:text="${party.title}"></div>
     <div th:text="${party.description}"></div>
-    <div th:text="${party.start_time}"></div>
-    <div th:text="${party.end_time}"></div>
+    <div th:text="${party.startTime}"></div>
+    <div th:text="${party.endTime}"></div>
     <div th:text="${party.owner.first_name + ' ' + party.owner.last_name}"></div>
     <div th:text="${party.location.address_one}"></div>
     <div th:text="${party.location.city}"></div>
@@ -25,15 +25,12 @@
 
 <!--Form to RSVP for Party-->
 <form th:action="@{|/rsvp/${party.urlKey}|}" th:method="post" th:object="${guest}">
+
     <!--Enter First Name-->
     <div class="form-group">
         <label for="firstName">First Name: </label>
-        <input class="form-control" id="firstName" type="text" th:value="${party.location.zipcode}"/>
+        <input class="form-control" id="firstName" type="text" th:field="*{firstName}"/>
     </div>
-
-
-<!--    th:field="*{firstName}"-->
-<!--    by default feield - test & get back to them -->
 
     <!--Enter Last Name-->
     <div class="form-group">
@@ -57,14 +54,7 @@
         </select>
     </div>
 
-    <!--Sign Up for Items-->
-    <!--TODO: List Party Items (forEach?) -->
-    <!--TODO: How to Add Party Items-->
-
-    <input type="submit" value="Log In"/>
-
+    <input type="submit" value="Submit"/>
 </form>
-
-
 </body>
 </html>
