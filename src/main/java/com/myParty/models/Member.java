@@ -39,6 +39,7 @@ public class Member {
     @Column(nullable = false)
     @Getter @Setter private String last_name;
 
+    @Getter @Setter
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
     private List<Party> parties;
 
@@ -52,7 +53,4 @@ public class Member {
         password = copy.password;
     }
 
-    public List<Party> getParties() {
-        return parties;
-    }
 }

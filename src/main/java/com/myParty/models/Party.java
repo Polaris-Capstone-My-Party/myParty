@@ -38,7 +38,6 @@ public class Party {
     @Column(nullable = true, name="url_key")
     @Getter @Setter private String urlKey;
 
-
     @ManyToOne
     @JoinColumn (name = "member_id")
     @Getter @Setter private Member owner;
@@ -47,7 +46,6 @@ public class Party {
     @JoinColumn(name = "location_id")
     @Getter @Setter private Location location;
 
-    //added many to many
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name="parties_tags",
@@ -55,7 +53,6 @@ public class Party {
             inverseJoinColumns={@JoinColumn(name="tag_id")}
     )
     @Getter @Setter private List<Tag> tags;
-
 
     public Party(String title, String description) {
         this.title = title;
