@@ -120,6 +120,7 @@ public class GuestController {
         Guest guest = guestDAO.getByGuestKey(guestKey);
 
         //TODO: set default RSVP status to be one currently
+        //TODO: if quantity = 0, do not show?
         model.addAttribute("party", party); //get party info
         model.addAttribute("guest", guest); //get guest info
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
@@ -133,11 +134,17 @@ public class GuestController {
 
     //saves Guest edited information
     @PostMapping(path = "/rsvp/{urlKey}/{guestKey}/edit")
-    public String saveEditRSVP(@ModelAttribute Guest guest, @RequestParam String rsvp){
+    public String saveEditRSVP(@ModelAttribute Guest guest, @RequestParam String rsvp, @RequestParam(name="itemBringer[]") String[] itemBringer, @RequestParam(name="quantity[]") String[] quantities){
         guest.setRsvpStatus(RsvpStatuses.valueOf(rsvp));
         guestDAO.save(guest); //save guest information
 
-        //TODO: Update ItemBringer information (?)
+        for(int i = 0; i < itemBringer.length; i++){ //updates itemBringer quantity
+            //TODO: Add error message to avoid negative values in the database (someone signs up for stuff before you submit)
+            ItemBringer updatedItemBringer = itemBringerDAO.getById(Long.valueOf(itemBringer[i])); //get itemBringer object associated w/ itemBringerID
+            updatedItemBringer.setQuantity((Long.valueOf(quantities[i]))); //sets updated quantity
+            itemBringerDAO.save(updatedItemBringer); //saves & updates quantity
+        }
+3
         //TODO: Update party items database
         return "redirect:/guests/successRsvp";
     }
