@@ -54,8 +54,6 @@ public class Party {
     )
     @Getter @Setter private List<Tag> tags;
 
-    public Party() {
-    }
 
     public Party(String title, String description) {
         this.title = title;
