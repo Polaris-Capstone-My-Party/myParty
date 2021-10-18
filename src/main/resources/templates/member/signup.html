@@ -5,7 +5,7 @@
   <title>Sign up</title>
 </head>
 <body>
-<!--<nav th:replace="partials/navbar :: navbar"></nav>-->
+<nav th:replace="partials/navbar :: navbar"></nav>
 
 <h1>Create an account</h1>
 <form th:action="@{/sign-up}" method="POST" th:object="${member}">
