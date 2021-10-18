@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title layout:fragment="title">
+        Default
+    </title>
+    <th:block th:include="partials/head :: head" ></th:block>
+</head>
+
+<body>
+<nav th:replace="partials/navbar :: navbar" ></nav>
+<header>
+
+
+
+</header>
+<section layout:fragment="content">
+    <p>Page content goes here, you should not see this. ADD THIS TO THE TEMPLATES</p>
+</section>
+<footer th:replace="partials/footer :: footer">
+    <p>My footer</p>
+    <p layout:fragment="custom-footer">Custom footer here</p>
+</footer>
+</body>
+</html>
