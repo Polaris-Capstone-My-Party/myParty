@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class MembersController {
 
+    //        @Autowired
     private final MemberRepository memberDao;
 
     private final PasswordEncoder passwordEncoder;
@@ -18,6 +19,12 @@ public class MembersController {
         this.memberDao = memberDao;
         this.passwordEncoder = passwordEncoder;
     }
+
+    @GetMapping("/user/create")
+    public String createUserForm() {
+        return "user/create";
+    }
+
 
     @GetMapping("/sign-up")
     public String showSignupForm(Model model) {
@@ -43,4 +50,6 @@ public class MembersController {
         return "member/displayParties";
     }
 }
+
+
 

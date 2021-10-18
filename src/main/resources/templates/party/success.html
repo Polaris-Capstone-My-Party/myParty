@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Success! <br/> Party has been created</title>
+</head>
+<body>
+
+<form th:action="@{/parties/success}" th:method="post">
+    Custom Url:<p th:text="${party.urlKey}"></p>
+    Custom Message:
+    <input type="text" name="customMessage" />
+    <br />
+    Email addresses:
+    <input type="text" name="emailAddresses" />
+    <br />
+
+    <input type="submit" />
+</form>
+
+</body>
+</html>
