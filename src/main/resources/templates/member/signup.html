@@ -1,34 +1,38 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="partials/head :: head('Sign-Up')">
-  <meta charset="UTF-8" />
-  <title>Sign up</title>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<meta charset="UTF-8"/>
+<title layout:fragment="title">
+    Sign Up
+</title>
 </head>
 <body>
-<nav th:replace="partials/navbar :: navbar"></nav>
 
-<h1>Create an account</h1>
-<form th:action="@{/sign-up}" method="POST" th:object="${member}">
-  <label for="username">Username</label>
-  <input id="username" th:field="*{username}" />
+<section layout:fragment="content">
+    <h1>Create an account</h1>
+    <form th:action="@{/sign-up}" method="POST" th:object="${member}">
+        <label for="username">Username</label>
+        <input id="username" th:field="*{username}"/>
 
-  <label for="first_name">First Name</label>
-  <input id="first_name" type="text" th:field="*{first_name}" />
+        <label for="first_name">First Name</label>
+        <input id="first_name" type="text" th:field="*{first_name}"/>
 
-  <label for="last_name">Last Name</label>
-  <input id="last_name" type="text" th:field="*{last_name}" />
+        <label for="last_name">Last Name</label>
+        <input id="last_name" type="text" th:field="*{last_name}"/>
 
-  <label for="email">Email</label>
-  <input id="email" th:field="*{email}" />
+        <label for="email">Email</label>
+        <input id="email" th:field="*{email}"/>
 
 
-  <label for="phone">Phone Number</label>
-  <input id="phone" type="number" th:field="*{phone}" />
+        <label for="phone">Phone Number</label>
+        <input id="phone" type="number" th:field="*{phone}"/>
 
-  <label for="password">Password</label>
-  <input id="password" type="password" th:field="*{password}" />
+        <label for="password">Password</label>
+        <input id="password" type="password" th:field="*{password}"/>
 
-  <input value="Let's Party!" type="submit" />
-</form>
+        <input value="Let's Party!" type="submit"/>
+    </form>
+</section>
 </body>
 </html>
