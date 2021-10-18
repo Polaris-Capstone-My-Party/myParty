@@ -133,4 +133,7 @@ public class GuestController {
         //TODO: Update party items database
         return "redirect:/guests/successRsvp";
     }
+
+    //Method to check quantity?
+    //Store quantitiy RE
 }
