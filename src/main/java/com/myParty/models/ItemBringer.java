@@ -4,6 +4,7 @@ package com.myParty.models;
 import lombok.*;
 import javax.persistence.*;
 
+@ToString
 @Entity
 @Table(name = "item_bringer")
 @AllArgsConstructor

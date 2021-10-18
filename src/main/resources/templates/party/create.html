@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create your Party</title>
+</head>
+<body>
+
+<form th:action="@{/parties/create}" th:method="post" th:object="${party}">
+    Title:
+    <input th:field="*{title}" />
+    <br />
+    Description:
+    <input th:field="*{description}" />
+    <br />
+    Start Time
+    <input name="start_time" type="datetime-local"/>
+    <br />
+    End Time
+    <input name="end_time" type="datetime-local"/>
+    <br />
+        Address one
+        <input name="address_one" type="text"/>
+        <br />
+        Address two
+        <input name="address_two" type="text"/>
+        <br />
+        City
+        <input name="city" type="text"/>
+        <br />
+        State
+        <input name="state" type="text"/>
+        <br />
+        Zipcode
+        <input name="zipcode" type="number"/>
+        <br />
+    <input type="submit" />
+
+</form>
+
+</body>
+</html>
+
+
+
+
+<!--<div class="container">-->
+<!--    <div class="row justify-content-between">-->
+<!--        <div class="col-4">-->
+<!--            Party Title-->
+<!--        </div>-->
+<!--        <div class="col-4">-->
+<!--            Description-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="row justify-content-between">-->
+<!--        <div class="col-4">-->
+<!--            Location-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
