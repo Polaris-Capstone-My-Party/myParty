@@ -20,10 +20,10 @@ public class MembersController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @GetMapping("/user/create")
-    public String createUserForm() {
-        return "user/create";
-    }
+//    @GetMapping("/user/create")
+//    public String createUserForm() {
+//        return "user/create";
+//    }
 
 
     @GetMapping("/sign-up")

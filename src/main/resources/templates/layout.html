@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta3/css/bootstrap.css' integrity='sha512-a0JFdrmA/jK076yAzKEsLBcN7qRT1gqd66A6sVJbqlYeo+4SrcvltXWPfZGwaSFJOVgckCNWqn4mH6lcFnr6QA==' crossorigin='anonymous'/>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta3/js/bootstrap.bundle.min.js' integrity='sha512-DSdiuNZtfUhehZHXtit9Sa/83i06YSnvT8Js8drwdkVCDMk3JwpIxdhf2oRUByUDB3wguN2iAzoTNfxFAuqGyA==' crossorigin='anonymous'></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+  <!-- Toast Library -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+  <!-- Axios -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous"></script>
+  <!-- Style override -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header>
+  <nav class="nav bg-main navbar-expand-md">
+    <div class="container p-1">
+
+      <div class="d-flex d-md-none flex-row justify-content-between m-auto col-12 py-2 m-0">
+        <a class="col-3" href="/">
+          <img class="w-100" src="/img/Logo.svg" alt="">
+        </a>
+        <button class="navbar-toggler col-4 text-end px-0 align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          Menu <i class="far fa-caret-square-down"></i>
+        </button>
+
+      </div>
+
+      <!-- Navbar at small -->
+      <div class=" collapse navbar-collapse" id="navbarSupportedContent">
+
+        <ul class="d-block d-md-none navbar-nav align-items-start px-4 text-center">
+          <li class="nav-item text-dark">
+            <a href="/" class="nav-link text-dark">
+              <i class="fas fa-home"></i> Home
+            </a>
+          </li>
+          <li class="nav-item text-dark">
+            <a href="/login" class="nav-link text-dark" sec:authorize="isAnonymous()">
+              <i class="fas fa-sign-in-alt"></i> Login/Sign-Up
+            </a>
+          </li>
+          <li class="nav-item text-dark">
+            <a href="/admin" class="nav-link text-dark" sec:authorize="hasRole('ADMIN')">
+              <i class="fas fa-users-cog"></i> Admin
+            </a>
+          </li>
+          <li class="nav-item text-dark">
+            <a href="/about" class="nav-link text-dark">
+              <i class="fas fa-code"></i> About Us
+            </a>
+          </li>
+          <li class="nav-item text-dark px-2" sec:authorize="isAuthenticated()">
+            <a href="/user/profile" class="nav-link text-dark ">
+              <i class="fas fa-user-circle"></i> Profile
+            </a>
+          </li>
+          <li class="nav-item text-dark px-2" sec:authorize="isAuthenticated()">
+            <a href="/logout" class="nav-link text-dark">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+          </li>
+        </ul>
+
+      </div>
+
+      <!-- Navbar at large -->
+      <div class="d-none d-md-flex justify-content-between align-items-center ">
+
+        <div class="col-12 col-md order-2 order-md-first" >
+          <ul class="navbar-nav align-items-start px-4 text-center">
+            <li class="nav-item text-dark">
+              <a href="/" class="nav-link text-dark">
+                <i class="fas fa-home"></i> Home
+              </a>
+            </li>
+            <li class="nav-item text-dark">
+              <a href="/admin" class="nav-link text-dark" sec:authorize="hasRole('ADMIN')">
+                <i class="fas fa-users-cog"></i> Admin
+              </a>
+            </li>
+            <li class="nav-item text-dark">
+              <a href="/about" class="nav-link text-dark" sec:authorize="!hasRole('ADMIN')">
+                <i class="fas fa-code"></i> About Us
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="nav-brand col-2 p-2 d-flex flex-row justify-content-between order-first order-md-2 d-none d-md-block">
+          <a href="/">
+            <img class="w-100" src="/img/Logo.svg" alt="">
+          </a>
+        </div>
+
+
+
+        <div class="col order-last order-md-last align-items-end justify-content-end">
+          <!-- show when anon -->
+          <ul class="navbar-nav align-items-end align-items-end justify-content-end px-4" sec:authorize="isAnonymous()">
+            <div class="d-flex flex-row px-2">
+              <li class="nav-item text-dark">
+                <a href="/login" class="nav-link text-dark">
+                  <i class="fas fa-sign-in-alt"></i> Login/Sign-Up
+                </a>
+              </li>
+            </div>
+          </ul>
+          <!-- show when logged in  -->
+          <ul class="navbar-nav align-items-end px-4 me-auto align-items-end justify-content-end" sec:authorize="isAuthenticated()">
+            <div class="d-flex flex-row ">
+              <li class="nav-item text-dark px-2">
+                <a href="/user/profile" class="nav-link text-dark ">
+                  <i class="fas fa-user-circle"></i> Profile
+                </a>
+              </li>
+              <li class="nav-item text-dark px-2">
+                <a href="/logout" class="nav-link text-dark">
+                  <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+              </li>
+            </div>
+          </ul>
+        </div>
+
+      </div>
+
+
+    </div>
+  </nav>
+</header>
+
+<main layout:fragment="content">
+  <!-- content goes here -->
+</main>
+
+</body>
+<script layout:fragment="script" >
+</script>
+</html>
