@@ -63,10 +63,16 @@ public class GuestController {
     @GetMapping(path = "/rsvp/{urlKey}/{guestKey}/items")
     public String showItemSignup(@PathVariable String urlKey, @PathVariable String guestKey, Model model){
         Party party = partyDAO.getByUrlKey(urlKey); // gets party info for form
+        List<PartyItem> partyItems = partyItemDAO.getByParty(party);
+
+        List<Long> quantities = calculateQuantity(partyItems); //gets dynamic quantities left of each party
+        for(int i =0; i < partyItems.size(); i++){
+            partyItems.get(i).setQuantityRequired(quantities.get(i)); //sets partyItemQuantity on form to be whatever quantity is left
+        }
 
         model.addAttribute("party", party); //sets party info
         model.addAttribute("guest", guestDAO.getByGuestKey(guestKey)); //sets guest info
-        model.addAttribute("partyItems", partyItemDAO.getByParty(party)); //gets & sets party Items for party
+        model.addAttribute("partyItems", partyItems); //gets & sets party Items for party
 
         return "guests/itemSignup";
     }
@@ -93,10 +99,6 @@ public class GuestController {
             itemBringerDAO.save(itemBringer); // saves item bringer
 
             //TODO: Add error message to avoid negative values in the database (someone signs up for stuff before you submit)
-            Long currentQuantityRequired = partyItem.getQuantityRequired(); //constant of current quantity required for partyItem
-            Long updatedQuantity = currentQuantityRequired - itemBringer.getQuantity(); //constant of current quantity required - quantity guest/itemBringer signed up for
-            partyItem.setQuantityRequired(updatedQuantity); //set updated quantityRequired
-            partyItemDAO.save(partyItem); //save new partyItem instance with updated quantityRequired
         }
 
         return "redirect:/guests/successRsvp";
@@ -118,17 +120,21 @@ public class GuestController {
 
         Party party = partyDAO.getByUrlKey(urlKey);
         Guest guest = guestDAO.getByGuestKey(guestKey);
+        List<PartyItem> partyItems = partyItemDAO.getByParty(party);
+        List<ItemBringer> itemBringers = itemBringerDAO.getByGuest(guest); //gets & sets list of item bringers associated w/ guest
 
-        //TODO: set default RSVP status to be one currently
+        List<Long> quantities = calculateQuantity(partyItems); //gets dynamic quantities left of each party
+        for(int i =0; i < partyItems.size(); i++){
+            partyItems.get(i).setQuantityRequired(quantities.get(i)); //sets partyItemQuantity on form to be whatever quantity is left
+        }
+
+        //TODO: set default RSVP status to be the one currently
         //TODO: if quantity = 0, do not show?
         model.addAttribute("party", party); //get party info
         model.addAttribute("guest", guest); //get guest info
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
-        model.addAttribute("partyItems", partyItemDAO.getByParty(party)); //gets & sets partyItems for party
-
-        List<ItemBringer> itemBringers = itemBringerDAO.getByGuest(guest); //gets & sets list of item bringers associated w/ guest
         model.addAttribute("itemBringers", itemBringers); //gets ItemBringer info associated with guestId
-
+        model.addAttribute("partyItems", partyItems); //gets & sets partyItems for party
         return "guests/editRsvp";
     }
 
@@ -144,19 +150,29 @@ public class GuestController {
             //TODO: Add error message to avoid negative values in the database (someone signs up for stuff before you submit)
             ItemBringer updatedItemBringer = itemBringerDAO.getById(Long.valueOf(itemBringer[i])); //get itemBringer object associated w/ itemBringerID
             updatedItemBringer.setQuantity((Long.valueOf(quantities[i]))); //sets updated quantity
-            itemBringerDAO.save(updatedItemBringer); //saves & updates quantity
-//
-//            PartyItem updatedPartyItem = partyItemDAO.getById(Long.valueOf(partyItem[i])); //gets partyItem via partyItemID
-//
-//            Long currentQuantityRequired = updatedPartyItem.getQuantityRequired(); //constant of current quantity required for partyItem
-//            Long updatedQuantity = currentQuantityRequired - updatedItemBringer.getQuantity(); //constant of current quantity required - updated quantity guest/itemBringer signed up for
-//            updatedPartyItem.setQuantityRequired(updatedQuantity); //set updated quantityRequired
-//            partyItemDAO.save(updatedPartyItem); //save partyItem instance with updated quantityRequired
+            itemBringerDAO.save(updatedItemBringer); //saves & updates quantity for ItemBringer
         }
 
         return "redirect:/guests/successRsvp";
     }
 
-    //Method to check quantity?
-    //Store quantitiy RE
+
+    public List<Long> calculateQuantity(List<PartyItem> partyItems){ //takes in List of partyItems
+        List<Long> totalQuantity= new ArrayList<>(); //list to store total quantity being brought of each partyItem for a party
+        Long quantityGuestsBringing = Long.valueOf(0);
+
+        for (PartyItem partyItem: partyItems){ //run through each partyItem in partyItem array
+            List<ItemBringer> itemBringers = itemBringerDAO.getByPartyItem(partyItem); //gets list of item bringers associated w/ party item
+            quantityGuestsBringing = Long.valueOf(0); //reset quantity to 0
+
+            for (ItemBringer itemBringer: itemBringers) { //run though each ItemBringer associated w/ partyItem
+                quantityGuestsBringing += itemBringer.getQuantity(); //tallies quantities of each itemBringer for specific partyItem
+            }
+
+            Long actualQuantity = partyItem.getQuantityRequired() - quantityGuestsBringing;
+            totalQuantity.add(actualQuantity); //add tally of quantities to totalQuantities array
+        }
+
+        return totalQuantity;
+    }
 }
