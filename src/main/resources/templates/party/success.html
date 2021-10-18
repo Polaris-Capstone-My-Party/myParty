@@ -5,8 +5,7 @@
     <title>Success! <br/> Party has been created</title>
 </head>
 <body>
-<!--<h1> Success! <br/> Party has been created></h1>-->
-<!--<span th:text=" ${urlKey}"></span>-->
+
 <form th:action="@{/parties/success}" th:method="post">
     Custom Url:<p th:text="${party.urlKey}"></p>
     Custom Message:

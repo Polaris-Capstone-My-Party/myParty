@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -79,6 +79,7 @@ public class GuestController {
 
         for(int i = 0; i < myPartyItems.length; i++){
 
+            //TODO: Test This
             if(quantities[i].equals("0")){ //if quantity is 0, no need to create Item Bringer instance
                 continue;
             }
@@ -115,22 +116,44 @@ public class GuestController {
         rsvpStatuses.add("maybe");
         rsvpStatuses.add("no");
 
+        Party party = partyDAO.getByUrlKey(urlKey);
+        Guest guest = guestDAO.getByGuestKey(guestKey);
+
         //TODO: set default RSVP status to be one currently
-        model.addAttribute("party", partyDAO.getByUrlKey(urlKey)); //get party info
-        model.addAttribute("guest", guestDAO.getByGuestKey(guestKey)); //get guest info
+        //TODO: if quantity = 0, do not show?
+        model.addAttribute("party", party); //get party info
+        model.addAttribute("guest", guest); //get guest info
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
+        model.addAttribute("partyItems", partyItemDAO.getByParty(party)); //gets & sets partyItems for party
+
+        List<ItemBringer> itemBringers = itemBringerDAO.getByGuest(guest); //gets & sets list of item bringers associated w/ guest
+        model.addAttribute("itemBringers", itemBringers); //gets ItemBringer info associated with guestId
 
         return "guests/editRsvp";
     }
 
     //saves Guest edited information
     @PostMapping(path = "/rsvp/{urlKey}/{guestKey}/edit")
-    public String saveEditRSVP(@ModelAttribute Guest guest, @RequestParam String rsvp){
+    public String saveEditRSVP(@ModelAttribute Guest guest, @RequestParam String rsvp, @RequestParam(name="itemBringer[]") String[] itemBringer, @RequestParam(name="quantity[]") String[] quantities,
+                               @RequestParam(name="partyItem[]") String[] partyItem, @PathVariable String urlKey){
         guest.setRsvpStatus(RsvpStatuses.valueOf(rsvp));
+        guest.setParty(partyDAO.getByUrlKey(urlKey));
         guestDAO.save(guest); //save guest information
 
-        //TODO: Update ItemBringer information (?)
-        //TODO: Update party items database
+        for(int i = 0; i < itemBringer.length; i++){ //updates itemBringer quantity
+            //TODO: Add error message to avoid negative values in the database (someone signs up for stuff before you submit)
+            ItemBringer updatedItemBringer = itemBringerDAO.getById(Long.valueOf(itemBringer[i])); //get itemBringer object associated w/ itemBringerID
+            updatedItemBringer.setQuantity((Long.valueOf(quantities[i]))); //sets updated quantity
+            itemBringerDAO.save(updatedItemBringer); //saves & updates quantity
+//
+//            PartyItem updatedPartyItem = partyItemDAO.getById(Long.valueOf(partyItem[i])); //gets partyItem via partyItemID
+//
+//            Long currentQuantityRequired = updatedPartyItem.getQuantityRequired(); //constant of current quantity required for partyItem
+//            Long updatedQuantity = currentQuantityRequired - updatedItemBringer.getQuantity(); //constant of current quantity required - updated quantity guest/itemBringer signed up for
+//            updatedPartyItem.setQuantityRequired(updatedQuantity); //set updated quantityRequired
+//            partyItemDAO.save(updatedPartyItem); //save partyItem instance with updated quantityRequired
+        }
+
         return "redirect:/guests/successRsvp";
     }
 

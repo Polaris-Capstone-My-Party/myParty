@@ -53,6 +53,29 @@
         </select>
     </div>
     <input type="hidden" th:field="*{id}" th:placeholder="${guest.id}">
+    <br>
+
+<!-- Display Party Items -->
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>Quantity Requested</th>
+            <th>Quantity You're Bringing</th>
+        </tr>
+
+       <div th:each="itemBringer : ${itemBringers}">
+           <tr>
+               <td th:text="${itemBringer.partyItem.item.name}"></td>
+               <td th:text="${itemBringer.partyItem.quantityRequired}"></td>
+               <td>
+                   <input type="text" th:value="${itemBringer.quantity}" name="quantity[]">
+               </td>
+               <input type="hidden" name="itemBringer[]" th:value="${itemBringer.id}">
+               <input type="hidden" name="partyItem[]" th:value="${itemBringer.partyItem.id}">
+           </tr>
+       </div>
+    </table>
+
     <input type="submit" value="Submit"/>
 </form>
 </body>
