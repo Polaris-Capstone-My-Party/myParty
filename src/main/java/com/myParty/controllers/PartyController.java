@@ -117,9 +117,24 @@ public class PartyController {
 
 
     @GetMapping("/parties/edit/{id}")
-    public String showEditPartyForm(@PathVariable long id, Model model) {
+    public String showEditPartyForm(@PathVariable long id, String urlKey, Model model) {
         Party partyToEdit = partyDao.getById(id);
+
+        Party party = partyDao.getByUrlKey(urlKey); // gets party info for form
         model.addAttribute("id", partyToEdit.getId());
+        model.addAttribute("party", partyToEdit.getUrlKey());
+        model.addAttribute("title", partyToEdit.getTitle());
+        model.addAttribute("description", partyToEdit.getDescription());
+        model.addAttribute("startTime", partyToEdit.getStartTime());
+        model.addAttribute("endTime", partyToEdit.getEndTime());
+        model.addAttribute("address_one", partyToEdit.getLocation().getAddress_one());
+        model.addAttribute("address_two", partyToEdit.getLocation().getAddress_two());
+        model.addAttribute("city", partyToEdit.getLocation().getCity());
+        model.addAttribute("state", partyToEdit.getLocation().getState());
+        model.addAttribute("zipcode", partyToEdit.getLocation().getZipcode());
+
+
+
         return "party/edit";
     }
 
@@ -196,6 +211,7 @@ public class PartyController {
 //        System.out.println(listOfParties);
 //        model.addAttribute("listOfParties", listOfParties);
 //        return "/parties/party_index";
+//    }
     }
 
 

@@ -14,33 +14,33 @@
 
     Title:
 <!--    <input th:field="*{title}" />-->
-    <input name="title" type="text"/>
+    <input name="title" type="text" th:value="${title}"/>
     <br />
     Description:
 <!--    <input th:field="*{description}" />-->
-    <input name="description" type="text"/>
+    <input name="description" type="text" th:value="${description}"/>
 
     <br />
     Start Time
-    <input name="startTime" type="datetime-local"/>
+    <input name="startTime" type="datetime-local" th:datetime="${startTime}"/>
     <br />
     End Time
-    <input name="endTime" type="datetime-local"/>
+    <input name="endTime" type="datetime-local" th:datetime="${endTime}"/>
     <br />
     Address one
-    <input name="address_one" type="text"/>
+    <input name="address_one" type="text" th:value="${address_one}"/>
     <br />
     Address two
-    <input name="address_two" type="text"/>
+    <input name="address_two" type="text" th:value="${address_two}"/>
     <br />
     City
-    <input name="city" type="text"/>
+    <input name="city" type="text" th:value="${city}"/>
     <br />
     State
-    <input name="state" type="text"/>
+    <input name="state" type="text" th:value="${state}"/>
     <br />
     Zipcode
-    <input name="zipcode" type="number"/>
+    <input name="zipcode" type="number" th:value="${zipcode}"/>
     <br />
     <input type="submit" />
 
