@@ -6,8 +6,6 @@ import com.myParty.models.Party;
 import com.myParty.repositories.LocationRepository;
 import com.myParty.repositories.MemberRepository;
 import com.myParty.repositories.PartyRepository;
-import com.sun.net.httpserver.Authenticator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,23 +15,24 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 @Controller
 public class PartyController {
 
-    @Autowired
-    PartyRepository partyDao;
-    @Autowired
-    MemberRepository memberDao;
-    @Autowired
-    LocationRepository locationDao;
 
-    public PartyController(PartyRepository partyDao, MemberRepository memberDao) {
+    private final PartyRepository partyDao;
+
+    private final MemberRepository memberDao;
+
+    private final LocationRepository locationDao;
+
+    public PartyController(PartyRepository partyDao, MemberRepository memberDao, LocationRepository locationDao) {
         this.partyDao = partyDao;
         this.memberDao = memberDao;
+        this.locationDao = locationDao;
     }
+
 
     @GetMapping("/parties/create")
     public String showCreatePartyForm(Model model) {
@@ -116,6 +115,7 @@ public class PartyController {
         return "redirect:/success";
     }
 
+
     @GetMapping("/parties/edit/{id}")
     public String showEditPartyForm(@PathVariable long id, Model model) {
         Party partyToEdit = partyDao.getById(id);
@@ -197,4 +197,5 @@ public class PartyController {
         model.addAttribute("listOfParties", listOfParties);
         return "/parties/party_index";
     }
+
 }
