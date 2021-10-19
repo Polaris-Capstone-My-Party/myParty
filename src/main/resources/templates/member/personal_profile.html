@@ -5,15 +5,15 @@
     <title>profile</title>
 </head>
 <body>
-
+<!--<nav th:replace="partials/"></nav>-->
 <h1>This is the profile page</h1>
 <div>
     <div th:text="${owner.username}"></div>
     <div th:text="${owner.email}"></div>
 </div>
-<div class="card-body" th:each="party : ${party}">
+<div class="card-body" th:each="party : ${owner.party}">
     <h5 th:text="${party.title}" class="card-title"></h5>
-    <p th:text="${party.body}" class="card-text"></p>
+    <p th:text="${party.description}" class="card-text"></p>
     <a th:href="@{/party/update/{id}(id=${party.id})}" class="btn btn-primary">Edit</a>
     <!--  <a th:href="@{/party/delete/{id}(id=${party.id})}" class="btn btn-danger">Delete</a>-->
 </div>
