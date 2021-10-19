@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="partials/head :: head('PROFILE')">
-    <meta charset="UTF-8" />
-    <title>profile</title>
-</head>
-<body>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<title layout:fragment="title" >
+    Profile
+</title>
+
+<section layout:fragment="content">
 
 <h1>This is the profile page</h1>
 <div>
@@ -13,10 +15,14 @@
 </div>
 <div class="card-body" th:each="party : ${party}">
     <h5 th:text="${party.title}" class="card-title"></h5>
-    <p th:text="${party.body}" class="card-text"></p>
+    <p th:text="${party.description}" class="card-text"></p>
     <a th:href="@{/party/update/{id}(id=${party.id})}" class="btn btn-primary">Edit</a>
     <!--  <a th:href="@{/party/delete/{id}(id=${party.id})}" class="btn btn-danger">Delete</a>-->
 </div>
 
-</body>
+</section>
+
+<footer>
+    <p layout:fragment="custom-footer">This is actually working</p>
+</footer>
 </html>
