@@ -1,16 +1,25 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <title layout:fragment="title">
         Default
     </title>
-    <th:block th:include="partials/head :: head" ></th:block>
+    <th:block th:include="partials/head :: head"></th:block>
 </head>
 
 <body>
-<nav th:replace="partials/guestNavbar :: navbar" ></nav>
-<header>
+<div sec:authorize="isAuthenticated()">
+    <nav th:replace="partials/memberNavbar :: navbar"></nav>
+    <span th:text="${#authentication.principal.username}"/>
+    <span th:text="${#authentication.principal.email}"/>
+</div>
 
+<div sec:authorize="isAnonymous()">
+    <nav th:replace="partials/guestNavbar :: navbar"></nav>
+</div>
+
+<header>
 
 
 </header>
