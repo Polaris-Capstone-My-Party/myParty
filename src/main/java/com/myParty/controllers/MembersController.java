@@ -70,9 +70,6 @@ public class MembersController {
         return "member/personal_profile";
     }
 
-
-   
-
     @PostMapping("/logout")
     public String logout(){return "redirect:/";}
 }
