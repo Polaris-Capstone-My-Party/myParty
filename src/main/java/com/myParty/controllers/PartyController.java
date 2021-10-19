@@ -64,6 +64,7 @@ public class PartyController {
                 city,
                 state,
                 zipcode);
+        System.out.println(locationToAdd);
         // 2021-10-21T13:13
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         Date parsedDate = dateFormat.parse(start_time.replace("T", " "));
@@ -113,6 +114,80 @@ public class PartyController {
                                @RequestParam(name="emailAddress") String emailAddress)  {
 
         return "redirect:/success";
+    }
+
+    @GetMapping("/parties/edit/{id}")
+    public String showEditPartyForm(@PathVariable long id, Model model) {
+        Party partyToEdit = partyDao.getById(id);
+        model.addAttribute("id", partyToEdit.getId());
+        return "party/edit";
+    }
+
+    @PostMapping("/parties/edit/{id}")
+    public String editParty(
+            @PathVariable long id,
+            @RequestParam(name = "title") String title,
+            @RequestParam(name = "description") String description,
+            @RequestParam(name = "startTime") String startTime,
+            @RequestParam(name = "endTime") String endTime,
+
+
+            @RequestParam(name = "address_one") String address_one,
+            @RequestParam(name ="address_two") String address_two,
+            @RequestParam(name ="city") String city,
+            @RequestParam(name ="state") String state,
+            @RequestParam(name ="zipcode") String zipcode
+
+            ) throws ParseException {
+        Location locationToUpdate = new Location(
+                0,
+                address_one,
+                address_two,
+                city,
+                state,
+                zipcode);
+
+
+// get existing info from post
+        Party partyToUpdate = partyDao.getById(id);
+        locationToUpdate.setId(partyToUpdate.getLocation().getId());
+//        System.out.println(party);
+        // update its contents
+        partyToUpdate.setTitle(title);
+        partyToUpdate.setDescription(description);
+
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        Date parsedDate = dateFormat.parse(startTime.replace("T", " "));
+        Member loggedInMember = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+
+        partyToUpdate.setStartTime(timestamp);
+         parsedDate = dateFormat.parse(endTime.replace("T", " "));
+
+         timestamp = new java.sql.Timestamp(parsedDate.getTime());
+
+        Location locationInDb = locationDao.save(locationToUpdate);
+
+        partyToUpdate.setLocation(locationInDb);
+
+        partyToUpdate.setEndTime(timestamp);
+        partyToUpdate.setLocation(locationInDb);
+//        partyToUpdate.setAddressOne(address_one);
+//        partyToUpdate.setAddressTwo(address_two);
+//        partyToUpdate.setCity( city);
+//        partyToUpdate.Setstate(state);
+//        partyToUpdate.setZipcode(zipcode);
+
+
+
+        UUID uuid = UUID.randomUUID();
+
+        // save updated post
+        partyDao.save(partyToUpdate);
+        return "redirect:/parties/success?urlKey="+ uuid;
+
     }
 
     @GetMapping("/parties")
