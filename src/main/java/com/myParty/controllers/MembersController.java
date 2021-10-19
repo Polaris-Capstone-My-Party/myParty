@@ -2,21 +2,30 @@ package com.myParty.controllers;
 
 import com.myParty.models.Member;
 import com.myParty.repositories.MemberRepository;
+import com.myParty.repositories.PartyRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class MembersController {
 
-//        @Autowired
-        private final MemberRepository memberDao;
+//    @Autowired
+       private final MemberRepository memberDao;
 
-        private final PasswordEncoder passwordEncoder;
+    private final PartyRepository partyDao;
 
-        public MembersController(MemberRepository memberDao, PasswordEncoder passwordEncoder) {
+
+    private final PasswordEncoder passwordEncoder;
+
+        public MembersController(MemberRepository memberDao, PartyRepository partyDao, PasswordEncoder passwordEncoder) {
             this.memberDao = memberDao;
+            this.partyDao = partyDao;
             this.passwordEncoder = passwordEncoder;
         }
 
@@ -40,30 +49,35 @@ public class MembersController {
         return "redirect:/login";
     }
 
-    @GetMapping("/member/{username}/parties")
-    public String showMemberParties(
+//    @GetMapping("/party/{member_id}")
+//
+//    public String showPostById(@PathVariable long id, Model model) {
+//
+//        Party party = partyDao.getById(id);
+//        model.addAttribute("party", party);
+//
+//        return "/party/view_party";
+//    }
+
+    @GetMapping("/member/{username}/profile")
+    public String showMemberProfile(
             @PathVariable String username,
             Model model
     ) {
         Member memberToDisplay = memberDao.findByUsername(username);
-        model.addAttribute("member", memberToDisplay);
+        model.addAttribute("owner", memberToDisplay);
 
-        return "member/displayParties";
+        return "member/profile";
+    }
+    @GetMapping("/profile")
+    public String memberProfile(Model model) {
+        Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member memberToDisplay = memberDao.getById(userInSession.getId());
+        model.addAttribute("owner",memberToDisplay);
+        return "member/personal_profile";
     }
 
 
-
-//    @PostMapping("/member/create")
-//    @ResponseBody
-//    public String createMember(
-//            @RequestParam(name = "uname") String username,
-//            @RequestParam(name = "psw") String password
-//    ) {
-//        System.out.println("Username" + username);
-//        System.out.println("Password" + password);
-//
-//        return "Member created. Let's party!";
-//    }
 }
 
 
