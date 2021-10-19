@@ -6,13 +6,41 @@
 </head>
 <body>
 
-<nav th:replace="partials/navbar :: navbar"></nav>
+<!--<nav th:replace="partials/navbar :: navbar"></nav>-->
 
-<form th:action="@{|/posts/edit/${id}|}" th:method="post">
+<form th:action="@{|/parties/edit/${id}|}" th:method="post">
 
-    <input type="text" name="title" placeholder="title">
-    <input type="text" name="body" placeholder="body">
-    <input type="submit">
+    Title:
+<!--    <input th:field="*{title}" />-->
+    <input name="title" type="text"/>
+    <br />
+    Description:
+<!--    <input th:field="*{description}" />-->
+    <input name="description" type="text"/>
+
+    <br />
+    Start Time
+    <input name="startTime" type="datetime-local"/>
+    <br />
+    End Time
+    <input name="endTime" type="datetime-local"/>
+    <br />
+    Address one
+    <input name="address_one" type="text"/>
+    <br />
+    Address two
+    <input name="address_two" type="text"/>
+    <br />
+    City
+    <input name="city" type="text"/>
+    <br />
+    State
+    <input name="state" type="text"/>
+    <br />
+    Zipcode
+    <input name="zipcode" type="number"/>
+    <br />
+    <input type="submit" />
 
 </form>
 
