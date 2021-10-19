@@ -1,0 +1,29 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="partials/head :: head">
+    <meta charset="UTF-8"/>
+    <title>profile</title>
+</head>
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">myParty</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNotLoggedInContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            <li>
+                <button type="button" class="btn btn-secondary nav-link" href="//sign-up">CREATE A PARTY</button>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/login"><i class="fas fa-user">Login</i></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/sign-up"><i class="fas fa-user-plus">Sign-Up</i></a>
+            </li>
+        </ul>
+
+    </div>
+
+</nav>
+</html>

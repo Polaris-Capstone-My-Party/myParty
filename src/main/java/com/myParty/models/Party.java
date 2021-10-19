@@ -54,8 +54,12 @@ public class Party {
     )
     @Getter @Setter private List<Tag> tags;
 
-    public Party(String title, String description) {
-        this.title = title;
-        this.description = description;
+
+//    public Party(String title, String description, String member) {
+//        this.title = title;
+//        this.description = description;
+//        this.owner = member;
     }
-}
+
+
+

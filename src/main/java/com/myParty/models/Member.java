@@ -16,7 +16,6 @@ import java.util.List;
 public class Member {
 
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter @Setter private Long id;
@@ -41,11 +40,22 @@ public class Member {
 
     @Getter @Setter
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
-    private List<Party> parties;
+    private List<Party> party;
 
+    public Member(String username, String email, String password, List<Party> party) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.party = party;
+    }
 
+    public List<Party> getParty() {
+        return party;
+    }
 
-
+    public void setParty(List<Party> party) {
+        this.party = party;
+    }
     public Member (Member copy) {
         id = copy.id; // This line is SUPER important! Many things won't work if it's absent
         email = copy.email;
