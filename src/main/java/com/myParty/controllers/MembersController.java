@@ -29,11 +29,12 @@ public class MembersController {
             this.passwordEncoder = passwordEncoder;
         }
 
+
     @GetMapping("/user/create")
     public String createUserForm() {
         return "user/create";
     }
-    
+
 
     @GetMapping("/sign-up")
     public String showSignupForm(Model model) {
@@ -49,15 +50,6 @@ public class MembersController {
         return "redirect:/login";
     }
 
-//    @GetMapping("/party/{member_id}")
-//
-//    public String showPostById(@PathVariable long id, Model model) {
-//
-//        Party party = partyDao.getById(id);
-//        model.addAttribute("party", party);
-//
-//        return "/party/view_party";
-//    }
 
     @GetMapping("/member/{username}/profile")
     public String showMemberProfile(
@@ -65,6 +57,7 @@ public class MembersController {
             Model model
     ) {
         Member memberToDisplay = memberDao.findByUsername(username);
+
         model.addAttribute("owner", memberToDisplay);
 
         return "member/profile";
@@ -78,6 +71,11 @@ public class MembersController {
     }
 
 
+   
+
+    @PostMapping("/logout")
+    public String logout(){return "redirect:/";}
 }
+
 
 
