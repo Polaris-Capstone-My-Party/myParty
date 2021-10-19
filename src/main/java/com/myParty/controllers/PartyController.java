@@ -211,6 +211,10 @@ public class PartyController {
 //        System.out.println(listOfParties);
 //        model.addAttribute("listOfParties", listOfParties);
 //        return "/parties/party_index";
+<<<<<<< HEAD
 //    }
+=======
+    }
+>>>>>>> main
 
-}
+
