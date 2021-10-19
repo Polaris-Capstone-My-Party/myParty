@@ -1,5 +1,4 @@
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="partials/head :: head">
     <meta charset="UTF-8"/>
     <title>profile</title>
@@ -17,18 +16,10 @@
                 <button type="button" class="btn btn-secondary nav-link" href="/sign-up">CREATE A PARTY</button>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/login" sec:authorize="isAnonymous()"><i class="fas fa-user">Login</i></a>
+                <a class="nav-link" href="/login"><i class="fas fa-user">Login</i></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/sign-up" sec:authorize="isAnonymous()"><i
-                        class="fas fa-user-plus">Sign-Up</i></a>
-            </li>
-
-            <li>
-                <form th:action="@{/logout}" th:method="post">
-                    <button class="btn-link btn" style="margin-top: 8px" sec:authorize="isAuthenticated()">Logout
-                    </button>
-                </form>
+                <a class="nav-link" href="/sign-up"><i class="fas fa-user-plus">Sign-Up</i></a>
             </li>
         </ul>
 
