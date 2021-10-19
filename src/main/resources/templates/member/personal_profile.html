@@ -19,7 +19,7 @@
 <div class="card-body" th:each="party : ${owner.party}">
     <h5 th:text="${party.title}" class="card-title"></h5>
     <p th:text="${party.description}" class="card-text"></p>
-    <a th:href="@{/party/edit/{id}(id=${party.id})}" class="btn btn-primary">edit party</a>
+    <a th:href="@{/parties/edit/{id}(id=${party.id})}" class="btn btn-primary">edit party</a>
     <!--  <a th:href="@{/party/delete/{id}(id=${party.id})}" class="btn btn-danger">Delete</a>-->
         </p>
 </div>

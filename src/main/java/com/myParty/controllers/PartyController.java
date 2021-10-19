@@ -205,16 +205,13 @@ public class PartyController {
 
     }
 
-//    @GetMapping("/parties")
-//    public String showParties(Model model) {
-//        List<Party> listOfParties = partyDao.findAll();
-//        System.out.println(listOfParties);
-//        model.addAttribute("listOfParties", listOfParties);
-//        return "/parties/party_index";
-<<<<<<< HEAD
-//    }
-=======
+    @GetMapping("/parties")
+    public String showParties(Model model) {
+        List<Party> listOfParties = partyDao.findAll();
+        System.out.println(listOfParties);
+        model.addAttribute("listOfParties", listOfParties);
+        return "/parties/party_index";
     }
->>>>>>> main
+    }
 
 

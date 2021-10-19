@@ -7,7 +7,9 @@
 <body>
 
 <form th:action="@{/parties/success}" th:method="post">
-    Custom Url:<p th:text="${party.urlKey}"></p>
+    Custom Url:
+    <input type="text"  th:value="${party.urlKey}"/>
+    <br/>
     Custom Message:
     <input type="text" name="customMessage" />
     <br />
