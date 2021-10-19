@@ -6,10 +6,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class HomeController {
-    @GetMapping("/home")
-    @ResponseBody
+    @GetMapping("/")
     public String landingPage(){
-        return "This is the TEMPORARY landing page! TEMPORARY.";
+        return "home";
     }
 
 }
