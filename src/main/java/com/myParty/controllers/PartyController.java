@@ -119,7 +119,9 @@ public class PartyController {
     @GetMapping("/parties/edit/{id}")
     public String showEditPartyForm(@PathVariable long id, Model model) {
         Party partyToEdit = partyDao.getById(id);
+        Party party = partyDao.getByUrlKey(urlKey); // gets party info for form
         model.addAttribute("id", partyToEdit.getId());
+        model.addAttribute("party", party.getUrlKey(urlKey));
         return "party/edit";
     }
 
