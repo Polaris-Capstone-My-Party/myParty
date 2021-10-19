@@ -49,6 +49,9 @@ public class MembersController {
         model.addAttribute("member", memberToDisplay);
         return "member/displayParties";
     }
+
+    @PostMapping("/logout")
+    public String logout(){return "redirect:/";}
 }
 
 
