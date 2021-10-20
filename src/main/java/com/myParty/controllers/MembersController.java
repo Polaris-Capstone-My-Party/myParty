@@ -60,8 +60,6 @@ public class MembersController {
         return "member/personal_profile";
     }
 
-<<<<<<< HEAD
-=======
     //show host party page to member
     @GetMapping("/member/{urlKey}/view")
     public String showHostPartyPage(Model model, @PathVariable String urlKey){
@@ -76,7 +74,6 @@ public class MembersController {
     }
 
     //logs out user
->>>>>>> main
     @PostMapping("/logout")
     public String logout(){return "redirect:/";}
 }
