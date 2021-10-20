@@ -8,17 +8,23 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 public class MembersController {
 
     private final MemberRepository memberDao;
     private final PartyRepository partyDao;
     private final PasswordEncoder passwordEncoder;
+    private final GuestRepository guestDao;
+    private final PartyItemRepository partyItemDao;
 
-    public MembersController(MemberRepository memberDao, PartyRepository partyDao, PasswordEncoder passwordEncoder) {
+    public MembersController(MemberRepository memberDao, PartyRepository partyDao, PasswordEncoder passwordEncoder, GuestRepository guestDao, PartyItemRepository partyItemDao) {
         this.memberDao = memberDao;
         this.partyDao = partyDao;
         this.passwordEncoder = passwordEncoder;
+        this.guestDao = guestDao;
+        this.partyItemDao = partyItemDao;
     }
 
     //TODO: Confirm not needed
@@ -59,6 +65,19 @@ public class MembersController {
         Member memberToDisplay = memberDao.getById(userInSession.getId());
         model.addAttribute("owner",memberToDisplay);
         return "member/personal_profile";
+    }
+
+    //show host party page to member
+    @GetMapping("/member/{urlKey}/view")
+    public String showHostPartyPage(Model model, @PathVariable String urlKey){
+        Party party = partyDao.getByUrlKey(urlKey); //gets party by urlKey
+        List<Guest> guests = guestDao.getByParty(party); //gets guests associated w/ party
+        List<PartyItem> partyItems = partyItemDao.getByParty(party); //gets partyItems associated w/ party
+
+        model.addAttribute("party", party); //sets party information
+        model.addAttribute("guests", guests); //sets guest information
+        model.addAttribute("partyItems", partyItems); //sets partyItem information
+        return "member/hostPartyPage";
     }
 
     //logs out user
