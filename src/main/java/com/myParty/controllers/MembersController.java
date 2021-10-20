@@ -54,6 +54,7 @@ public class MembersController {
     //shows member profile to themselves
     @GetMapping("/profile")
     public String memberProfile(Model model) {
+        System.out.println("In profile");
         Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member memberToDisplay = memberDao.getById(userInSession.getId());
         model.addAttribute("owner",memberToDisplay);
