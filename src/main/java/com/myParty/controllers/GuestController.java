@@ -21,7 +21,6 @@ public class GuestController {
     private final PartyItemRepository partyItemDAO;
     private final ItemBringerRepository itemBringerDAO;
 
-
     public GuestController(PartyRepository partyDAO, GuestRepository guestDAO, PartyItemRepository partyItemDAO, ItemBringerRepository itemBringerDAO){
         this.partyDAO = partyDAO;
         this.guestDAO = guestDAO;
@@ -55,7 +54,6 @@ public class GuestController {
         guest.setGuestKey(uuid.toString()); //https://www.baeldung.com/java-uui
 
         guestDAO.save(guest); //save guest information
-
         return "redirect:/rsvp/" + urlKey + "/" + guest.getGuestKey() + "/items";
     }
 
@@ -73,7 +71,6 @@ public class GuestController {
         model.addAttribute("party", party); //sets party info
         model.addAttribute("guest", guestDAO.getByGuestKey(guestKey)); //sets guest info
         model.addAttribute("partyItems", partyItems); //gets & sets party Items for party
-
         return "guests/itemSignup";
     }
 
@@ -85,7 +82,6 @@ public class GuestController {
 
         for(int i = 0; i < myPartyItems.length; i++){
 
-            //TODO: Test This
             if(quantities[i].equals("0")){ //if quantity is 0, no need to create Item Bringer instance
                 continue;
             }
@@ -100,7 +96,6 @@ public class GuestController {
 
             //TODO: Add error message to avoid negative values in the database (someone signs up for stuff before you submit)
         }
-
         return "redirect:/guests/successRsvp";
     }
 
@@ -152,11 +147,10 @@ public class GuestController {
             updatedItemBringer.setQuantity((Long.valueOf(quantities[i]))); //sets updated quantity
             itemBringerDAO.save(updatedItemBringer); //saves & updates quantity for ItemBringer
         }
-
         return "redirect:/guests/successRsvp";
     }
 
-
+    //calculates actual quantity remaining
     public List<Long> calculateQuantity(List<PartyItem> partyItems){ //takes in List of partyItems
         List<Long> totalQuantity= new ArrayList<>(); //list to store total quantity being brought of each partyItem for a party
         Long quantityGuestsBringing = Long.valueOf(0);
@@ -172,7 +166,6 @@ public class GuestController {
             Long actualQuantity = partyItem.getQuantityRequired() - quantityGuestsBringing;
             totalQuantity.add(actualQuantity); //add tally of quantities to totalQuantities array
         }
-
         return totalQuantity;
     }
 }

@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Guest Item Sign Up</title>
-</head>
-<body>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+
+<title layout:fragment="title">My Party | Item Signup</title>
+<section layout:fragment="content">
 
 <!--Multistage form, submission, redirects to party items that can sign up for-->
 <!--TODO: pop up modal eventually-->
@@ -31,6 +29,7 @@
   </table>
   <input type="submit" value="Submit"/>
 </form>
+</section>
 
-</body>
+<footer><p layout:fragment="custom-footer">This is actually working</p></footer>
 </html>

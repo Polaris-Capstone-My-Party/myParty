@@ -20,11 +20,8 @@ import java.util.UUID;
 @Controller
 public class PartyController {
 
-
     private final PartyRepository partyDao;
-
     private final MemberRepository memberDao;
-
     private final LocationRepository locationDao;
 
     public PartyController(PartyRepository partyDao, MemberRepository memberDao, LocationRepository locationDao) {
@@ -110,9 +107,7 @@ public class PartyController {
     }
 
     @PostMapping("/parties/{urlKey}")
-    public String successParty(@RequestParam(name="customMessage") String customMessage,
-                               @RequestParam(name="emailAddress") String emailAddress)  {
-
+    public String successParty(@RequestParam(name="customMessage") String customMessage, @RequestParam(name="emailAddress") String emailAddress){
         return "redirect:/success";
     }
 
