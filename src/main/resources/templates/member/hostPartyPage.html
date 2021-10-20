@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<title layout:fragment="title">My Party | Host View</title>
+
+<section layout:fragment="content">
+
+  <div>
+    <h1 th:text="${party.title}"></h1>
+    <h2 th:text="${party.description}"></h2>
+    <div th:text="'Start Time: ' + ${party.startTime}"></div>
+    <div th:text="'End Time: ' + ${party.endTime}"></div>
+    <div th:text="'Organizer: ' + ${party.owner.first_name + ' ' + party.owner.last_name}"></div>
+  <!--TODO: Add logic for show address 2 if not null-->
+    <div th:text="'Address: ' + ${party.location.address_one} + ', ' + ${party.location.city}+ ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}"></div>
+  </div>
+  <br>
+
+  <div>
+    <h1>Party Item Information</h1>
+    <div th:each="partyItem : ${partyItems}">
+      <div th:text="'Item: ' + ${partyItem.item.name}"></div>
+      <div th:text="'Quantity Required: ' + ${partyItem.quantityRequired}"></div>
+    </div>
+  </div>
+
+  <br>
+  <div>
+    <h1>Guest Information</h1>
+    <div th:each="guest : ${guests}">
+      <div th:text="'Name: ' + ${guest.firstName} + ' ' + ${guest.lastName}"></div>
+      <div th:text="'Email: ' + ${guest.email}"></div>
+      <div th:text="'RSVP Status: ' + ${guest.rsvpStatus}"></div>
+      <br>
+    </div>
+  </div>
+
+</section>
+<footer><p layout:fragment="custom-footer">This is actually working</p></footer>
+</html>

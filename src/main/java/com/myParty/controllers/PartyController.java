@@ -20,11 +20,8 @@ import java.util.UUID;
 @Controller
 public class PartyController {
 
-
     private final PartyRepository partyDao;
-
     private final MemberRepository memberDao;
-
     private final LocationRepository locationDao;
 
     public PartyController(PartyRepository partyDao, MemberRepository memberDao, LocationRepository locationDao) {
@@ -32,6 +29,7 @@ public class PartyController {
         this.memberDao = memberDao;
         this.locationDao = locationDao;
     }
+
 
 
     @GetMapping("/parties/create")
@@ -109,17 +107,30 @@ public class PartyController {
     }
 
     @PostMapping("/parties/{urlKey}")
-    public String successParty(@RequestParam(name="customMessage") String customMessage,
-                               @RequestParam(name="emailAddress") String emailAddress)  {
-
+    public String successParty(@RequestParam(name="customMessage") String customMessage, @RequestParam(name="emailAddress") String emailAddress){
         return "redirect:/success";
     }
 
 
     @GetMapping("/parties/edit/{id}")
-    public String showEditPartyForm(@PathVariable long id, Model model) {
+    public String showEditPartyForm(@PathVariable long id, String urlKey, Model model) {
         Party partyToEdit = partyDao.getById(id);
+
+        Party party = partyDao.getByUrlKey(urlKey); // gets party info for form
         model.addAttribute("id", partyToEdit.getId());
+        model.addAttribute("party", partyToEdit.getUrlKey());
+        model.addAttribute("title", partyToEdit.getTitle());
+        model.addAttribute("description", partyToEdit.getDescription());
+        model.addAttribute("startTime", partyToEdit.getStartTime());
+        model.addAttribute("endTime", partyToEdit.getEndTime());
+        model.addAttribute("address_one", partyToEdit.getLocation().getAddress_one());
+        model.addAttribute("address_two", partyToEdit.getLocation().getAddress_two());
+        model.addAttribute("city", partyToEdit.getLocation().getCity());
+        model.addAttribute("state", partyToEdit.getLocation().getState());
+        model.addAttribute("zipcode", partyToEdit.getLocation().getZipcode());
+
+
+
         return "party/edit";
     }
 
@@ -190,12 +201,19 @@ public class PartyController {
 
     }
 
+    @GetMapping("/parties/delete/{id}")
+    public String deletePost(@PathVariable("id") long id) {
+        partyDao.deleteById(id);
+        return "redirect:/profile";
+    }
+
 //    @GetMapping("/parties")
 //    public String showParties(Model model) {
 //        List<Party> listOfParties = partyDao.findAll();
 //        System.out.println(listOfParties);
 //        model.addAttribute("listOfParties", listOfParties);
 //        return "/parties/party_index";
+//    }
     }
 
 

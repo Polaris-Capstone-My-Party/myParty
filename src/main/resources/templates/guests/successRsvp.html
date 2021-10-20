@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Success RSVP</title>
-</head>
-<body>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 
+<title layout:fragment="title">My Party | RSVP Success</title>
+<section layout:fragment="content">
 <h1>You Registered for this Party!</h1>
 
-</body>
+</section>
+
+<footer><p layout:fragment="custom-footer">This is actually working</p></footer>
 </html>
