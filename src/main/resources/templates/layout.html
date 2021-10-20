@@ -11,8 +11,6 @@
 <body>
 <div sec:authorize="isAuthenticated()">
     <nav th:replace="partials/memberNavbar :: navbar"></nav>
-    <span th:text="${#authentication.principal.username}"/>
-    <span th:text="${#authentication.principal.email}"/>
 </div>
 
 <div sec:authorize="isAnonymous()">
