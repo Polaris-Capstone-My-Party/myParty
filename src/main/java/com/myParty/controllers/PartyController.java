@@ -108,7 +108,7 @@ public class PartyController {
 
     @PostMapping("/parties/{urlKey}")
     public String successParty(@RequestParam(name="customMessage") String customMessage, @RequestParam(name="emailAddress") String emailAddress){
-        return "redirect:/success";
+        return "redirect:profile";
     }
 
 
