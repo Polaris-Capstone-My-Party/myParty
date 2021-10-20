@@ -1,24 +1,35 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Success! <br/> Party has been created</title>
+    <title layout:fragment="title">
+       Party Created
+    </title>
 </head>
 <body>
+<nav th:replace="partials/memberNavbar :: navbar"></nav>
 
-<form th:action="@{/parties/success}" th:method="post">
+<a href="/profile"> < Back to Profile</a>
+
+<h1>Your party has been successfully created!</h1>
+
+<section layout:fragment="content">
+
+<form th:action="@{/profile}" th:method="post">
     Custom Url:
     <input type="text"  th:value="${party.urlKey}"/>
     <br/>
     Custom Message:
-    <input type="text" name="customMessage" />
+    <input type="text" name="customMessage"/>
     <br />
     Email addresses:
-    <input type="text" name="emailAddresses" />
+    <input type="email" name="emailAddresses"/>
     <br />
 
-    <input type="submit" />
+    <input type="submit" value="Send Invites!"/>
 </form>
-
+</section>
 </body>
 </html>
