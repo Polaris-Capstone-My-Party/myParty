@@ -34,6 +34,7 @@ public class PartyController {
     }
 
 
+
     @GetMapping("/parties/create")
     public String showCreatePartyForm(Model model) {
         model.addAttribute("party", new Party());
@@ -188,6 +189,12 @@ public class PartyController {
         partyDao.save(partyToUpdate);
         return "redirect:/parties/success?urlKey="+ uuid;
 
+    }
+
+    @GetMapping("/parties/delete/{id}")
+    public String deletePost(@PathVariable("id") long id) {
+        partyDao.deleteById(id);
+        return "redirect:/profile";
     }
 
 //    @GetMapping("/parties")

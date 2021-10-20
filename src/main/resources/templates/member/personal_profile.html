@@ -6,7 +6,8 @@
     Profile
 </title>
 <section layout:fragment="content">
-<div class="container">
+
+    <div class="container">
     <div class="hero-unit">
         <h1>Profile</h1>
 <div>
@@ -21,7 +22,10 @@
     <p th:text="${party.description}" class="card-text"></p>
     <a th:href="@{/party/edit/{id}(id=${party.id})}" class="btn btn-primary">edit party</a>
     <!--  <a th:href="@{/party/delete/{id}(id=${party.id})}" class="btn btn-danger">Delete</a>-->
-        </p>
+        <a th:replace="partials/modalsUpdates :: modal"></a>
+    </div>
+        <div th:replace="partials/scripts :: scripts"></div>
+
 </div>
 </section>
 </div>
