@@ -85,7 +85,6 @@ public class GuestController {
 
         for(int i = 0; i < myPartyItems.length; i++){
 
-            //TODO: Test This
             if(quantities[i].equals("0")){ //if quantity is 0, no need to create Item Bringer instance
                 continue;
             }
