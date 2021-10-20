@@ -1,13 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
     <title>Edit Party</title>
-</head>
+    <title layout:fragment="title" >
+        Edit Party
+    </title>
+    <section layout:fragment="content">
+
+        <div class="container">
+            <div class="hero-unit">
+                <h1>Edit Party</h1>
+            </div>
+
 <body>
 
 
-<nav th:replace="partials/memberNavbar :: navbar"></nav>
+<!--<nav th:replace="partials/memberNavbar :: navbar"></nav>-->
 
 
 <form th:action="@{|/parties/edit/${id}|}" th:method="post">
