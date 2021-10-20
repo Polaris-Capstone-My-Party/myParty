@@ -27,12 +27,6 @@ public class MembersController {
         this.partyItemDao = partyItemDao;
     }
 
-    //TODO: Confirm not needed
-    @GetMapping("/user/create")
-    public String createUserForm() {
-        return "user/create";
-    }
-
     //shows signup Page
     @GetMapping("/sign-up")
     public String showSignupForm(Model model) {
@@ -49,8 +43,7 @@ public class MembersController {
         return "redirect:/login";
     }
 
-    //shows member profile
-    //TODO: Confirm which one to use
+    //shows public profile to other members
     @GetMapping("/member/{username}/profile")
     public String showMemberProfile(@PathVariable String username, Model model) {
         Member memberToDisplay = memberDao.findByUsername(username);
@@ -58,7 +51,7 @@ public class MembersController {
         return "member/profile";
     }
 
-    //TODO: Confirm Which one to use
+    //shows member profile to themselves
     @GetMapping("/profile")
     public String memberProfile(Model model) {
         Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
