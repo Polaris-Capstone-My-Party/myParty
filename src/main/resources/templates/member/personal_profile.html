@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title layout:fragment="title" >
     Profile
 </title>
@@ -18,17 +19,17 @@
 </div>
         <p>
 <div class="card-body" th:each="party : ${owner.party}">
-    <h5 th:text="${party.title}" class="card-title"></h5>
+    <h5><a th:text="${party.title}" class="card-title" th:href="@{/member/{urlKey}/view(urlKey=${party.urlKey})}"></a></h5>
     <p th:text="${party.description}" class="card-text"></p>
     <a th:href="@{/parties/edit/{id}(id=${party.id})}" class="btn btn-primary">edit party</a>
     <!--  <a th:href="@{/party/delete/{id}(id=${party.id})}" class="btn btn-danger">Delete</a>-->
         <a th:replace="partials/modalsUpdates :: modal"></a>
-    </div>
+</div>
         <div th:replace="partials/scripts :: scripts"></div>
 
 </div>
+    </div>
 </section>
-</div>
 <footer>
     <p layout:fragment="custom-footer">This is actually working</p>
 </footer>
