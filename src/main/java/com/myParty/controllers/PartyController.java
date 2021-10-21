@@ -1,11 +1,7 @@
 package com.myParty.controllers;
 
-import com.myParty.models.Location;
-import com.myParty.models.Member;
-import com.myParty.models.Party;
-import com.myParty.repositories.LocationRepository;
-import com.myParty.repositories.MemberRepository;
-import com.myParty.repositories.PartyRepository;
+import com.myParty.models.*;
+import com.myParty.repositories.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -23,11 +21,15 @@ public class PartyController {
     private final PartyRepository partyDao;
     private final MemberRepository memberDao;
     private final LocationRepository locationDao;
+    private final ItemRepository itemDao;
+    private final PartyItemRepository partyItemDao;
 
-    public PartyController(PartyRepository partyDao, MemberRepository memberDao, LocationRepository locationDao) {
+    public PartyController(PartyRepository partyDao, MemberRepository memberDao, LocationRepository locationDao, ItemRepository itemDao, PartyItemRepository partyItemDao) {
         this.partyDao = partyDao;
         this.memberDao = memberDao;
         this.locationDao = locationDao;
+        this.itemDao = itemDao;
+        this.partyItemDao = partyItemDao;
     }
 
 
@@ -129,8 +131,6 @@ public class PartyController {
         model.addAttribute("state", partyToEdit.getLocation().getState());
         model.addAttribute("zipcode", partyToEdit.getLocation().getZipcode());
 
-
-
         return "party/edit";
     }
 
@@ -191,12 +191,9 @@ public class PartyController {
 //        partyToUpdate.Setstate(state);
 //        partyToUpdate.setZipcode(zipcode);
 
-
-
         UUID uuid = UUID.randomUUID();
 
-        // save updated post
-        partyDao.save(partyToUpdate);
+        partyDao.save(partyToUpdate); // save updated post
         return "redirect:/profile";
 //        return "redirect:/parties/success?urlKey="+ uuid;
 
@@ -207,6 +204,47 @@ public class PartyController {
         partyDao.deleteById(id);
         return "redirect:/profile";
     }
+
+    @GetMapping("/parties/items/{urlKey}")
+    public String showItemForm(Model model, @PathVariable String urlKey){
+        Party party = partyDao.getByUrlKey(urlKey); //gets party
+        List<Long> test = new ArrayList<>();
+        test.add(1L);
+        test.add(2L);
+        test.add(3L);
+
+        model.addAttribute("party", party); //sets party
+        model.addAttribute("tests", test); //sets tests
+        return "/party/createItems";
+    }
+
+    @PostMapping("/parties/items/{urlKey}")
+    public String addItems(@PathVariable String urlKey, @RequestParam(name="name[]") String[] names,@RequestParam(name="quantity[]") String[] quantities ) {
+        Party party = partyDao.getByUrlKey(urlKey);
+
+        for(int i = 0; i< names.length; i++){
+
+            //TODO: If item is null don't add
+            //TODO: How to make dynamic, 'add another item'
+
+            Item item = new Item(); //create new item instance //TODO: check if item already exists
+            item.setName(names[i]); //set item name from name[]
+            itemDao.save(item); //save item instance
+
+            PartyItem partyItem = new PartyItem(); //create new PartyItem instance
+            partyItem.setItem(item);
+            partyItem.setQuantityRequired(Long.valueOf(quantities[i]));
+            partyItem.setParty(party);
+            partyItemDao.save(partyItem);
+        }
+
+        return "redirect:/profile";
+    }
+
+
+
+
+
 
 //    @GetMapping("/parties")
 //    public String showParties(Model model) {
