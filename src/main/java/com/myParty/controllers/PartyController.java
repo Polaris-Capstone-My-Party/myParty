@@ -1,6 +1,10 @@
 package com.myParty.controllers;
 
 import com.myParty.models.*;
+import com.myParty.repositories.LocationRepository;
+import com.myParty.repositories.MemberRepository;
+import com.myParty.repositories.PartyItemRepository;
+import com.myParty.repositories.PartyRepository;
 import com.myParty.repositories.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -21,6 +25,7 @@ public class PartyController {
     private final PartyRepository partyDao;
     private final MemberRepository memberDao;
     private final LocationRepository locationDao;
+//    private final PartyItemRepository partyItemDAO;
     private final ItemRepository itemDao;
     private final PartyItemRepository partyItemDao;
 
@@ -28,6 +33,8 @@ public class PartyController {
         this.partyDao = partyDao;
         this.memberDao = memberDao;
         this.locationDao = locationDao;
+//        this.partyItemDAO = partyItemDAO;
+
         this.itemDao = itemDao;
         this.partyItemDao = partyItemDao;
     }
@@ -97,7 +104,8 @@ public class PartyController {
         partyDao.save(party);
 
 
-        return "redirect:/parties/success?urlKey="+ uuid;
+        return "redirect:/parties/items/" + uuid;
+//                "redirect:/parties/success?urlKey="+ uuid;
 
     }
 
@@ -235,7 +243,8 @@ public class PartyController {
             partyItem.setItem(item);
             partyItem.setQuantityRequired(Long.valueOf(quantities[i]));
             partyItem.setParty(party);
-            partyItemDao.save(partyItem);
+            PartyItem partyItemInDB = partyItemDao.save(partyItem);
+            System.out.println(partyItemInDB);
         }
 
         return "redirect:/profile";

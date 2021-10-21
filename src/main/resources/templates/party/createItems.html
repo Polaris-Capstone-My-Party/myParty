@@ -5,9 +5,11 @@
 <section layout:fragment="content">
   <h1>Add Items to Your Party!</h1>
 
-  <form th:action="@{|/parties/items/${party.urlKey}|}" th:method="post">
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
-      <div th:each="test : ${tests}">
+
+
+   <form th:action="@{|/parties/items/${party.urlKey}|}" th:method="post">
         <div class="form-group">
           <label for="name[]">Item Name:</label>
           <input type="text" name="name[]" id="name[]">
@@ -15,10 +17,24 @@
           <label for="quantity[]">Quantity:</label>
           <input type="text" name="quantity[]" id="quantity[]">
         </div>
-      </div>
+           <input type="submit" value="Submit"/>
+   </form>
 
-    <input type="submit" value="Submit"/>
-  </form>
+           <script>
+  $(document).ready(function() {
 
+      const deleteLink = document.getElementById('addItemButton');
+      deleteLink.addEventListener('click', function(event) {
+            event.preventDefault();
+
+
+            const originalHtml = document.getElementById('additionalItems').innerHTML;
+
+            document.querySelector('#additionalItems').innerHTML = originalHtml;
+
+      });
+  })
+      </script>
 </section>
 </html>
+
