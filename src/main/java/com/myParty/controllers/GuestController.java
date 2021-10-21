@@ -78,6 +78,32 @@ public class GuestController {
     @PostMapping(path = "/rsvp/{urlKey}/{guestKey}/items")
     public String createItemBringer(@PathVariable String urlKey, @PathVariable String guestKey, @RequestParam(name="partyItem[]") String[] myPartyItems, @RequestParam(name="quantity[]") String[] quantities) {
 
+        //partyItem[] = 1, 2, 3
+        //quantites[] = 5, 10, 15
+
+        //party Party = partyDa.getByURlKey(urlKey)
+
+        //array of party item names = hotdog, hamburger, drinks
+        //array of quantities = 15, 20, 30
+
+        //for loop where you go through each array iteration
+            //create an item object, and set the name to parrtyItem[i]
+            //Item item = new Item0-
+            //item.setName(partyItem[i])
+            //itemDao.save(item)  //save item object in database
+
+            //create a new party item object
+            //PartyTiem partyItem = new Party item();
+
+            //partyItem.setItem(item)
+            //partyItem.setQuantity_required(quantites[i])
+            //partyItem.setParty(party);
+            //partyItemDao.save(partyItem);
+
+            //set item/item id to whatever item object is
+            //set the party/party id to party object
+
+
         Guest guest = guestDAO.getByGuestKey(guestKey); //gets guest object
 
         for(int i = 0; i < myPartyItems.length; i++){
@@ -141,6 +167,7 @@ public class GuestController {
         guest.setParty(partyDAO.getByUrlKey(urlKey));
         guestDAO.save(guest); //save guest information
 
+        //TODO: Error message, something to check this bc if no items, then gives error
         for(int i = 0; i < itemBringer.length; i++){ //updates itemBringer quantity
             //TODO: Add error message to avoid negative values in the database (someone signs up for stuff before you submit)
             ItemBringer updatedItemBringer = itemBringerDAO.getById(Long.valueOf(itemBringer[i])); //get itemBringer object associated w/ itemBringerID

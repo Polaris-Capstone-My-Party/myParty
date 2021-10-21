@@ -6,6 +6,8 @@
 
 <section layout:fragment="content">
 
+  <a th:href="@{/parties/edit/{id}(id=${party.id})}" class="btn btn-primary">Return to Profile</a>
+
   <div>
     <h1 th:text="${party.title}"></h1>
     <h2 th:text="${party.description}"></h2>
@@ -19,11 +21,13 @@
 
   <div>
     <h1>Party Item Information</h1>
-    <div th:each="partyItem : ${partyItems}">
-      <div th:text="'Item: ' + ${partyItem.item.name}"></div>
-      <div th:text="'Quantity Required: ' + ${partyItem.quantityRequired}"></div>
+    <div th:each="partyItem: ${partyItems}">
+      <div th:text="'Item: ' + ${partyItem.value.item.name}"></div>
+      <div th:text="'Quantity Required: ' + ${partyItem.value.quantityRequired}"></div>
+      <div th:text="'Quantity Remaining: ' + ${partyItem.key}"></div>
     </div>
   </div>
+
 
   <br>
   <div>
