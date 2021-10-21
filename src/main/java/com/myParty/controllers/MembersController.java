@@ -22,13 +22,16 @@ public class MembersController {
     private final PartyItemRepository partyItemDao;
     private final ItemBringerRepository itemBringerDao;
 
-    public MembersController(MemberRepository memberDao, PartyRepository partyDao, PasswordEncoder passwordEncoder, GuestRepository guestDao, PartyItemRepository partyItemDao, ItemBringerRepository itemBringerDao) {
+    private final GuestController guestController;
+
+    public MembersController(MemberRepository memberDao, PartyRepository partyDao, PasswordEncoder passwordEncoder, GuestRepository guestDao, PartyItemRepository partyItemDao, ItemBringerRepository itemBringerDao, GuestController guestController) {
         this.memberDao = memberDao;
         this.partyDao = partyDao;
         this.passwordEncoder = passwordEncoder;
         this.guestDao = guestDao;
         this.partyItemDao = partyItemDao;
         this.itemBringerDao = itemBringerDao;
+        this.guestController = guestController;
     }
 
     //shows signup Page
@@ -71,7 +74,8 @@ public class MembersController {
 
         Party party = partyDao.getByUrlKey(urlKey); //gets party by urlKey
         List<PartyItem> partyItems = partyItemDao.getByParty(party); //gets partyItems associated w/ party
-        List<Long> quantityRemaining = calculateQuantity(partyItems); //gets list of quantity remaining
+        List<Long> quantityRemaining = guestController.calculateQuantity(partyItems);//gets list of quantity remaining
+
         HashMap<Long, PartyItem> completedPartyItems = new HashMap<>(); //Creates Hashmap that stores PartyItem objects & quantitiesRemaining
 
         for(int i = 0; i < partyItems.size(); i++){ //iterates through partyItems list & quantityRemaining list
@@ -95,26 +99,6 @@ public class MembersController {
     //logs out user
     @PostMapping("/logout")
     public String logout(){return "redirect:/";}
-
-    //calculate remaining Quantity
-    public List<Long> calculateQuantity(List<PartyItem> partyItems){ //takes in List of partyItems
-        List<Long> totalQuantity= new ArrayList<>(); //list to store total quantity being brought of each partyItem for a party
-        Long quantityGuestsBringing = Long.valueOf(0);
-
-        for (PartyItem partyItem: partyItems){ //run through each partyItem in partyItem array
-            List<ItemBringer> itemBringers = itemBringerDao.getByPartyItem(partyItem); //gets list of item bringers associated w/ party item
-            quantityGuestsBringing = Long.valueOf(0); //reset quantity to 0
-
-            for (ItemBringer itemBringer: itemBringers) { //run though each ItemBringer associated w/ partyItem
-                quantityGuestsBringing += itemBringer.getQuantity(); //tallies quantities of each itemBringer for specific partyItem
-            }
-
-            Long actualQuantity = partyItem.getQuantityRequired() - quantityGuestsBringing;
-            totalQuantity.add(actualQuantity); //add tally of quantities to totalQuantities array
-        }
-        return totalQuantity;
-    }
-
 
 }
 
