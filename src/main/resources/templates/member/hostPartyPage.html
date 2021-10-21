@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/html"
       layout:decorate="~{layout}">
 
 <title layout:fragment="title">My Party | Host View</title>
 
 <section layout:fragment="content">
+
+  <a th:href="@{/parties/edit/{id}(id=${party.id})}" class="btn btn-primary">Return to Profile</a>
 
   <div>
     <h1 th:text="${party.title}"></h1>
@@ -19,19 +21,28 @@
 
   <div>
     <h1>Party Item Information</h1>
-    <div th:each="partyItem : ${partyItems}">
-      <div th:text="'Item: ' + ${partyItem.item.name}"></div>
-      <div th:text="'Quantity Required: ' + ${partyItem.quantityRequired}"></div>
+    <div th:each="partyItem: ${partyItems}">
+      <div th:text="'Item: ' + ${partyItem.value.item.name}"></div>
+      <div th:text="'Quantity Required: ' + ${partyItem.value.quantityRequired}"></div>
+      <div th:text="'Quantity Remaining: ' + ${partyItem.key}"></div>
+      <br>
     </div>
   </div>
+
 
   <br>
   <div>
     <h1>Guest Information</h1>
     <div th:each="guest : ${guests}">
-      <div th:text="'Name: ' + ${guest.firstName} + ' ' + ${guest.lastName}"></div>
-      <div th:text="'Email: ' + ${guest.email}"></div>
-      <div th:text="'RSVP Status: ' + ${guest.rsvpStatus}"></div>
+      <div th:text="'Name: ' + ${guest.key.firstName} + ' ' + ${guest.key.lastName}"></div>
+      <div th:text="'Email: ' + ${guest.key.email}"></div>
+      <div th:text="'RSVP Status: ' + ${guest.key.rsvpStatus}"></div>
+
+      <div th:each="itemBringer : ${guest.value}">
+        <div th:text="'Item Bringing: ' + ${itemBringer.partyItem.item.name}"></div>
+        <div th:text="'Quantity Bringing: ' + ${itemBringer.quantity}"></div>
+      </div>
+
       <br>
     </div>
     <div>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+
+<title layout:fragment="title">My Party | Add Items</title>
+<section layout:fragment="content">
+  <h1>Add Items to Your Party!</h1>
+
+  <form th:action="@{|/parties/items/${party.urlKey}|}" th:method="post">
+
+      <div th:each="test : ${tests}">
+        <div class="form-group">
+          <label for="name[]">Item Name:</label>
+          <input type="text" name="name[]" id="name[]">
+
+          <label for="quantity[]">Quantity:</label>
+          <input type="text" name="quantity[]" id="quantity[]">
+        </div>
+      </div>
+
+    <input type="submit" value="Submit"/>
+  </form>
+
+</section>
+</html>
