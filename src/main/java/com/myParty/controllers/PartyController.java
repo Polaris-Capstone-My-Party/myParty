@@ -202,7 +202,7 @@ public class PartyController {
     }
 
     @GetMapping("/parties/delete/{id}")
-    public String deletePost(@PathVariable("id") long id) {
+    public String deleteParty(@PathVariable("id") long id) {
         partyDao.deleteById(id);
         return "redirect:/profile";
     }

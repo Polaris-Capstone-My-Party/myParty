@@ -34,8 +34,14 @@
       <div th:text="'RSVP Status: ' + ${guest.rsvpStatus}"></div>
       <br>
     </div>
+    <div>
+    <a th:href="@{/parties/edit/{id}(id=${party.id})}" class="btn btn-primary">edit party</a>
+    <!--  <a th:href="@{/party/delete/{id}(id=${party.id})}" class="btn btn-danger">delete</a>-->
+    <a th:replace="partials/modalsUpdates :: modal"></a>
   </div>
-
+  </div>
+  <div th:replace="partials/scripts :: scripts"></div>
+  </div>
 </section>
 <footer><p layout:fragment="custom-footer">This is actually working</p></footer>
 </html>
