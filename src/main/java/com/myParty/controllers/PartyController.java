@@ -1,10 +1,9 @@
 package com.myParty.controllers;
 
-import com.myParty.models.Location;
-import com.myParty.models.Member;
-import com.myParty.models.Party;
+import com.myParty.models.*;
 import com.myParty.repositories.LocationRepository;
 import com.myParty.repositories.MemberRepository;
+import com.myParty.repositories.PartyItemRepository;
 import com.myParty.repositories.PartyRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -14,7 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -23,11 +24,14 @@ public class PartyController {
     private final PartyRepository partyDao;
     private final MemberRepository memberDao;
     private final LocationRepository locationDao;
+//    private final PartyItemRepository partyItemDAO;
 
     public PartyController(PartyRepository partyDao, MemberRepository memberDao, LocationRepository locationDao) {
         this.partyDao = partyDao;
         this.memberDao = memberDao;
         this.locationDao = locationDao;
+//        this.partyItemDAO = partyItemDAO;
+
     }
 
 
@@ -206,6 +210,8 @@ public class PartyController {
         partyDao.deleteById(id);
         return "redirect:/profile";
     }
+
+
 
 //    @GetMapping("/parties")
 //    public String showParties(Model model) {
