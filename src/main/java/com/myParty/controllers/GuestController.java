@@ -141,6 +141,7 @@ public class GuestController {
         guest.setParty(partyDAO.getByUrlKey(urlKey));
         guestDAO.save(guest); //save guest information
 
+        //TODO: Error message, something to check this bc if no items, then gives error
         for(int i = 0; i < itemBringer.length; i++){ //updates itemBringer quantity
             //TODO: Add error message to avoid negative values in the database (someone signs up for stuff before you submit)
             ItemBringer updatedItemBringer = itemBringerDAO.getById(Long.valueOf(itemBringer[i])); //get itemBringer object associated w/ itemBringerID

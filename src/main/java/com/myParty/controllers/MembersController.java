@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -18,13 +19,15 @@ public class MembersController {
     private final PasswordEncoder passwordEncoder;
     private final GuestRepository guestDao;
     private final PartyItemRepository partyItemDao;
+    private final ItemBringerRepository itemBringerDao;
 
-    public MembersController(MemberRepository memberDao, PartyRepository partyDao, PasswordEncoder passwordEncoder, GuestRepository guestDao, PartyItemRepository partyItemDao) {
+    public MembersController(MemberRepository memberDao, PartyRepository partyDao, PasswordEncoder passwordEncoder, GuestRepository guestDao, PartyItemRepository partyItemDao, ItemBringerRepository itemBringerDao) {
         this.memberDao = memberDao;
         this.partyDao = partyDao;
         this.passwordEncoder = passwordEncoder;
         this.guestDao = guestDao;
         this.partyItemDao = partyItemDao;
+        this.itemBringerDao = itemBringerDao;
     }
 
     //shows signup Page
@@ -67,10 +70,21 @@ public class MembersController {
         Party party = partyDao.getByUrlKey(urlKey); //gets party by urlKey
         List<Guest> guests = guestDao.getByParty(party); //gets guests associated w/ party
         List<PartyItem> partyItems = partyItemDao.getByParty(party); //gets partyItems associated w/ party
+        List<ItemBringer> itemBringers = new ArrayList<>(); //new arraylist of item bringers
+
+        for (Guest guest : guests){ //for each guest
+            List<ItemBringer> placeholders = itemBringerDao.getByGuest(guest); //get itembringers associated w/ guest
+            for (ItemBringer placeholder: placeholders) {//for each item bringer associated with guest
+                if(placeholder != null){ //if itemBringer is not null, add to masterlist of itemBringers
+                    itemBringers.add(placeholder);
+                }
+            }
+        }
 
         model.addAttribute("party", party); //sets party information
         model.addAttribute("guests", guests); //sets guest information
         model.addAttribute("partyItems", partyItems); //sets partyItem information
+        model.addAttribute("itemBringers", itemBringers);
         return "member/hostPartyPage";
     }
 
