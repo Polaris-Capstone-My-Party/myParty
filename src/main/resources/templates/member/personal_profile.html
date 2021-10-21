@@ -24,16 +24,7 @@
         <div class="card-body">
     <h5><a th:text="${party.title}" class="card-title" th:href="@{/member/{urlKey}/view(urlKey=${party.urlKey})}"></a></h5>
     <p th:text="${party.description}" class="card-text"></p>
-            </div>
-</div>
-</div>
-
-    <a th:href="@{/parties/edit/{id}(id=${party.id})}" class="btn btn-primary">edit party</a>
-    <!--  <a th:href="@{/party/delete/{id}(id=${party.id})}" class="btn btn-danger">Delete</a>-->
-        <a th:replace="partials/modalsUpdates :: modal"></a>
-</div>
-        <div th:replace="partials/scripts :: scripts"></div>
-
+        </div>
 </div>
     </div>
 </section>
