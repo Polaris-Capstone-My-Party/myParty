@@ -70,18 +70,16 @@ public class MembersController {
     public String showHostPartyPage(Model model, @PathVariable String urlKey){
 
         Party party = partyDao.getByUrlKey(urlKey); //gets party by urlKey
-        List<Guest> guests = guestDao.getByParty(party); //gets guests associated w/ party
         List<PartyItem> partyItems = partyItemDao.getByParty(party); //gets partyItems associated w/ party
-//        List<ItemBringer> itemBringers = new ArrayList<>(); //new arraylist of item bringers
         List<Long> quantityRemaining = calculateQuantity(partyItems); //gets list of quantity remaining
+        HashMap<Long, PartyItem> completedPartyItems = new HashMap<>(); //Creates Hashmap that stores PartyItem objects & quantitiesRemaining
 
-        //Creates Hashmap that stores PartyItem objects & quantitiesRemaining
-        HashMap<Long, PartyItem> completedPartyItems = new HashMap<>();
-
-        //iterates through partyItems list & quantityRemaining list
-        for(int i = 0; i < partyItems.size(); i++){
+        for(int i = 0; i < partyItems.size(); i++){ //iterates through partyItems list & quantityRemaining list
             completedPartyItems.put(quantityRemaining.get(i), partyItems.get(i)); //sets quantityRemaining Long & PartyItem object for HashMap
         }
+
+        List<Guest> guests = guestDao.getByParty(party); //gets guests associated w/ party
+        List<ItemBringer> itemBringers = new ArrayList<>(); //new arraylist of item bringers
 
 //        for (Guest guest : guests){ //for each guest
 //            List<ItemBringer> placeholders = itemBringerDao.getByGuest(guest); //get itembringers associated w/ guest
