@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import lombok.*;
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,6 +55,10 @@ public class Party {
     )
     @Getter @Setter private List<Tag> tags;
 
+
+    @OneToMany(mappedBy="party",
+            cascade= {CascadeType.REMOVE})
+    private List<Guest> guests;
 
 //    public Party(String title, String description, String member) {
 //        this.title = title;
