@@ -78,17 +78,14 @@ public class GuestController {
     @PostMapping(path = "/rsvp/{urlKey}/{guestKey}/items")
     public String createItemBringer(@PathVariable String urlKey, @PathVariable String guestKey, @RequestParam(name="partyItem[]") String[] myPartyItems, @RequestParam(name="quantity[]") String[] quantities) {
 
-        //partyItem[] = 1, 2, 3
-        //quantites[] = 5, 10, 15
-
         //party Party = partyDa.getByURlKey(urlKey)
 
-        //array of party item names = hotdog, hamburger, drinks
-        //array of quantities = 15, 20, 30
+        //array of party item names = [hotdog, hamburger, drinks]
+        //array of quantities = [15, 20, 30]
 
         //for loop where you go through each array iteration
             //create an item object, and set the name to parrtyItem[i]
-            //Item item = new Item0-
+            //Item item = new Item0
             //item.setName(partyItem[i])
             //itemDao.save(item)  //save item object in database
 
@@ -113,10 +110,10 @@ public class GuestController {
             }
 
             ItemBringer itemBringer = new ItemBringer(); //new instance of Item Bringer
-            PartyItem partyItem = partyItemDAO.getById(Long.valueOf(myPartyItems[i])); //get partyItem object
+            PartyItem partyItem = partyItemDAO.getById(Long.valueOf(myPartyItems[i])); //get partyItem object by id
 
-            itemBringer.setGuest(guest); //sets guest object
             itemBringer.setQuantity(Long.valueOf(quantities[i])); //sets quantity
+            itemBringer.setGuest(guest); //sets guest object
             itemBringer.setPartyItem(partyItem); // sets partyItem object
             itemBringerDAO.save(itemBringer); // saves item bringer
 
