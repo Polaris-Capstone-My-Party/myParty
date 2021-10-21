@@ -104,7 +104,8 @@ public class PartyController {
         partyDao.save(party);
 
 
-        return "redirect:/parties/success?urlKey="+ uuid;
+        return "redirect:/parties/items/" + uuid;
+//                "redirect:/parties/success?urlKey="+ uuid;
 
     }
 
@@ -242,7 +243,8 @@ public class PartyController {
             partyItem.setItem(item);
             partyItem.setQuantityRequired(Long.valueOf(quantities[i]));
             partyItem.setParty(party);
-            partyItemDao.save(partyItem);
+            PartyItem partyItemInDB = partyItemDao.save(partyItem);
+            System.out.println(partyItemInDB);
         }
 
         return "redirect:/profile";
