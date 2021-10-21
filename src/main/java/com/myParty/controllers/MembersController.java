@@ -79,19 +79,15 @@ public class MembersController {
         }
 
         List<Guest> guests = guestDao.getByParty(party); //gets guests associated w/ party
-        List<ItemBringer> itemBringers = new ArrayList<>(); //new arraylist of item bringers
+        HashMap<Guest, List<ItemBringer>> completedGuests = new HashMap<>(); //Creates Hashmap that stores Guest objects & list of ItemBringers (assoc. w/ guest)
 
-//        for (Guest guest : guests){ //for each guest
-//            List<ItemBringer> placeholders = itemBringerDao.getByGuest(guest); //get itembringers associated w/ guest
-//            for (ItemBringer placeholder: placeholders) {//for each item bringer associated with guest
-//                if(placeholder != null){ //if itemBringer is not null, add to masterlist of itemBringers
-//                    itemBringers.add(placeholder);
-//                }
-//            }
-//        }
+        for (Guest guest : guests){ //for each guest
+            List<ItemBringer> itemBringers = itemBringerDao.getByGuest(guest); //get List of itemBringer objects associated w/ guest
+            completedGuests.put(guest, itemBringers); //adds guest object & ItemBringer List to HashMap
+        }
 
         model.addAttribute("party", party); //sets party information
-        model.addAttribute("guests", guests); //sets guest information
+        model.addAttribute("guests", completedGuests); //sets guest information
         model.addAttribute("partyItems", completedPartyItems); //sets partyItem information
         return "member/hostPartyPage";
     }
