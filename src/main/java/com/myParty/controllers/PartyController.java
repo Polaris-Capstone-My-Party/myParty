@@ -197,7 +197,8 @@ public class PartyController {
 
         // save updated post
         partyDao.save(partyToUpdate);
-        return "redirect:/parties/success?urlKey="+ uuid;
+        return "redirect:/profile";
+//        return "redirect:/parties/success?urlKey="+ uuid;
 
     }
 
