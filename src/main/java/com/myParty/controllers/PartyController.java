@@ -44,7 +44,8 @@ public class PartyController {
             @RequestParam String addressTwo,
             @RequestParam String city,
             @RequestParam String state,
-            @RequestParam String zipcode){
+            @RequestParam String zipcode)
+    {
 
         //Creates & Saves Location
         Location locationToAdd = new Location(0, addressOne, addressTwo, city, state, zipcode);
@@ -90,8 +91,8 @@ public class PartyController {
         model.addAttribute("party", partyToEdit.getUrlKey());
         model.addAttribute("title", partyToEdit.getTitle());
         model.addAttribute("description", partyToEdit.getDescription());
-        model.addAttribute("startTime", partyToEdit.getStartTime());
-        model.addAttribute("endTime", partyToEdit.getEndTime());
+        model.addAttribute("startTime", partyToEdit.getStartTime().toLocalDateTime());
+        model.addAttribute("endTime", partyToEdit.getEndTime().toLocalDateTime());
         model.addAttribute("addressOne", partyToEdit.getLocation().getAddressOne());
         model.addAttribute("addressTwo", partyToEdit.getLocation().getAddressTwo());
         model.addAttribute("city", partyToEdit.getLocation().getCity());
