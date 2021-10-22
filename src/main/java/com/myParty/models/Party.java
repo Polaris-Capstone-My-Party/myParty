@@ -3,6 +3,9 @@ package com.myParty.models;
 import lombok.*;
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @ToString
@@ -49,11 +52,19 @@ public class Party {
             cascade= {CascadeType.REMOVE})
     @Getter @Setter private List<Guest> guests;
 
-//    public Party(String title, String description, String member) {
-//        this.title = title;
-//        this.description = description;
-//        this.owner = member;
+    public Timestamp makeTimestampFromString(String datetime){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        Date parsedDate = null;
+        try {
+            parsedDate = dateFormat.parse(datetime.replace("T", " "));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+
+        return timestamp;
     }
+}
 
 
 

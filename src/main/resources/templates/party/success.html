@@ -15,8 +15,7 @@
                     once email functionality is completed to send emails too-->
 
         <label for="customUrl">Custom Url:</label>
-        <input type="text" id="customUrl" th:value="${party.urlKey}"/>
-
+        <input type="text" id="customUrl" th:value="'http://localhost:8080/rsvp/' + ${party.urlKey}"/>
         <label for="customMessage">Custom Message:</label>
         <input type="text" id="customMessage" name="customMessage"/>
 

@@ -5,6 +5,8 @@
 
 <section layout:fragment="content">
     <h1>You Registered for this Party!</h1>
+    <label for="editUrl">Edit Your RSVP With This Link:</label>
+    <input type="text" id="editUrl" th:value="'http://localhost:8080/rsvp/' + ${urlKey} + '/' + ${guestKey} + '/edit'"/>
 </section>
 
 <footer><p layout:fragment="custom-footer">This is actually working</p></footer>

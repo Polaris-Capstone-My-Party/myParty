@@ -2,6 +2,7 @@ package com.myParty.controllers;
 
 import com.myParty.models.*;
 import com.myParty.repositories.*;
+import org.dom4j.rule.Mode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -73,6 +74,7 @@ public class GuestController {
     @PostMapping(path = "/rsvp/{urlKey}/{guestKey}/items")
     public String createItemBringer(@PathVariable String urlKey, @PathVariable String guestKey, @RequestParam(name="partyItem[]") String[] myPartyItems, @RequestParam(name="quantity[]") String[] quantities) {
         Guest guest = guestDAO.getByGuestKey(guestKey); //gets guest object
+        Party party = partyDAO.getByUrlKey(urlKey);
 
         for(int i = 0; i < myPartyItems.length; i++){
 
@@ -90,12 +92,14 @@ public class GuestController {
 
             //TODO: Add error message to avoid negative values in the database (someone signs up for stuff before you submit)
         }
-        return "redirect:/guests/successRsvp";
+        return "redirect:/guests/successRsvp/" + urlKey + "/" + guestKey;
     }
 
     //shows RSVPSuccess page
-    @GetMapping(path = "/guests/successRsvp")
-    public String showRSVPSuccess(){
+    @GetMapping(path = "/guests/successRsvp/{urlKey}/{guestKey}")
+    public String showRSVPSuccess(Model model, @PathVariable String guestKey, @PathVariable String urlKey){
+        model.addAttribute("urlKey", urlKey);
+        model.addAttribute("guestKey", guestKey);
         return "guests/successRsvp";
     }
 

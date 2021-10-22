@@ -36,9 +36,11 @@
             additionalItem.addEventListener('click', function(event) {
                 event.preventDefault();
 
-                const originalHtml = document.getElementById('additionalItems').innerHTML;
 
-                document.querySelector('#additionalItems').innerHTML = originalHtml + itemForm;
+                const testyBoi = document.getElementById('additionalItems');
+                let newItem = document.createElement("div");
+                newItem.innerHTML = itemForm;
+                testyBoi.appendChild(newItem);
          });
      })
     </script>
