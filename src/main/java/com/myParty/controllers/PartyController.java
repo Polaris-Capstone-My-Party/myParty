@@ -16,14 +16,12 @@ import java.util.*;
 public class PartyController {
 
     private final PartyRepository partyDao;
-    private final MemberRepository memberDao;
     private final LocationRepository locationDao;
     private final ItemRepository itemDao;
     private final PartyItemRepository partyItemDao;
 
-    public PartyController(PartyRepository partyDao, MemberRepository memberDao, LocationRepository locationDao, ItemRepository itemDao, PartyItemRepository partyItemDao) {
+    public PartyController(PartyRepository partyDao, LocationRepository locationDao, ItemRepository itemDao, PartyItemRepository partyItemDao) {
         this.partyDao = partyDao;
-        this.memberDao = memberDao;
         this.locationDao = locationDao;
         this.itemDao = itemDao;
         this.partyItemDao = partyItemDao;
@@ -46,48 +44,24 @@ public class PartyController {
             @RequestParam String addressTwo,
             @RequestParam String city,
             @RequestParam String state,
-            @RequestParam String zipcode
+            @RequestParam String zipcode){
 
-    ) throws ParseException {
-
-        Location locationToAdd = new Location(
-                0,
-                addressOne,
-                addressTwo,
-                city,
-                state,
-                zipcode);
-        System.out.println(locationToAdd);
-        // 2021-10-21T13:13
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-        Date parsedDate = dateFormat.parse(start_time.replace("T", " "));
-        Member loggedInMember = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
-
-        party.setOwner(loggedInMember);
-
-        party.setStartTime(timestamp);
-
-
-        party.setEndTime(timestamp);
-
-
-        System.out.println(timestamp);
-
-
-
-        UUID uuid = UUID.randomUUID();
-
-        System.out.println(uuid.toString());
-
-        party.setUrlKey(uuid.toString());
-        System.out.println(party);
-
+        //Creates & Saves Location
+        Location locationToAdd = new Location(0, addressOne, addressTwo, city, state, zipcode);
         Location locationInDb = locationDao.save(locationToAdd);
 
-        party.setLocation(locationInDb);
+        //Gets Logged in Member
+        Member loggedInMember = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+        //get UUID for urlKey
+        UUID uuid = UUID.randomUUID();
+
+        //sets & save party details
+        party.setOwner(loggedInMember);
+        party.setStartTime(party.makeTimestampFromString(start_time));
+        party.setEndTime(party.makeTimestampFromString(end_time));
+        party.setUrlKey(uuid.toString());
+        party.setLocation(locationInDb);
         partyDao.save(party);
 
         return "redirect:/parties/items/" + uuid;
@@ -149,19 +123,11 @@ public class PartyController {
         locationToUpdate.setId(partyToUpdate.getLocation().getId());
         Location locationInDb = locationDao.save(locationToUpdate);
 
-        //Date & Time stuff
-        //TODO ASK Herman
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-        Date parsedDate = dateFormat.parse(startTime.replace("T", " "));
-        Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
-        parsedDate = dateFormat.parse(endTime.replace("T", " "));
-        timestamp = new java.sql.Timestamp(parsedDate.getTime());
-
-        // update & save party contents
+        //sets & saves party edited info
         partyToUpdate.setTitle(title);
         partyToUpdate.setDescription(description);
-        partyToUpdate.setStartTime(timestamp);
-        partyToUpdate.setEndTime(timestamp);
+        partyToUpdate.setStartTime(partyToUpdate.makeTimestampFromString(startTime));
+        partyToUpdate.setEndTime(partyToUpdate.makeTimestampFromString(endTime));
         partyToUpdate.setLocation(locationInDb);
         partyDao.save(partyToUpdate);
 
