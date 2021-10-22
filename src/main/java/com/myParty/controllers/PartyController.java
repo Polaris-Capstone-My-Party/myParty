@@ -40,38 +40,54 @@ public class PartyController {
     @PostMapping("/parties/create")
     public String createParty(
             @ModelAttribute Party party,
-            @RequestParam String startTime,
-            @RequestParam String endTime,
-            @RequestParam String addressOne,
-            @RequestParam String addressTwo,
+            @RequestParam String start_time,
+            @RequestParam String end_time,
+            @RequestParam String address_one,
+            @RequestParam String address_two,
             @RequestParam String city,
             @RequestParam String state,
-            @RequestParam String zipcode) throws ParseException {
+            @RequestParam String zipcode
 
-        //Creates & Saves new Location
-        Location locationToAdd = new Location(0, addressOne, addressTwo, city, state, zipcode);
-        Location locationInDb = locationDao.save(locationToAdd);
+    ) throws ParseException {
 
-        //Date & Time Info
-        //TODO ASK Herman
+        Location locationToAdd = new Location(
+                0,
+                address_one,
+                address_two,
+                city,
+                state,
+                zipcode);
+        System.out.println(locationToAdd);
+        // 2021-10-21T13:13
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-        Date parsedDate = dateFormat.parse(startTime.replace("T", " "));
-        Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
-        parsedDate = dateFormat.parse(endTime.replace("T", " "));
-        timestamp = new java.sql.Timestamp(parsedDate.getTime());
-
-        //Gets logged in Member
+        Date parsedDate = dateFormat.parse(start_time.replace("T", " "));
         Member loggedInMember = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        //get UUID for urlKey
+        Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+
+        party.setOwner(loggedInMember);
+
+        party.setStartTime(timestamp);
+
+
+        party.setEndTime(timestamp);
+
+
+        System.out.println(timestamp);
+
+
+
         UUID uuid = UUID.randomUUID();
 
-        //set & save Party details
-        party.setOwner(loggedInMember);
-        party.setStartTime(timestamp);
-        party.setEndTime(timestamp);
+        System.out.println(uuid.toString());
+
         party.setUrlKey(uuid.toString());
+        System.out.println(party);
+
+        Location locationInDb = locationDao.save(locationToAdd);
+
         party.setLocation(locationInDb);
+
         partyDao.save(party);
 
         return "redirect:/parties/items/" + uuid;
@@ -153,7 +169,6 @@ public class PartyController {
     }
 
     //deletes party
-    //TODO DOES NOT WORK
     @GetMapping("/parties/delete/{id}")
     public String deleteParty(@PathVariable("id") long id) {
         partyDao.deleteById(id);

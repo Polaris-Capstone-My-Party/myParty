@@ -1,16 +1,9 @@
 package com.myParty.models;
 
-import com.myParty.repositories.PartyRepository;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import lombok.*;
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @ToString
 @Entity
@@ -28,10 +21,10 @@ public class Party {
     @Column(nullable = false, columnDefinition = "TEXT")
     @Getter @Setter private String description;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "start_time")
     @Getter @Setter private Timestamp startTime;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "end_time")
     @Getter @Setter private Timestamp endTime;
 
     @Column(nullable = false, name="url_key")

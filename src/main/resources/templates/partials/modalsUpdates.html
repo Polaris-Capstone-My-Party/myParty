@@ -27,7 +27,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <a th:href="@{/parties/delete/{id}(id=${party.id})}" class="btn btn-danger">delete</a>
+          <a th:href="@{|/parties/delete/${party.id}|}" class="btn btn-danger">delete</a>
         </div>
       </div>
     </div>
