@@ -1,17 +1,12 @@
 package com.myParty.controllers;
 
 import com.myParty.models.*;
-import com.myParty.repositories.GuestRepository;
-import com.myParty.repositories.ItemBringerRepository;
-import com.myParty.repositories.PartyItemRepository;
-import com.myParty.repositories.PartyRepository;
+import com.myParty.repositories.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 @Controller
 public class GuestController {
@@ -62,8 +57,8 @@ public class GuestController {
     public String showItemSignup(@PathVariable String urlKey, @PathVariable String guestKey, Model model){
         Party party = partyDAO.getByUrlKey(urlKey); // gets party info for form
         List<PartyItem> partyItems = partyItemDAO.getByParty(party);
-
         List<Long> quantities = calculateQuantity(partyItems); //gets dynamic quantities left of each party
+
         for(int i =0; i < partyItems.size(); i++){
             partyItems.get(i).setQuantityRequired(quantities.get(i)); //sets partyItemQuantity on form to be whatever quantity is left
         }
@@ -77,7 +72,6 @@ public class GuestController {
     //saves Item Bringer info
     @PostMapping(path = "/rsvp/{urlKey}/{guestKey}/items")
     public String createItemBringer(@PathVariable String urlKey, @PathVariable String guestKey, @RequestParam(name="partyItem[]") String[] myPartyItems, @RequestParam(name="quantity[]") String[] quantities) {
-
         Guest guest = guestDAO.getByGuestKey(guestKey); //gets guest object
 
         for(int i = 0; i < myPartyItems.length; i++){
@@ -117,8 +111,8 @@ public class GuestController {
         Guest guest = guestDAO.getByGuestKey(guestKey);
         List<PartyItem> partyItems = partyItemDAO.getByParty(party);
         List<ItemBringer> itemBringers = itemBringerDAO.getByGuest(guest); //gets & sets list of item bringers associated w/ guest
-
         List<Long> quantities = calculateQuantity(partyItems); //gets dynamic quantities left of each party
+
         for(int i =0; i < partyItems.size(); i++){
             partyItems.get(i).setQuantityRequired(quantities.get(i)); //sets partyItemQuantity on form to be whatever quantity is left
         }
@@ -130,6 +124,7 @@ public class GuestController {
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
         model.addAttribute("itemBringers", itemBringers); //gets ItemBringer info associated with guestId
         model.addAttribute("partyItems", partyItems); //gets & sets partyItems for party
+
         return "guests/editRsvp";
     }
 
@@ -142,8 +137,8 @@ public class GuestController {
         guestDAO.save(guest); //save guest information
 
         //TODO: Error message, something to check this bc if no items, then gives error
+        //TODO: Add error message to avoid negative values in the database (someone signs up for stuff before you submit)
         for(int i = 0; i < itemBringer.length; i++){ //updates itemBringer quantity
-            //TODO: Add error message to avoid negative values in the database (someone signs up for stuff before you submit)
             ItemBringer updatedItemBringer = itemBringerDAO.getById(Long.valueOf(itemBringer[i])); //get itemBringer object associated w/ itemBringerID
             updatedItemBringer.setQuantity((Long.valueOf(quantities[i]))); //sets updated quantity
             itemBringerDAO.save(updatedItemBringer); //saves & updates quantity for ItemBringer

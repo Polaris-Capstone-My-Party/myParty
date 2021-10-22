@@ -5,54 +5,59 @@
 <title layout:fragment="title">My Party | Host View</title>
 
 <section layout:fragment="content">
-
-  <a th:href="@{/profile}" class="btn btn-primary">Return to Profile</a>
-
   <div>
-    <h1 th:text="${party.title}"></h1>
-    <h2 th:text="${party.description}"></h2>
-    <div th:text="'Start Time: ' + ${party.startTime}"></div>
-    <div th:text="'End Time: ' + ${party.endTime}"></div>
-    <div th:text="'Organizer: ' + ${party.owner.first_name + ' ' + party.owner.last_name}"></div>
-  <!--TODO: Add logic for show address 2 if not null-->
-    <div th:text="'Address: ' + ${party.location.address_one} + ', ' + ${party.location.city}+ ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}"></div>
-  </div>
-  <br>
+    <a href="/profile" class="btn btn-primary">Return to Profile</a>
 
-  <div>
-    <h1>Party Item Information</h1>
-    <div th:each="partyItem: ${partyItems}">
-      <div th:text="'Item: ' + ${partyItem.value.item.name}"></div>
-      <div th:text="'Quantity Required: ' + ${partyItem.value.quantityRequired}"></div>
-      <div th:text="'Quantity Remaining: ' + ${partyItem.key}"></div>
-      <br>
+    <div>
+      <h1 th:text="${party.title}"></h1>
+      <h2 th:text="${party.description}"></h2>
+      <div th:text="'Start Time: ' + ${party.startTime}"></div>
+      <div th:text="'End Time: ' + ${party.endTime}"></div>
+      <div th:text="'Organizer: ' + ${party.owner.firstName + ' ' + party.owner.lastName}"></div>
+      <div th:text="'Location: ' + ${party.location.addressOne} + ', ' + ${party.location.city}+ ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}"></div>
+      <!--TODO: Add logic for show addressTwo if not null-->
     </div>
-  </div>
 
+    <br>
 
-  <br>
-  <div>
-    <h1>Guest Information</h1>
-    <div th:each="guest : ${guests}">
-      <div th:text="'Name: ' + ${guest.key.firstName} + ' ' + ${guest.key.lastName}"></div>
-      <div th:text="'Email: ' + ${guest.key.email}"></div>
-      <div th:text="'RSVP Status: ' + ${guest.key.rsvpStatus}"></div>
+    <div>
+      <h1>Party Item Information</h1>
+      <div th:each="partyItem: ${partyItems}">
+        <div th:text="'Item: ' + ${partyItem.value.item.name}"></div>
+        <div th:text="'Quantity Required: ' + ${partyItem.value.quantityRequired}"></div>
+        <div th:text="'Quantity Remaining: ' + ${partyItem.key}"></div>
+        <br>
+      </div>
+    </div>
 
-      <div th:each="itemBringer : ${guest.value}">
-        <div th:text="'Item Bringing: ' + ${itemBringer.partyItem.item.name}"></div>
-        <div th:text="'Quantity Bringing: ' + ${itemBringer.quantity}"></div>
+    <br>
+
+    <div>
+      <h1>Guest Information</h1>
+      <div th:each="guest : ${guests}">
+        <div th:text="'Name: ' + ${guest.key.firstName} + ' ' + ${guest.key.lastName}"></div>
+        <div th:text="'Email: ' + ${guest.key.email}"></div>
+        <div th:text="'RSVP Status: ' + ${guest.key.rsvpStatus}"></div>
+
+        <div th:each="itemBringer : ${guest.value}">
+          <div th:text="'Item Bringing: ' + ${itemBringer.partyItem.item.name}"></div>
+          <div th:text="'Quantity Bringing: ' + ${itemBringer.quantity}"></div>
+        </div>
+        <br>
       </div>
 
-      <br>
+    <!--TODO: Fix Delete-->
+      <div>
+        <a th:href="@{|/parties/edit/${party.id}|}" class="btn btn-primary">Edit Party</a>
+        <!--  <a th:href="@{/party/delete/{id}(id=${party.id})}" class="btn btn-danger">delete</a>-->
+        <a th:replace="partials/modalsUpdates :: modal"></a>
+      </div>
     </div>
-    <div>
-    <a th:href="@{/parties/edit/{id}(id=${party.id})}" class="btn btn-primary">edit party</a>
-    <!--  <a th:href="@{/party/delete/{id}(id=${party.id})}" class="btn btn-danger">delete</a>-->
-    <a th:replace="partials/modalsUpdates :: modal"></a>
-  </div>
-  </div>
-  <div th:replace="partials/scripts :: scripts"></div>
+
+    <div th:replace="partials/scripts :: scripts"></div>
+
   </div>
 </section>
+
 <footer><p layout:fragment="custom-footer">This is actually working</p></footer>
 </html>

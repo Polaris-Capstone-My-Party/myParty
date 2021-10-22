@@ -1,21 +1,16 @@
 <!DOCTYPE html>
 
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 
-<title layout:fragment="title" >
-    Login Page
-</title>
+<title layout:fragment="title">myParty | Login</title>
 
 <section layout:fragment="content">
 
-     <h1>Log In</h1>
-    <div th:if="${param.error}">
-        Invalid Username and Password.
-    </div>
-    <div th:if="${param.logout}">
-        You have been logged out.
-    </div>
+    <h1>Log In</h1>
+
+    <div th:if="${param.error}">Invalid Username and Password.</div>
+
+    <div th:if="${param.logout}">You have been logged out.</div>
 
     <form th:action="@{/login}" method="post">
         <label for="username">Username</label>
@@ -24,10 +19,11 @@
         <input id="password" name="password" type="password"/>
         <input type="submit" value="Log In"/>
     </form>
+
     <a href="/sign-up">Don't have an account? Sign up here</a>
+
 </section>
-<footer>
-    <p layout:fragment="custom-footer">This is actually working</p>
-</footer>
+
+<footer><p layout:fragment="custom-footer">This is actually working</p></footer>
 
 </html>

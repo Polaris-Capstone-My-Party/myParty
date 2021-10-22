@@ -1,43 +1,34 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
-<head>
-    <meta charset="UTF-8">
-    <title layout:fragment="title">
-        Party Created
-    </title>
-</head>
-<body>
-<nav th:replace="partials/memberNavbar :: navbar"></nav>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 
-<a href="/profile"> < Back to Profile</a>
-
+<title layout:fragment="title">myParty | Party Created!</title>
 
 <section layout:fragment="content">
 
+    <a href="/profile">Back to Profile</a>
+
     <h1>SUCCESS!</h1>
-
-    <h2 th:text="${party.title}"></h2>
-
-    <h2>has been successfully created!</h2>
-
+    <h2 th:text="${party.title} + 'has been successfully created!'"></h2>
 
     <form th:action="@{/profile}" th:method="get">
-        <!--    Need to change the above back to POST method, send back to profile and add a controller
-         once email functionality is completed to send emails too-->
-        Custom Url:
-        <input type="text" th:value="${party.urlKey}"/>
-        <br/>
-        Custom Message:
-        <input type="text" name="customMessage"/>
-        <br/>
-        Email addresses:
-        <input type="email" name="emailAddresses"/>
-        <br/>
+        <!--TODO: Need to change the above back to POST method, send back to profile and add a controller
+                    once email functionality is completed to send emails too-->
+
+        <label for="customUrl">Custom Url:</label>
+        <input type="text" id="customUrl" th:value="${party.urlKey}"/>
+
+        <label for="customMessage">Custom Message:</label>
+        <input type="text" id="customMessage" name="customMessage"/>
+
+        <label for="emailAddress">Email Address::</label>
+        <input type="email" id="emailAddress" name="emailAddresses"/>
 
         <input type="submit" value="Send Invites!"/>
     </form>
+
+
 </section>
-</body>
+
+<footer><p layout:fragment="custom-footer">This is actually working</p></footer>
+
 </html>

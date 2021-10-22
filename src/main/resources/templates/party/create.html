@@ -1,71 +1,53 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
-<title>Create Party</title>
-<title layout:fragment="title" >
-    Create Party
-</title>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+
+<title layout:fragment="title" >myParty | Create</title>
+
 <section layout:fragment="content">
 
-    <a href="/profile">< Back to Profile</a>
     <div class="container">
         <div class="hero-unit">
+
+            <a href="/profile">< Back to Profile</a>
             <h1>Create Party</h1>
+
+            <form th:action="@{/parties/create}" th:method="post" th:object="${party}">
+
+                <label for="title">Title:</label>
+                <input id="title" th:field="*{title}"/>
+
+                <label for="description">Description:</label>
+                <input id="description" th:field="*{description}"/>
+
+                <label for="startTime">Start Time:</label>
+                <input id="startTime"  name="startTime" type="datetime-local"/>
+
+                <label for="endTime">End Time:</label>
+                <input id="endTime"  name="endTime" type="datetime-local"/>
+
+                <label for="addressOne">Street Address:</label>
+                <input id="addressOne"  name="addressOne" type="text"/>
+
+                <label for="addressTwo">Apt/Ste/Floor:</label>
+                <input id="addressTwo"  name="addressTwo" type="text"/>
+
+                <label for="city">City:</label>
+                <input id="city" name="city" type="text"/>
+
+                <label for="state">State:</label>
+                <input id="state" name="state" type="text"/>
+
+                <label for="zipcode">Zipcode:</label>
+                <input id="zipcode" name="zipcode" type="number"/>
+
+                <input value="Create Party!" type="submit"/>
+            </form>
         </div>
     </div>
+</section>
 
+<footer><p layout:fragment="custom-footer">This is actually working</p></footer>
 
-        <form th:action="@{/parties/create}" th:method="post" th:object="${party}">
-    Title:
-    <input th:field="*{title}" />
-    <br />
-    Description:
-    <input th:field="*{description}" />
-    <br />
-    Start Time
-    <input name="start_time" type="datetime-local"/>
-    <br />
-    End Time
-    <input name="end_time" type="datetime-local"/>
-    <br />
-        Address one
-        <input name="address_one" type="text"/>
-        <br />
-        Address two
-        <input name="address_two" type="text"/>
-        <br />
-        City
-        <input name="city" type="text"/>
-        <br />
-        State
-        <input name="state" type="text"/>
-        <br />
-        Zipcode
-        <input name="zipcode" type="number"/>
-        <br />
-    <input type="submit" />
-
-</form>
-
-</body>
 </html>
 
-
-
-
-<!--<div class="container">-->
-<!--    <div class="row justify-content-between">-->
-<!--        <div class="col-4">-->
-<!--            Party Title-->
-<!--        </div>-->
-<!--        <div class="col-4">-->
-<!--            Description-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    <div class="row justify-content-between">-->
-<!--        <div class="col-4">-->
-<!--            Location-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
 

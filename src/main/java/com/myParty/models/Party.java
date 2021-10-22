@@ -34,9 +34,7 @@ public class Party {
     @Column(nullable = false)
     @Getter @Setter private Timestamp endTime;
 
-//    @Column(nullable = true)
-//    @Column(nullable = false, name="url_key")
-    @Column(nullable = true, name="url_key")
+    @Column(nullable = false, name="url_key")
     @Getter @Setter private String urlKey;
 
     @ManyToOne
@@ -52,13 +50,11 @@ public class Party {
             name="parties_tags",
             joinColumns={@JoinColumn(name="party_id")},
             inverseJoinColumns={@JoinColumn(name="tag_id")}
-    )
-    @Getter @Setter private List<Tag> tags;
-
+    ) @Getter @Setter private List<Tag> tags;
 
     @OneToMany(mappedBy="party",
             cascade= {CascadeType.REMOVE})
-    private List<Guest> guests;
+    @Getter @Setter private List<Guest> guests;
 
 //    public Party(String title, String description, String member) {
 //        this.title = title;

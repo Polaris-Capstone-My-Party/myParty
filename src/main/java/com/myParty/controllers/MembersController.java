@@ -7,10 +7,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 @Controller
 public class MembersController {
@@ -21,7 +19,6 @@ public class MembersController {
     private final GuestRepository guestDao;
     private final PartyItemRepository partyItemDao;
     private final ItemBringerRepository itemBringerDao;
-
     private final GuestController guestController;
 
     public MembersController(MemberRepository memberDao, PartyRepository partyDao, PasswordEncoder passwordEncoder, GuestRepository guestDao, PartyItemRepository partyItemDao, ItemBringerRepository itemBringerDao, GuestController guestController) {
@@ -55,17 +52,16 @@ public class MembersController {
     public String showMemberProfile(@PathVariable String username, Model model) {
         Member memberToDisplay = memberDao.findByUsername(username);
         model.addAttribute("owner", memberToDisplay);
-        return "member/profile";
+        return "member/publicProfile";
     }
 
     //shows member profile to themselves
     @GetMapping("/profile")
     public String memberProfile(Model model) {
-        System.out.println("In profile");
         Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member memberToDisplay = memberDao.getById(userInSession.getId());
         model.addAttribute("owner",memberToDisplay);
-        return "member/personal_profile";
+        return "member/personalProfile";
     }
 
     //show host party page to member
@@ -75,7 +71,6 @@ public class MembersController {
         Party party = partyDao.getByUrlKey(urlKey); //gets party by urlKey
         List<PartyItem> partyItems = partyItemDao.getByParty(party); //gets partyItems associated w/ party
         List<Long> quantityRemaining = guestController.calculateQuantity(partyItems);//gets list of quantity remaining
-
         HashMap<Long, PartyItem> completedPartyItems = new HashMap<>(); //Creates Hashmap that stores PartyItem objects & quantitiesRemaining
 
         for(int i = 0; i < partyItems.size(); i++){ //iterates through partyItems list & quantityRemaining list

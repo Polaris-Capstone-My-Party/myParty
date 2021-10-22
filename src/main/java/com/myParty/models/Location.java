@@ -17,11 +17,11 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter @Setter private long id;
 
-    @Column(nullable = false)
-    @Getter @Setter private String address_one;
+    @Column(nullable = false, name="address_one")
+    @Getter @Setter private String addressOne;
 
-    @Column
-    @Getter @Setter private String address_two;
+    @Column(name = "address_two")
+    @Getter @Setter private String addressTwo;
 
     @Column(nullable = false)
     @Getter @Setter private String city;

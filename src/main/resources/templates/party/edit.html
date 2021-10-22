@@ -1,59 +1,48 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
-<title>Edit Party</title>
-<title layout:fragment="title">
-    Edit Party
-</title>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 
+<title layout:fragment="title">myParty | Edit Party</title>
 
-<body>
 <section layout:fragment="content">
     <div class="container">
         <div class="hero-unit">
             <h1>Edit Party</h1>
+
+            <form th:action="@{|/parties/edit/${id}|}" th:method="post">
+
+                <label for="title">Title:</label>
+                <input name="title" type="text" id="title" th:value="${title}"/>
+
+                <label for="description">Description:</label>
+                <input name="description" type="text" id="description"th:value="${description}"/>
+
+                <label for="startTime">Start Time:</label>
+                <input name="startTime" id="startTime" type="datetime-local" th:datetime="${startTime}"/>
+
+                <label for="startTime">End Time:</label>
+                <input name="endTime" type="datetime-local" th:datetime="${endTime}"/>
+
+                <label for="addressOne">Street Address:</label>
+                <input name="addressOne" id="addressOne" type="text" th:value="${addressOne}"/>
+
+                <label for="addressTwo">Apt/Ste/Floor:</label>
+                <input name="addressTwo" id="addressTwo" type="text" th:value="${addressTwo}"/>
+
+                <label for="city">City:</label>
+                <input name="city" id="city" type="text" th:value="${city}"/>
+
+                <label for="state">State:</label>
+                <input name="state" id="state" type="text" th:value="${state}"/>
+
+                <label for="zipcode">Zipcode:</label>
+                <input name="zipcode" id="zipcode" type="number" th:value="${zipcode}"/>
+
+                <input type="submit"/>
+            </form>
         </div>
-        <!--<nav th:replace="partials/memberNavbar :: navbar"></nav>-->
-
-
-        <form th:action="@{|/parties/edit/${id}|}" th:method="post">
-
-            Title:
-            <!--    <input th:field="*{title}" />-->
-            <input name="title" type="text" th:value="${title}"/>
-            <br/>
-            Description:
-            <!--    <input th:field="*{description}" />-->
-            <input name="description" type="text" th:value="${description}"/>
-
-            <br/>
-            Start Time
-            <input name="startTime" type="datetime-local" th:datetime="${startTime}"/>
-            <br/>
-            End Time
-            <input name="endTime" type="datetime-local" th:datetime="${endTime}"/>
-            <br/>
-            Address one
-            <input name="address_one" type="text" th:value="${address_one}"/>
-            <br/>
-            Address two
-            <input name="address_two" type="text" th:value="${address_two}"/>
-            <br/>
-            City
-            <input name="city" type="text" th:value="${city}"/>
-            <br/>
-            State
-            <input name="state" type="text" th:value="${state}"/>
-            <br/>
-            Zipcode
-            <input name="zipcode" type="number" th:value="${zipcode}"/>
-            <br/>
-            <input type="submit"/>
-
-        </form>
     </div>
 </section>
 
-</body>
+<footer><p layout:fragment="custom-footer">This is actually working</p></footer>
 
 </html>
