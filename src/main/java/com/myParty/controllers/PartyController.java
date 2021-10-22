@@ -42,8 +42,8 @@ public class PartyController {
             @ModelAttribute Party party,
             @RequestParam String start_time,
             @RequestParam String end_time,
-            @RequestParam String address_one,
-            @RequestParam String address_two,
+            @RequestParam String addressOne,
+            @RequestParam String addressTwo,
             @RequestParam String city,
             @RequestParam String state,
             @RequestParam String zipcode
@@ -52,8 +52,8 @@ public class PartyController {
 
         Location locationToAdd = new Location(
                 0,
-                address_one,
-                address_two,
+                addressOne,
+                addressTwo,
                 city,
                 state,
                 zipcode);
@@ -94,8 +94,8 @@ public class PartyController {
     }
 
     //show page when party successfully created
-    @GetMapping("/parties/success")
-    public String showSuccessPartyForm(@RequestParam String urlKey, Model model) {
+    @GetMapping("/parties/success/{urlKey}")
+    public String showSuccessPartyForm(@PathVariable String urlKey, Model model) {
         Party party = partyDao.getByUrlKey(urlKey);
         model.addAttribute("party", party);
         return "party/success";
@@ -204,7 +204,7 @@ public class PartyController {
             partyItem.setParty(party);
             partyItemDao.save(partyItem);
         }
-        return "redirect:/profile";
+        return "redirect:/parties/success/" + urlKey;
     }
 }
 

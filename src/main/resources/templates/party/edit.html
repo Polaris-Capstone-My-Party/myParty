@@ -8,57 +8,57 @@
         <div class="hero-unit">
             <h1>Edit Party</h1>
         </div>
+
+        <form th:action="@{|/parties/edit/${id}|}" th:method="post">
+
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input name="title" type="text" id="title" th:value="${title}"/>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <input name="description" type="text" id="description"th:value="${description}"/>
+            </div>
+
+            <div class="form-group">
+                <label for="startTime">Start Time:</label>
+                <input name="startTime" id="startTime" type="datetime-local" th:datetime="${startTime}"/>
+            </div>
+
+            <div class="form-group">
+                <label for="endTime">End Time:</label>
+                <input name="endTime" id="endTime" type="datetime-local" th:datetime="${endTime}"/>
+            </div>
+
+            <div class="form-group">
+                <label for="addressOne">Street Address:</label>
+                <input name="addressOne" id="addressOne" type="text" th:value="${addressOne}"/>
+            </div>
+
+            <div class="form-group">
+                <label for="addressTwo">Apt/Ste/Floor:</label>
+                <input name="addressTwo" id="addressTwo" type="text" th:value="${addressTwo}"/>
+            </div>
+
+            <div class="form-group">
+                <label for="city">City:</label>
+                <input name="city" id="city" type="text" th:value="${city}"/>
+            </div>
+
+            <div class="form-group">
+                <label for="state">State:</label>
+                <input name="state" id="state" type="text" th:value="${state}"/>
+            </div>
+
+            <div class="form-group">
+                <label for="zipcode">Zipcode:</label>
+                <input name="zipcode" id="zipcode" type="number" th:value="${zipcode}"/>
+            </div>
+
+            <input type="submit"/>
+        </form>
     </div>
-
-    <form th:action="@{|/parties/edit/${id}|}" th:method="post">
-
-        <div class="form-group">
-            <label for="title">Title:</label>
-            <input name="title" type="text" id="title" th:value="${title}"/>
-        </div>
-
-        <div class="form-group">
-            <label for="description">Description:</label>
-            <input name="description" type="text" id="description"th:value="${description}"/>
-        </div>
-
-        <div class="form-group">
-            <label for="startTime">Start Time:</label>
-            <input name="startTime" id="startTime" type="datetime-local" th:datetime="${startTime}"/>
-        </div>
-
-        <div class="form-group">
-            <label for="endTime">End Time:</label>
-            <input name="endTime" id="endTime" type="datetime-local" th:datetime="${endTime}"/>
-        </div>
-
-        <div class="form-group">
-            <label for="addressOne">Street Address:</label>
-            <input name="addressOne" id="addressOne" type="text" th:value="${addressOne}"/>
-        </div>
-
-        <div class="form-group">
-            <label for="addressTwo">Apt/Ste/Floor:</label>
-            <input name="addressTwo" id="addressTwo" type="text" th:value="${addressTwo}"/>
-        </div>
-
-        <div class="form-group">
-            <label for="city">City:</label>
-            <input name="city" id="city" type="text" th:value="${city}"/>
-        </div>
-
-        <div class="form-group">
-            <label for="state">State:</label>
-            <input name="state" id="state" type="text" th:value="${state}"/>
-        </div>
-
-        <div class="form-group">
-            <label for="zipcode">Zipcode:</label>
-            <input name="zipcode" id="zipcode" type="number" th:value="${zipcode}"/>
-        </div>
-
-        <input type="submit"/>
-    </form>
 
 </section>
 
