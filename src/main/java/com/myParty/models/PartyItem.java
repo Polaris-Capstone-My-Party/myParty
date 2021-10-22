@@ -2,6 +2,7 @@ package com.myParty.models;
 
 import lombok.*;
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "party_items")
@@ -23,5 +24,9 @@ public class PartyItem {
     @ManyToOne
     @JoinColumn(name = "item_id")
     @Getter @Setter private Item item;
+
+    @OneToMany(mappedBy="partyItem",
+            cascade= {CascadeType.REMOVE})
+    @Getter @Setter private List<ItemBringer> itemBringers;
 
 }

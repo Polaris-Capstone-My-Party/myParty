@@ -2,6 +2,7 @@ package com.myParty.repositories;
 
 import com.myParty.models.Guest;
 import com.myParty.models.ItemBringer;
+import com.myParty.models.Party;
 import com.myParty.models.PartyItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 

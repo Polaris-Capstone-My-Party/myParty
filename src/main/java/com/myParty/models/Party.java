@@ -52,6 +52,17 @@ public class Party {
             cascade= {CascadeType.REMOVE})
     @Getter @Setter private List<Guest> guests;
 
+    @OneToMany(mappedBy="party",
+            cascade= {CascadeType.REMOVE})
+    @Getter @Setter private List<PartyItem> partyItems;
+
+    @OneToMany(mappedBy="party",
+            cascade= {CascadeType.REMOVE})
+    @Getter @Setter private List<PartyMember> partyMembers;
+
+
+
+
     public Timestamp makeTimestampFromString(String datetime){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         Date parsedDate = null;
