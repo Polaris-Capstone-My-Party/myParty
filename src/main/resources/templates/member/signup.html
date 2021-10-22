@@ -1,29 +1,25 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 
 <meta charset="UTF-8"/>
-<title layout:fragment="title">
-    Sign Up
-</title>
-</head>
-<body>
+<title layout:fragment="title">myParty | Sign Up</title>
 
 <section layout:fragment="content">
+
     <h1>Create an account</h1>
+
     <form th:action="@{/sign-up}" method="POST" th:object="${member}">
         <label for="username">Username</label>
         <input id="username" th:field="*{username}"/>
 
         <label for="first_name">First Name</label>
-        <input id="first_name" type="text" th:field="*{first_name}"/>
+        <input id="first_name" type="text" th:field="*{firstName}"/>
 
         <label for="last_name">Last Name</label>
-        <input id="last_name" type="text" th:field="*{last_name}"/>
+        <input id="last_name" type="text" th:field="*{lastName}"/>
 
         <label for="email">Email</label>
-        <input id="email" th:field="*{email}"/>
-
+        <input id="email" type="email" th:field="*{email}"/>
 
         <label for="phone">Phone Number</label>
         <input id="phone" type="number" th:field="*{phone}"/>
@@ -35,5 +31,7 @@
     </form>
     <a href="/login">Already have an account? Log in here</a>
 </section>
-</body>
+
+<footer><p layout:fragment="custom-footer">This is actually working</p></footer>
+
 </html>

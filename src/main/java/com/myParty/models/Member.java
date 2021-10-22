@@ -32,11 +32,11 @@ public class Member {
     @Column(nullable = false)
     @Getter @Setter private Long phone;
 
-    @Column(nullable = false)
-    @Getter @Setter private String first_name;
+    @Column(nullable = false, name = "first_name")
+    @Getter @Setter private String firstName;
 
-    @Column(nullable = false)
-    @Getter @Setter private String last_name;
+    @Column(nullable = false, name = "last_name")
+    @Getter @Setter private String lastName;
 
     @Getter @Setter
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")

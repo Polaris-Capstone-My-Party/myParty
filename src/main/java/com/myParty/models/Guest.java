@@ -27,7 +27,6 @@ public class Guest {
     @Column(nullable = false)
     @Getter @Setter private RsvpStatuses rsvpStatus;
 
-    //Added Guest key to identify it w/
     @Column(nullable = false, name = "guest_key")
     @Getter @Setter private String guestKey;
 

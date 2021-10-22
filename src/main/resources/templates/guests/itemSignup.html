@@ -1,34 +1,34 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 
-<title layout:fragment="title">My Party | Item Signup</title>
+<title layout:fragment="title">myParty | Item Signup</title>
 <section layout:fragment="content">
 
-<!--Multistage form, submission, redirects to party items that can sign up for-->
-<!--TODO: pop up modal eventually-->
+  <!--TODO: Turn into pop up modal or single page eventually-->
 
-<!--Sign Up for Items-->
-<h1>Sign Up for Items</h1>
-<form th:action="@{|/rsvp/${party.urlKey}/${guest.guestKey}/items|}" th:method="post">
-  <table>
-    <tr>
-      <th>Item</th>
-      <th>Quantity Requested</th>
-      <th>Quantity You're Bringing</th>
-    </tr>
-
-    <div th:each="partyItem : ${partyItems}">
-      <tr class="form-group">
-        <td th:text="${partyItem.item.name}"></td>
-        <td th:text="${partyItem.quantityRequired}"></td> <!--TODO: Make drop down eventually-->
-        <td><input type="text" name="quantity[]"></td>
-        <input type="hidden" name="partyItem[]" th:value="${partyItem.id}">
+  <!--Sign Up for Items-->
+  <h1>Sign Up for Items</h1>
+  <form th:action="@{|/rsvp/${party.urlKey}/${guest.guestKey}/items|}" th:method="post">
+    <table>
+      <tr>
+        <th>Item</th>
+        <th>Quantity Requested</th>
+        <th>Quantity You're Bringing</th>
       </tr>
-    </div>
 
-  </table>
-  <input type="submit" value="Submit"/>
-</form>
+      <div th:each="partyItem : ${partyItems}">
+        <tr class="form-group">
+          <td th:text="${partyItem.item.name}"></td>
+          <td th:text="${partyItem.quantityRequired}"></td> <!--TODO: Make drop down eventually-->
+          <td><input type="text" name="quantity[]"></td>
+          <input type="hidden" name="partyItem[]" th:value="${partyItem.id}">
+          <br>
+        </tr>
+      </div>
+
+    </table>
+    <input type="submit" value="Submit"/>
+  </form>
 </section>
 
 <footer><p layout:fragment="custom-footer">This is actually working</p></footer>

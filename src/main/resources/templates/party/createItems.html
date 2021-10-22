@@ -2,39 +2,50 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 
 <title layout:fragment="title">My Party | Add Items</title>
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
 <section layout:fragment="content">
   <h1>Add Items to Your Party!</h1>
-
-  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-
-
-
    <form th:action="@{|/parties/items/${party.urlKey}|}" th:method="post">
-        <div class="form-group">
-          <label for="name[]">Item Name:</label>
-          <input type="text" name="name[]" id="name[]">
+       <div id="additionalItems">
+           <div class="form-group">
+               <label for="name[]">Item Name:</label>
+               <input type="text" name="name[]" id="name[]">
 
-          <label for="quantity[]">Quantity:</label>
-          <input type="text" name="quantity[]" id="quantity[]">
-        </div>
-           <input type="submit" value="Submit"/>
+               <label for="quantity[]">Quantity:</label>
+               <input type="text" name="quantity[]" id="quantity[]">
+           </div>
+       </div>
+       <button id="addItemButton">Add Another Item</button>
+       <input type="submit" value="Submit"/>
    </form>
 
-           <script>
-  $(document).ready(function() {
+    <script>
+        window.onload = (function() {
+            const additionalItem = document.getElementById('addItemButton');
 
-      const deleteLink = document.getElementById('addItemButton');
-      deleteLink.addEventListener('click', function(event) {
-            event.preventDefault();
+            const itemForm = `<div class="form-group">
+                  <label for="name[]">Item Name:</label>
+                  <input type="text" name="name[]" id="name[]">
 
+                  <label for="quantity[]">Quantity:</label>
+                  <input type="text" name="quantity[]" id="quantity[]">
+                </div>`
 
-            const originalHtml = document.getElementById('additionalItems').innerHTML;
+            additionalItem.addEventListener('click', function(event) {
+                event.preventDefault();
 
-            document.querySelector('#additionalItems').innerHTML = originalHtml;
+                const originalHtml = document.getElementById('additionalItems').innerHTML;
 
-      });
-  })
-      </script>
+                document.querySelector('#additionalItems').innerHTML = originalHtml + itemForm;
+         });
+     })
+    </script>
+
 </section>
+
+<footer><p layout:fragment="custom-footer">This is actually working</p></footer>
+
 </html>
 
