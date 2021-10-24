@@ -41,13 +41,6 @@ public class Party {
     @JoinColumn(name = "location_id")
     @Getter @Setter private Location location;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name="parties_tags",
-            joinColumns={@JoinColumn(name="party_id")},
-            inverseJoinColumns={@JoinColumn(name="tag_id")}
-    ) @Getter @Setter private List<Tag> tags;
-
     @OneToMany(mappedBy="party",
             cascade= {CascadeType.REMOVE})
     @Getter @Setter private List<Guest> guests;
@@ -59,9 +52,6 @@ public class Party {
     @OneToMany(mappedBy="party",
             cascade= {CascadeType.REMOVE})
     @Getter @Setter private List<PartyMember> partyMembers;
-
-
-
 
     public Timestamp makeTimestampFromString(String datetime){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
