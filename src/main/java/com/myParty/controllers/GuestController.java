@@ -24,7 +24,7 @@ public class GuestController {
         this.itemBringerDAO = itemBringerDAO;
     }
 
-    //show RSVP form with corresponding Party Information
+    //show RSVP form with corresponding Party & Party Item Information
     @GetMapping(path = "/rsvp/{urlKey}")
     public String showRSVP(@PathVariable String urlKey, Model model){
         ArrayList<String> rsvpStatuses = new ArrayList<>(); //list of RSVP enum values/options
@@ -34,49 +34,30 @@ public class GuestController {
 
         Party party = partyDAO.getByUrlKey(urlKey); // gets party info for form
 
+        List<PartyItem> partyItems = partyItemDAO.getByParty(party); //gets item associated with party
+        List<Long> quantities = calculateQuantity(partyItems); //gets dynamic quantities left of each party
+        for(int i =0; i < partyItems.size(); i++){
+            partyItems.get(i).setQuantityRequired(quantities.get(i)); //sets partyItemQuantity on form to be whatever quantity is left
+        }
+
         model.addAttribute("party", party); //sets party info for form
         model.addAttribute("guest", new Guest()); //thing to allow form to recognize new guest
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
+        model.addAttribute("partyItems", partyItems); //sets partyItem info form
         return "guests/rsvp";
     }
 
-    //saves Guest information
+    //saves Guest & ItemBringer information
     @PostMapping(path = "/rsvp/{urlKey}")
-    public String createGuest(@PathVariable String urlKey, @ModelAttribute Guest guest, @RequestParam String rsvp){
+    public String createGuest(@PathVariable String urlKey, @ModelAttribute Guest guest, @RequestParam String rsvp,  @RequestParam(name="partyItem[]") String[] myPartyItems, @RequestParam(name="quantity[]") String[] quantities){
         guest.setRsvpStatus(RsvpStatuses.valueOf(rsvp)); //set RSVP status enum
         guest.setParty(partyDAO.getByUrlKey(urlKey)); //sets Party linked to guest
 
         UUID uuid = UUID.randomUUID(); // creates UUID unique for given guest
         guest.setGuestKey(uuid.toString()); //https://www.baeldung.com/java-uui
+        Guest guest1 =  guestDAO.save(guest); //save guest information & creates item to reference
 
-        guestDAO.save(guest); //save guest information
-        return "redirect:/rsvp/" + urlKey + "/" + guest.getGuestKey() + "/items";
-    }
-
-    //shows Item sign up page
-    @GetMapping(path = "/rsvp/{urlKey}/{guestKey}/items")
-    public String showItemSignup(@PathVariable String urlKey, @PathVariable String guestKey, Model model){
-        Party party = partyDAO.getByUrlKey(urlKey); // gets party info for form
-        List<PartyItem> partyItems = partyItemDAO.getByParty(party);
-        List<Long> quantities = calculateQuantity(partyItems); //gets dynamic quantities left of each party
-
-        for(int i =0; i < partyItems.size(); i++){
-            partyItems.get(i).setQuantityRequired(quantities.get(i)); //sets partyItemQuantity on form to be whatever quantity is left
-        }
-
-        model.addAttribute("party", party); //sets party info
-        model.addAttribute("guest", guestDAO.getByGuestKey(guestKey)); //sets guest info
-        model.addAttribute("partyItems", partyItems); //gets & sets party Items for party
-        return "guests/itemSignup";
-    }
-
-    //saves Item Bringer info
-    @PostMapping(path = "/rsvp/{urlKey}/{guestKey}/items")
-    public String createItemBringer(@PathVariable String urlKey, @PathVariable String guestKey, @RequestParam(name="partyItem[]") String[] myPartyItems, @RequestParam(name="quantity[]") String[] quantities) {
-        Guest guest = guestDAO.getByGuestKey(guestKey); //gets guest object
-        Party party = partyDAO.getByUrlKey(urlKey);
-
-        for(int i = 0; i < myPartyItems.length; i++){
+        for(int i = 0; i < myPartyItems.length; i++){ //goes through partyItems guest submitted
 
             if(quantities[i].equals("0")){ //if quantity is 0, no need to create Item Bringer instance
                 continue;
@@ -86,13 +67,13 @@ public class GuestController {
             PartyItem partyItem = partyItemDAO.getById(Long.valueOf(myPartyItems[i])); //get partyItem object by id
 
             itemBringer.setQuantity(Long.valueOf(quantities[i])); //sets quantity
-            itemBringer.setGuest(guest); //sets guest object
+            itemBringer.setGuest(guest1); //sets guest object
             itemBringer.setPartyItem(partyItem); // sets partyItem object
             itemBringerDAO.save(itemBringer); // saves item bringer
-
             //TODO: Add error message to avoid negative values in the database (someone signs up for stuff before you submit)
         }
-        return "redirect:/guests/successRsvp/" + urlKey + "/" + guestKey;
+
+        return  "redirect:/guests/successRsvp/" + urlKey + "/" + uuid;
     }
 
     //shows RSVPSuccess page

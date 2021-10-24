@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
+      layout:decorate="~{layout}">
 
 <title layout:fragment="title">myParty | RSVP Success</title>
 
 <section layout:fragment="content">
     <h1>You Registered for this Party!</h1>
     <label for="editUrl">Edit Your RSVP With This Link:</label>
-    <input type="text" id="editUrl" th:value="'http://localhost:8080/rsvp/' + ${urlKey} + '/' + ${guestKey} + '/edit'"/>
+    <div id="editUrl" th:text="'http://localhost:8080/rsvp/' + ${urlKey} + '/' + ${guestKey} + '/edit'"/></div>
 </section>
 
 <footer><p layout:fragment="custom-footer">This is actually working</p></footer>
