@@ -48,6 +48,29 @@
             </select>
         </div>
 
+
+    <!--Sign Up For Items -->
+        <div class="form-group">
+            <table>
+                <tr>
+                    <th>Item</th>
+                    <th>Quantity Requested</th>
+                    <th>Quantity You're Bringing</th>
+                </tr>
+
+                <div th:each="partyItem : ${partyItems}">
+                    <tr class="form-group">
+                        <td th:text="${partyItem.item.name}"></td>
+                        <td th:text="${partyItem.quantityRequired}"></td> <!--TODO: Make drop down eventually-->
+                        <td><input type="text" name="quantity[]"></td>
+                        <input type="hidden" name="partyItem[]" th:value="${partyItem.id}">
+                        <br>
+                    </tr>
+                </div>
+            </table>
+
+        </div>
+
         <input type="submit" value="Submit"/>
     </form>
 </section>
