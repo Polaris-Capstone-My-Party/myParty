@@ -139,6 +139,12 @@ public class MembersController {
         return "redirect:/profile";
     }
 
+    @GetMapping("/members/delete/{id}")
+    public String deleteMember(@PathVariable("id") long id) {
+        memberDao.deleteById(id);
+        return "redirect:/";
+    }
+
 }
 
 
