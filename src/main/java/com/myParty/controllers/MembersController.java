@@ -7,6 +7,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.text.ParseException;
 import java.util.*;
 
 
@@ -93,7 +95,49 @@ public class MembersController {
 
     //logs out user
     @PostMapping("/logout")
-    public String logout(){return "redirect:/";}
+    public String logout(){return "redirect:/";
+    }
+
+    //show form for editing party
+    @GetMapping("/members/editProfile/{id}")
+    public String showEditMemberForm(@PathVariable long id, String username, Model model) {
+        Member memberToAdd = memberDao.getById(id);
+        //TODO: Refactor later
+        model.addAttribute("email", memberToAdd.getEmail());
+        model.addAttribute("firstName", memberToAdd.getFirstName());
+        model.addAttribute("lastName", memberToAdd.getLastName());
+        model.addAttribute("phone", memberToAdd.getPhone());
+        model.addAttribute("username", memberToAdd.getUsername());
+        model.addAttribute("password", memberToAdd.getPassword());
+
+        return "member/editProfile";
+    }
+
+    //saves edited party information
+    @PostMapping("/members/editProfile/{id}")
+    public String editProfile(
+            @PathVariable long id,
+            @RequestParam(name = "email") String email,
+            @RequestParam(name = "firstName") String firstName,
+            @RequestParam(name = "lastName") String lastName,
+            @RequestParam(name = "phone") Long phone,
+            @RequestParam(name = "username") String username,
+            @RequestParam(name ="password") String password) {
+
+        //get party object
+        Member memberToUpdate = memberDao.getById(id);
+
+        //sets & saves party edited info
+        memberToUpdate.setEmail(email);
+        memberToUpdate.setFirstName(firstName);
+        memberToUpdate.setLastName(lastName);
+        memberToUpdate.setPhone(phone);
+        memberToUpdate.setUsername(username);
+        memberToUpdate.setPassword(password);
+        memberDao.save(memberToUpdate);
+
+        return "redirect:/profile";
+    }
 
 }
 
