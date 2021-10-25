@@ -98,7 +98,7 @@ public class MembersController {
     public String logout(){return "redirect:/";
     }
 
-    //show form for editing party
+    //show form for editing member
     @GetMapping("/members/editProfile/{id}")
     public String showEditMemberForm(@PathVariable long id, String username, Model model) {
         Member memberToAdd = memberDao.getById(id);
@@ -113,7 +113,7 @@ public class MembersController {
         return "member/editProfile";
     }
 
-    //saves edited party information
+    //saves edited member information
     @PostMapping("/members/editProfile/{id}")
     public String editProfile(
             @PathVariable long id,
@@ -124,10 +124,10 @@ public class MembersController {
             @RequestParam(name = "username") String username,
             @RequestParam(name ="password") String password) {
 
-        //get party object
+        //get member object
         Member memberToUpdate = memberDao.getById(id);
 
-        //sets & saves party edited info
+        //sets & saves member edited info
         memberToUpdate.setEmail(email);
         memberToUpdate.setFirstName(firstName);
         memberToUpdate.setLastName(lastName);
