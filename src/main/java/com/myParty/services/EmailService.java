@@ -1,5 +1,13 @@
 package com.myParty.services;
 
+import com.myParty.models.Party;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
+
 @Service("mailService")
 public class EmailService {
 
@@ -9,10 +17,11 @@ public class EmailService {
     @Value("${spring.mail.from}")
     private String from;
 
-    public void prepareAndSend(Ad ad, String subject, String body) {
+    //email confirmation of party created for host
+    public void prepareAndSend(Party party, String subject, String body) {
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setFrom(from);
-        msg.setTo(ad.getOwner().getEmail());
+        msg.setTo(party.getOwner().getEmail());
         msg.setSubject(subject);
         msg.setText(body);
 
@@ -24,4 +33,6 @@ public class EmailService {
             System.err.println(ex.getMessage());
         }
     }
+
+//    public void prepareAndSend(Party party, String subject, String body, String email)
 }
