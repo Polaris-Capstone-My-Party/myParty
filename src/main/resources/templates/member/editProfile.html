@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+
+<title layout:fragment="title">MyParty | Edit Profile</title>
+
+<section layout:fragment="content">
+  <div class="container">
+    <div class="hero-unit">
+      <h1>Edit Profile</h1>
+    </div>
+
+    <form th:action="@{|/members/editProfile/${id}|}" th:method="post">
+
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input name="email" type="text" id="email" th:value="${email}"/>
+      </div>
+
+      <div class="form-group">
+        <label for="firstName">First Name:</label>
+        <input name="firstName" type="text" id="firstName" th:value="${firstName}"/>
+      </div>
+
+      <div class="form-group">
+        <label for="lastName">Last Name:</label>
+        <input name="lastName" id="lastName" type="text" th:value="${lastName}"/>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone:</label>
+        <input name="phone" id="phone" type="number" th:value="${phone}"/>
+      </div>
+
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input name="username" id="username" type="text" th:value="${username}"/>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input name="password" id="password" type="text" th:value="${password}"/>
+      </div>
+
+      <input type="submit"/>
+    </form>
+  </div>
+
+</section>
+
+<footer><p layout:fragment="footer"></p></footer>
+
+</html>
