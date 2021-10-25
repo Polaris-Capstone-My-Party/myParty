@@ -14,7 +14,6 @@
         <div th:text="'End Time: ' + ${party.endTime}"></div>
         <div th:text="'Organizer: ' + ${party.owner.firstName + ' ' + party.owner.lastName}"></div>
         <div th:text="'Location: ' + ${party.location.addressOne} + ', ' + ${party.location.city} + ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}"></div>
-        <!--TODO: For loop each party tag -->
         <!--TODO: Logic to show addressTwo if not null-->
     </div>
 
@@ -38,6 +37,7 @@
             <input class="form-control" id="email" type="text" th:field="*{email}" th:placeholder="${guest.email}"/>
         </div>
 
+        <!--TODO: set default RSVP status to be the one currently-->
         <!--Enter RSVP Status-->
         <div class="form-group">
             <label for="rsvp">RSVP: </label>

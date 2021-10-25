@@ -60,15 +60,18 @@
 
                 <div th:each="partyItem : ${partyItems}">
                     <tr class="form-group">
-                        <td th:text="${partyItem.item.name}"></td>
-                        <td th:text="${partyItem.quantityRequired}"></td> <!--TODO: Make drop down eventually-->
-                        <td><input type="text" name="quantity[]"></td>
-                        <input type="hidden" name="partyItem[]" th:value="${partyItem.id}">
+                        <td th:text="${partyItem.key.item.name}"></td>
+                        <td th:text="${partyItem.key.quantityRequired}"></td>
+                        <td>
+                            <select name="quantity[]">
+                                <option th:each="quantity : ${partyItem.value}" th:value="${quantity}" th:text="${quantity}" th:selected="${quantity == 0}"></option>
+                            </select>
+                        </td>
+                        <input type="hidden" name="partyItem[]" th:value="${partyItem.key.id}">
                         <br>
                     </tr>
                 </div>
             </table>
-
         </div>
 
         <input type="submit" value="Submit"/>

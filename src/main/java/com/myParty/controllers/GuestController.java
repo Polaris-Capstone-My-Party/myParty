@@ -40,10 +40,20 @@ public class GuestController {
             partyItems.get(i).setQuantityRequired(quantities.get(i)); //sets partyItemQuantity on form to be whatever quantity is left
         }
 
+        HashMap<PartyItem, List<Long>> completedPartyItems = new HashMap<>(); //Creates Hashmap that stores PartyItem objects & quantitiesRemaining
+        for(PartyItem partyItem : partyItems){
+            Long quantity = partyItem.getQuantityRequired(); //gets quantity of partyItem
+            List<Long> quantityList = new ArrayList<>();
+            for(Long test = 0L; test <= quantity; test++){
+                quantityList.add(test);
+            }
+            completedPartyItems.put(partyItem, quantityList); //adds partyItem & List of it's quantity
+        }
+
         model.addAttribute("party", party); //sets party info for form
         model.addAttribute("guest", new Guest()); //thing to allow form to recognize new guest
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
-        model.addAttribute("partyItems", partyItems); //sets partyItem info form
+        model.addAttribute("partyItems", completedPartyItems); //sets partyItem info form
         return "guests/rsvp";
     }
 
@@ -94,21 +104,19 @@ public class GuestController {
 
         Party party = partyDAO.getByUrlKey(urlKey);
         Guest guest = guestDAO.getByGuestKey(guestKey);
-        List<PartyItem> partyItems = partyItemDAO.getByParty(party);
+
+        List<PartyItem> partyItems = partyItemDAO.getByParty(party); //gets item associated with party
         List<ItemBringer> itemBringers = itemBringerDAO.getByGuest(guest); //gets & sets list of item bringers associated w/ guest
         List<Long> quantities = calculateQuantity(partyItems); //gets dynamic quantities left of each party
 
         for(int i =0; i < partyItems.size(); i++){
-            partyItems.get(i).setQuantityRequired(quantities.get(i)); //sets partyItemQuantity on form to be whatever quantity is left
+            partyItems.get(i).setQuantityRequired(quantities.get(i)); //sets partyItemQuantity on form to be whatever quantity is
         }
 
-        //TODO: set default RSVP status to be the one currently
-        //TODO: if quantity = 0, do not show?
         model.addAttribute("party", party); //get party info
         model.addAttribute("guest", guest); //get guest info
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
         model.addAttribute("itemBringers", itemBringers); //gets ItemBringer info associated with guestId
-        model.addAttribute("partyItems", partyItems); //gets & sets partyItems for party
 
         return "guests/editRsvp";
     }
