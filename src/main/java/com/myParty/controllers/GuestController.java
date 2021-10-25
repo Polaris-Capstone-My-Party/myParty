@@ -3,6 +3,7 @@ package com.myParty.controllers;
 import com.myParty.models.*;
 import com.myParty.repositories.*;
 import org.dom4j.rule.Mode;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -41,10 +42,21 @@ public class GuestController {
         }
 
         model.addAttribute("party", party); //sets party info for form
-        model.addAttribute("guest", new Guest()); //thing to allow form to recognize new guest
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
         model.addAttribute("partyItems", partyItems); //sets partyItem info form
-        return "guests/rsvp";
+
+        //TODO Error Message
+        Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if(userInSession != null){//checks if user is logged in or not
+            model.addAttribute("member", userInSession); //sets member info for prefilled in stuff
+            model.addAttribute("partyMember", new PartyMember()); //alows form to recognize new guest
+            return "partyMember/memberRsvp";
+        }
+        else{
+            model.addAttribute("guest", new Guest()); //thing to allow form to recognize new guest
+            return "guests/rsvp";
+        }
     }
 
     //saves Guest & ItemBringer information
