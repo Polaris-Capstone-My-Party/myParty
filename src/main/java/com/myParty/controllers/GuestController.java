@@ -45,6 +45,7 @@ public class GuestController {
         model.addAttribute("party", party); //sets party info for form
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
         model.addAttribute("partyItems", partyItems); //sets partyItem info form
+        model.addAttribute("guest", new Guest()); //thing to allow form to recognize new guest
 
         //Checks if Member is logged in or not
         if(!SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString().equals("anonymousUser")){
@@ -53,15 +54,13 @@ public class GuestController {
             model.addAttribute("member", actualMember); //sets member info for prefilled in stuff
             model.addAttribute("partyMember", new PartyMember()); //allows form to recognize new guest
         }
-
-        model.addAttribute("guest", new Guest()); //thing to allow form to recognize new guest
         return "guests/rsvp";
     }
 
     //saves Guest & ItemBringer information
     @PostMapping(path = "/rsvp/{urlKey}")
     public String createGuest(@PathVariable String urlKey, @ModelAttribute Guest guest, @RequestParam String rsvp,  @RequestParam(name="partyItem[]") String[] myPartyItems, @RequestParam(name="quantity[]") String[] quantities){
-         //TODO: Double Check RSVP works
+        //TODO: Double Check RSVP works
         guest.setRsvpStatus(RsvpStatuses.valueOf(rsvp)); //set RSVP status enum
         guest.setParty(partyDAO.getByUrlKey(urlKey)); //sets Party linked to guest
 
