@@ -34,5 +34,16 @@ public class EmailService {
         }
     }
 
-//    public void prepareAndSend(Party party, String subject, String body, String email)
+    //RSVP confirmation for guests/members with items they signed up to bring & link to edit RSVP
+    public void prepareAndSend(Party party, String subject, String body, String email){
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setFrom(from);
+//        msg.setTo(party.getGuests().getEmail());
+        msg.setTo(email);
+        msg.setSubject(subject);
+        msg.setText(body);
+    }
+
+
+
 }
