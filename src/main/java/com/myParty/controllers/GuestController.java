@@ -120,17 +120,14 @@ public class GuestController {
         Party party = partyDAO.getByUrlKey(urlKey);
         Guest guest = guestDAO.getByGuestKey(guestKey);
 
-        List<PartyItem> partyItems = partyItemDAO.getByParty(party);
+        List<PartyItem> partyItems = partyItemDAO.getByParty(party); //gets list of party Items w/ party
         List<ItemBringer> itemBringers = itemBringerDAO.getByGuest(guest); //gets & sets list of item bringers associated w/ guest
         List<Long> quantities = calculateQuantity(partyItems); //gets dynamic quantities left of each party
-
-        for(int i =0; i < partyItems.size(); i++){
-            partyItems.get(i).setQuantityRequired(quantities.get(i)); //sets partyItemQuantity on form to be whatever quantity is left
-        }
-
         HashMap<ItemBringer, List<Long>> itemBringerActual= new HashMap<>(); //hashmap to store party items & list of long quantity values
 
         for(int i = 0; i < itemBringers.size(); i++){ //loop through item bringer instances
+
+            itemBringers.get(i).getPartyItem().setQuantityRequired(quantities.get(i)); //sets partyItemQuantity on form to be whatever quantity is left
 
             Long quantityDigit = quantities.get(i) + itemBringers.get(i).getQuantity(); //holds quantity remaining + quantity signed up form
             List<Long> quantityList = new ArrayList<>();
@@ -142,13 +139,10 @@ public class GuestController {
             itemBringerActual.put(itemBringers.get(i), quantityList); //adds party item & associated quantity list to hashmap
         }
 
-        //TODO: set default RSVP status to be the one currently
-        //TODO: if quantity = 0, do not show?
         model.addAttribute("party", party); //get party info
         model.addAttribute("guest", guest); //get guest info
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
         model.addAttribute("itemBringers", itemBringerActual); //gets ItemBringer info associated with guestId
-        model.addAttribute("partyItems", partyItems); //gets & sets partyItems for party
         return "guests/editRsvp";
     }
 
