@@ -22,7 +22,7 @@ public class ItemBringer {
     @Getter @Setter private Guest guest;
 
     @ManyToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "partyMember_id")
     @Getter @Setter private PartyMember partyMember;
 
     @ManyToOne

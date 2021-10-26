@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <title layout:fragment="title">myParty | RSVP</title>
 <section layout:fragment="content">
@@ -14,65 +14,110 @@
         <div th:text="'End Time: ' + ${party.endTime}"></div>
         <div th:text="'Organizer: ' + ${party.owner.firstName + ' ' + party.owner.lastName}"></div>
         <div th:text="'Location: ' + ${party.location.addressOne} + ', ' + ${party.location.city} + ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}"></div>
-        <!--TODO: For loop each party tag -->
         <!--TODO: Logic to show addressTwo if not null-->
     </div>
 
-    <!--Form to RSVP for Party-->
-    <form th:action="@{|/rsvp/${party.urlKey}|}" th:method="post" th:object="${guest}">
-        <!--Enter First Name-->
-        <div class="form-group">
-            <label for="firstName">First Name: </label>
-            <input class="form-control" id="firstName" type="text" th:field="*{firstName}"/>
-        </div>
+    <!--Member RSVP Form-->
+    <div sec:authorize="isAuthenticated()">
+        <h1>Member form works!</h1>
+        <form th:action="@{|/rsvp/${party.urlKey}/${member.id}|}" th:method="post" th:object="${partyMember}">
 
-        <!--Enter Last Name-->
-        <div class="form-group">
-            <label for="lastName">Last Name: </label>
-            <input class="form-control" id="lastName" type="text" th:field="*{lastName}"/>
-        </div>
+            <!--Prefilled Member Information-->
+            <div th:text="'Name: ' + ${member.firstName} + ' ' + ${member.lastName} "></div>
+            <div th:text="'Email: ' + ${member.email}"></div>
 
-        <!--Enter Email-->
-        <div class="form-group">
-            <label for="email">Email: </label>
-            <input class="form-control" id="email" type="text" th:field="*{email}"/>
-        </div>
+            <!--Enter RSVP Status-->
+            <div class="form-group">
+                <label for="rsvp1">RSVP: </label>
+                <select id="rsvp1" name="rsvp">
+                    <div th:each="rsvp: ${rsvps}">
+                        <option th:value="${rsvp}" th:text="${rsvp}"></option>
+                    </div>
+                </select>
+            </div>
 
-        <!--Enter RSVP Status-->
-        <div class="form-group">
-            <label for="rsvp">RSVP: </label>
-            <select id="rsvp" name="rsvp">
-                <div th:each="rsvp: ${rsvps}">
-                    <option th:value="${rsvp}" th:text="${rsvp}"></option>
-                </div>
-            </select>
-        </div>
-
-
-    <!--Sign Up For Items -->
-        <div class="form-group">
-            <table>
-                <tr>
-                    <th>Item</th>
-                    <th>Quantity Requested</th>
-                    <th>Quantity You're Bringing</th>
-                </tr>
-
-                <div th:each="partyItem : ${partyItems}">
-                    <tr class="form-group">
-                        <td th:text="${partyItem.item.name}"></td>
-                        <td th:text="${partyItem.quantityRequired}"></td> <!--TODO: Make drop down eventually-->
-                        <td><input type="text" name="quantity[]"></td>
-                        <input type="hidden" name="partyItem[]" th:value="${partyItem.id}">
-                        <br>
+            <!--Sign Up For Items -->
+            <div class="form-group">
+                <table>
+                    <tr>
+                        <th>Item</th>
+                        <th>Quantity Requested</th>
+                        <th>Quantity You're Bringing</th>
                     </tr>
-                </div>
-            </table>
 
-        </div>
+                    <div th:each="partyItem : ${partyItems}">
+                        <tr class="form-group">
+                            <td th:text="${partyItem.item.name}"></td>
+                            <td th:text="${partyItem.quantityRequired}"></td> <!--TODO: Make drop down eventually-->
+                            <td><input type="text" name="quantity[]"></td>
+                            <input type="hidden" name="partyItem[]" th:value="${partyItem.id}">
+                            <br>
+                        </tr>
+                    </div>
+                </table>
+            </div>
+            <input type="submit" value="Submit"/>
+        </form>
+    </div>
 
-        <input type="submit" value="Submit"/>
-    </form>
+    <!--Guest RSVP Form-->
+    <div sec:authorize="isAnonymous()">
+        <form th:action="@{|/rsvp/${party.urlKey}|}" th:method="post" th:object="${guest}" >
+            <!--Enter First Name-->
+            <div class="form-group">
+                <label for="firstName">First Name: </label>
+                <input class="form-control" id="firstName" type="text" th:field="*{firstName}"/>
+            </div>
+
+            <!--Enter Last Name-->
+            <div class="form-group">
+                <label for="lastName">Last Name: </label>
+                <input class="form-control" id="lastName" type="text" th:field="*{lastName}"/>
+            </div>
+
+            <!--Enter Email-->
+            <div class="form-group">
+                <label for="email">Email: </label>
+                <input class="form-control" id="email" type="text" th:field="*{email}"/>
+            </div>
+
+            <!--Enter RSVP Status-->
+            <div class="form-group">
+                <label for="rsvp">RSVP: </label>
+                <select id="rsvp" name="rsvp">
+                    <div th:each="rsvp: ${rsvps}">
+                        <option th:value="${rsvp}" th:text="${rsvp}"></option>
+                    </div>
+                </select>
+            </div>
+
+
+            <!--Sign Up For Items -->
+            <div class="form-group">
+                <table>
+                    <tr>
+                        <th>Item</th>
+                        <th>Quantity Requested</th>
+                        <th>Quantity You're Bringing</th>
+                    </tr>
+
+                    <div th:each="partyItem : ${partyItems}">
+                        <tr class="form-group">
+                            <td th:text="${partyItem.item.name}"></td>
+                            <td th:text="${partyItem.quantityRequired}"></td> <!--TODO: Make drop down eventually-->
+                            <td><input type="text" name="quantity[]"></td>
+                            <input type="hidden" name="partyItem[]" th:value="${partyItem.id}">
+                            <br>
+                        </tr>
+                    </div>
+                </table>
+
+            </div>
+
+            <input type="submit" value="Submit"/>
+        </form>
+    </div>
+
 </section>
 
 <footer><p layout:fragment="custom-footer">This is actually working</p></footer>

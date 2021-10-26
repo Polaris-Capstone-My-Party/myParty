@@ -18,7 +18,7 @@ public class PartyMember {
     @Getter @Setter private Long id;
 
     @Column(nullable = false)
-    @Getter @Setter private RsvpStatuses rsvpStatuses ;
+    @Getter @Setter private RsvpStatuses rsvpStatus;
 
     @ManyToOne
     @JoinColumn(name = "party_id")
