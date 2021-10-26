@@ -95,8 +95,7 @@ public class MembersController {
 
     //logs out user
     @PostMapping("/logout")
-    public String logout(){return "redirect:/";
-    }
+    public String logout(){return "redirect:/";}
 
     //show form for editing member
     @GetMapping("/members/editProfile/{id}")
@@ -138,6 +137,12 @@ public class MembersController {
 
         return "redirect:/profile";
     }
+
+    @GetMapping("/members/delete/{id}")
+    public String deleteMember(@PathVariable("id") long id) {
+        memberDao.deleteById(id);
+        logout();
+        return "redirect:/";}
 
 }
 
