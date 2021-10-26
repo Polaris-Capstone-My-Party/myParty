@@ -10,11 +10,12 @@
     <h1>SUCCESS!</h1>
     <h2 th:text="${party.title} + 'has been successfully created!'"></h2>
 
+    <h3>Now let's invite people!</h3>
     <form th:action="@{/profile}" th:method="get">
         <!--TODO: Need to change the above back to POST method, send back to profile and add a controller
                     once email functionality is completed to send emails too-->
 
-        <label for="customUrl">Custom Url:</label>
+        <label for="customUrl">Custom Party Url:</label>
         <input type="text" id="customUrl" th:value="'http://localhost:8080/rsvp/' + ${party.urlKey}"/>
         <label for="customMessage">Custom Message:</label>
         <input type="text" id="customMessage" name="customMessage"/>

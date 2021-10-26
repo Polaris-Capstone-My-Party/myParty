@@ -35,15 +35,21 @@ public class EmailService {
     }
 
     //RSVP confirmation for guests/members with items they signed up to bring & link to edit RSVP
-    public void prepareAndSend(Party party, String subject, String body, String email){
+    public void prepareAndSend(Party party, String subject, String customMessage, String email){
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setFrom(from);
 //        msg.setTo(party.getGuests().getEmail());
         msg.setTo(email);
         msg.setSubject(subject);
-        msg.setText(body);
+        msg.setText(customMessage);
+
+        try{
+            this.emailSender.send(msg);
+        }
+        catch (MailException ex) {
+            // simply log it and go on...
+            System.err.println(ex.getMessage());
+        }
     }
-
-
 
 }
