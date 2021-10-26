@@ -2,7 +2,6 @@ package com.myParty.controllers;
 
 import com.myParty.models.*;
 import com.myParty.repositories.*;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,13 +15,15 @@ public class PartyMembersController {
     private final PartyItemRepository partyItemDao;
     private final ItemBringerRepository itemBringerDao;
     private final PartyMemberRepository partyMemberDao;
+    private final MemberRepository memberDao;
 
-    public PartyMembersController(PartyRepository partyDao, GuestRepository guestDao, PartyItemRepository partyItemDao, ItemBringerRepository itemBringerDao, PartyMemberRepository partyMemberDao) {
+    public PartyMembersController(PartyRepository partyDao, GuestRepository guestDao, PartyItemRepository partyItemDao, ItemBringerRepository itemBringerDao, PartyMemberRepository partyMemberDao, MemberRepository memberDao) {
         this.partyDao = partyDao;
         this.guestDao = guestDao;
         this.partyItemDao = partyItemDao;
         this.itemBringerDao = itemBringerDao;
         this.partyMemberDao = partyMemberDao;
+        this.memberDao = memberDao;
     }
 
     //saves PartyMember & ItemBringer information
@@ -30,15 +31,11 @@ public class PartyMembersController {
     @PostMapping(path = "/rsvp/{urlKey}/{memberId}")
     public String createGuest(@PathVariable String urlKey, @PathVariable String memberId, @ModelAttribute PartyMember partyMember, @RequestParam String rsvp, @RequestParam(name="partyItem[]") String[] myPartyItems, @RequestParam(name="quantity[]") String[] quantities){
 
-        System.out.println("RSVP: " + rsvp);
-        Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); //get logged in member
+        Member member = memberDao.getById(Long.valueOf(memberId));
 
         partyMember.setRsvpStatus(RsvpStatuses.valueOf(rsvp)); //set RSVP status enum
-        System.out.println("Set RSVP: " + partyMember.getRsvpStatus());
-
         partyMember.setParty(partyDao.getByUrlKey(urlKey)); //sets Party linked to partyMember
-        partyMember.setMember(userInSession); //sets Member to logged in member
-
+        partyMember.setMember(member); //sets Member to logged in member
         PartyMember partyMember1 = partyMemberDao.save(partyMember); //saves partyMember instance
 
         for(int i = 0; i < myPartyItems.length; i++){ //goes through partyItems guest submitted

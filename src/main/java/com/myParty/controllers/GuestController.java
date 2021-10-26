@@ -16,12 +16,14 @@ public class GuestController {
     private final GuestRepository guestDAO;
     private final PartyItemRepository partyItemDAO;
     private final ItemBringerRepository itemBringerDAO;
+    private final MemberRepository memberDao;
 
-    public GuestController(PartyRepository partyDAO, GuestRepository guestDAO, PartyItemRepository partyItemDAO, ItemBringerRepository itemBringerDAO){
+    public GuestController(PartyRepository partyDAO, GuestRepository guestDAO, PartyItemRepository partyItemDAO, ItemBringerRepository itemBringerDAO, MemberRepository memberDao){
         this.partyDAO = partyDAO;
         this.guestDAO = guestDAO;
         this.partyItemDAO = partyItemDAO;
         this.itemBringerDAO = itemBringerDAO;
+        this.memberDao = memberDao;
     }
 
     //show RSVP form with corresponding Party & Party Item Information
@@ -46,8 +48,9 @@ public class GuestController {
 
         //Checks if Member is logged in or not
         if(!SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString().equals("anonymousUser")){
-            Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            model.addAttribute("member", userInSession); //sets member info for prefilled in stuff
+            Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); //get member in session
+            Member actualMember = memberDao.getById(userInSession.getId()); //get member info associated with member in session
+            model.addAttribute("member", actualMember); //sets member info for prefilled in stuff
             model.addAttribute("partyMember", new PartyMember()); //allows form to recognize new guest
         }
 
@@ -58,6 +61,7 @@ public class GuestController {
     //saves Guest & ItemBringer information
     @PostMapping(path = "/rsvp/{urlKey}")
     public String createGuest(@PathVariable String urlKey, @ModelAttribute Guest guest, @RequestParam String rsvp,  @RequestParam(name="partyItem[]") String[] myPartyItems, @RequestParam(name="quantity[]") String[] quantities){
+         //TODO: Double Check RSVP works
         guest.setRsvpStatus(RsvpStatuses.valueOf(rsvp)); //set RSVP status enum
         guest.setParty(partyDAO.getByUrlKey(urlKey)); //sets Party linked to guest
 
@@ -131,10 +135,12 @@ public class GuestController {
 
         //TODO: Error message, something to check this bc if no items, then gives error
         //TODO: Add error message to avoid negative values in the database (someone signs up for stuff before you submit)
-        for(int i = 0; i < itemBringer.length; i++){ //updates itemBringer quantity
-            ItemBringer updatedItemBringer = itemBringerDAO.getById(Long.valueOf(itemBringer[i])); //get itemBringer object associated w/ itemBringerID
-            updatedItemBringer.setQuantity((Long.valueOf(quantities[i]))); //sets updated quantity
-            itemBringerDAO.save(updatedItemBringer); //saves & updates quantity for ItemBringer
+        if(itemBringer != null){
+            for(int i = 0; i < itemBringer.length; i++){ //updates itemBringer quantity
+                ItemBringer updatedItemBringer = itemBringerDAO.getById(Long.valueOf(itemBringer[i])); //get itemBringer object associated w/ itemBringerID
+                updatedItemBringer.setQuantity((Long.valueOf(quantities[i]))); //sets updated quantity
+                itemBringerDAO.save(updatedItemBringer); //saves & updates quantity for ItemBringer
+            }
         }
         return "redirect:/guests/successRsvp";
     }
