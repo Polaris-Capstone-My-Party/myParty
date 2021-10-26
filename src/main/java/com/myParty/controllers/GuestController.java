@@ -36,6 +36,7 @@ public class GuestController {
 
         Party party = partyDAO.getByUrlKey(urlKey); // gets party info for form
 
+        //TODO: make dropdown
         List<PartyItem> partyItems = partyItemDAO.getByParty(party); //gets item associated with party
         List<Long> quantities = calculateQuantity(partyItems); //gets dynamic quantities left of each party
         for(int i =0; i < partyItems.size(); i++){
@@ -60,7 +61,7 @@ public class GuestController {
     //saves Guest & ItemBringer information
     @PostMapping(path = "/rsvp/{urlKey}")
     public String createGuest(@PathVariable String urlKey, @ModelAttribute Guest guest, @RequestParam String rsvp,  @RequestParam(name="partyItem[]") String[] myPartyItems, @RequestParam(name="quantity[]") String[] quantities){
-        //TODO: Double Check RSVP works
+
         guest.setRsvpStatus(RsvpStatuses.valueOf(rsvp)); //set RSVP status enum
         guest.setParty(partyDAO.getByUrlKey(urlKey)); //sets Party linked to guest
 
