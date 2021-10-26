@@ -39,13 +39,27 @@ public class GuestController {
         //TODO: make dropdown
         List<PartyItem> partyItems = partyItemDAO.getByParty(party); //gets item associated with party
         List<Long> quantities = calculateQuantity(partyItems); //gets dynamic quantities left of each party
-        for(int i =0; i < partyItems.size(); i++){
+        HashMap<PartyItem, List<Long>> partyItemsActual= new HashMap<>();
+        for(int i = 0; i < partyItems.size(); i++){
+
+            Long quantityDigit = quantities.get(i);
+            partyItems.get(i).setQuantityRequired(quantityDigit);
+            List<Long> quantityList = new ArrayList<>();
+
+            for(long j = 0; j <= quantityDigit; j++){ //creates List of Longs up until quantity value
+                quantityList.add(j);
+            }
+
+            partyItemsActual.put(partyItems.get(i), quantityList); //adds party item & associated quantity list to hashmap
+
+
             partyItems.get(i).setQuantityRequired(quantities.get(i)); //sets partyItemQuantity on form to be whatever quantity is left
         }
 
+
         model.addAttribute("party", party); //sets party info for form
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
-        model.addAttribute("partyItems", partyItems); //sets partyItem info form
+        model.addAttribute("partyItems", partyItemsActual); //sets partyItem info form
         model.addAttribute("guest", new Guest()); //thing to allow form to recognize new guest
 
         //Checks if Member is logged in or not

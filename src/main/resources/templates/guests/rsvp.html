@@ -47,13 +47,18 @@
 
                     <div th:each="partyItem : ${partyItems}">
                         <tr class="form-group">
-                            <td th:text="${partyItem.item.name}"></td>
-                            <td th:text="${partyItem.quantityRequired}"></td> <!--TODO: Make drop down eventually-->
-                            <td><input type="text" name="quantity[]"></td>
-                            <input type="hidden" name="partyItem[]" th:value="${partyItem.id}">
+                            <td th:text="${partyItem.key.item.name}"></td>
+                            <td th:text="${partyItem.key.quantityRequired}"></td>
+                            <td>
+                                <select name="quantity[]">
+                                    <option th:each="quantity : ${partyItem.value}" th:text="${quantity}" th:value="${quantity}"></option>
+                                </select>
+                            </td>
+                            <input type="hidden" name="partyItem[]" th:value="${partyItem.key.id}">
                             <br>
                         </tr>
                     </div>
+
                 </table>
             </div>
             <input type="submit" value="Submit"/>
@@ -63,6 +68,9 @@
     <!--Guest RSVP Form-->
     <div sec:authorize="isAnonymous()">
         <form th:action="@{|/rsvp/${party.urlKey}|}" th:method="post" th:object="${guest}" >
+
+            <a href="/login">Have an account? Log in here</a>
+
             <!--Enter First Name-->
             <div class="form-group">
                 <label for="firstName">First Name: </label>
@@ -103,15 +111,19 @@
 
                     <div th:each="partyItem : ${partyItems}">
                         <tr class="form-group">
-                            <td th:text="${partyItem.item.name}"></td>
-                            <td th:text="${partyItem.quantityRequired}"></td> <!--TODO: Make drop down eventually-->
-                            <td><input type="text" name="quantity[]"></td>
-                            <input type="hidden" name="partyItem[]" th:value="${partyItem.id}">
+                            <td th:text="${partyItem.key.item.name}"></td>
+                            <td th:text="${partyItem.key.quantityRequired}"></td>
+                            <td>
+                                <select name="quantity[]">
+                                    <option th:each="quantity : ${partyItem.value}" th:text="${quantity}" th:value="${quantity}"></option>
+                                </select>
+                            </td>
+                            <input type="hidden" name="partyItem[]" th:value="${partyItem.key.id}">
                             <br>
                         </tr>
                     </div>
-                </table>
 
+                </table>
             </div>
 
             <input type="submit" value="Submit"/>
