@@ -3,9 +3,12 @@ package com.myParty.controllers;
 import com.myParty.models.*;
 import com.myParty.repositories.*;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+
+@Controller
 public class PartyMembersController {
 
     private final PartyRepository partyDao;
@@ -27,9 +30,12 @@ public class PartyMembersController {
     @PostMapping(path = "/rsvp/{urlKey}/{memberId}")
     public String createGuest(@PathVariable String urlKey, @PathVariable String memberId, @ModelAttribute PartyMember partyMember, @RequestParam String rsvp, @RequestParam(name="partyItem[]") String[] myPartyItems, @RequestParam(name="quantity[]") String[] quantities){
 
+        System.out.println(rsvp);
         Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); //get logged in member
 
         partyMember.setRsvpStatus(RsvpStatuses.valueOf(rsvp)); //set RSVP status enum
+        System.out.println(partyMember.getRsvpStatus());
+
         partyMember.setParty(partyDao.getByUrlKey(urlKey)); //sets Party linked to partyMember
         partyMember.setMember(userInSession); //sets Member to logged in member
 

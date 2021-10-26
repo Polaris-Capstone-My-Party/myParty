@@ -4,7 +4,7 @@
 <title layout:fragment="title">myParty | RSVP (Member)</title>
 <section layout:fragment="content">
 
-  <h1>Complete Your RSVP</h1>
+  <h1>Complete Your RSVP AS A MEMBER</h1>
 
   <!--Show The Party Info-->
   <div>
@@ -14,12 +14,11 @@
     <div th:text="'End Time: ' + ${party.endTime}"></div>
     <div th:text="'Organizer: ' + ${party.owner.firstName + ' ' + party.owner.lastName}"></div>
     <div th:text="'Location: ' + ${party.location.addressOne} + ', ' + ${party.location.city} + ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}"></div>
-    <!--TODO: For loop each party tag -->
     <!--TODO: Logic to show addressTwo if not null-->
   </div>
 
   <!--Form to RSVP for Party-->
-  <form th:action="@{|/rsvp/${party.urlKey}/${member.id}|}" th:method="post" th:object="${member}">
+  <form th:action="@{|/rsvp/${party.urlKey}/${member.id}|}" th:method="post" th:object="${member}" >
     <!--Enter First Name-->
     <div class="form-group">
       <label for="firstName">First Name: </label>

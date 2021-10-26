@@ -3,6 +3,7 @@ package com.myParty.controllers;
 import com.myParty.models.*;
 import com.myParty.repositories.*;
 import org.dom4j.rule.Mode;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,18 +46,15 @@ public class GuestController {
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
         model.addAttribute("partyItems", partyItems); //sets partyItem info form
 
-        //TODO Error Message
-        Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if(userInSession != null){//checks if user is logged in or not
+        //Checks if Member is logged in or not
+        if(!SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString().equals("anonymousUser")){
+            Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             model.addAttribute("member", userInSession); //sets member info for prefilled in stuff
-            model.addAttribute("partyMember", new PartyMember()); //alows form to recognize new guest
-            return "partyMember/memberRsvp";
+            model.addAttribute("partyMember", new PartyMember()); //allows form to recognize new guest
         }
-        else{
-            model.addAttribute("guest", new Guest()); //thing to allow form to recognize new guest
-            return "guests/rsvp";
-        }
+
+        model.addAttribute("guest", new Guest()); //thing to allow form to recognize new guest
+        return "guests/rsvp";
     }
 
     //saves Guest & ItemBringer information
