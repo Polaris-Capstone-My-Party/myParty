@@ -46,10 +46,20 @@
         <br>
       </div>
 
+      <div th:each="partyMember : ${partyMembers}">
+        <div th:text="'Name: ' + ${partyMember.key.member.firstName} + ' ' + ${partyMember.key.member.lastName}"></div>
+        <div th:text="'Email: ' + ${partyMember.key.member.email}"></div>
+        <div th:text="'RSVP Status: ' + ${partyMember.key.rsvpStatus}"></div>
+
+        <div th:each="itemBringer : ${partyMember.value}">
+          <div th:text="'Item Bringing: ' + ${itemBringer.partyItem.item.name}"></div>
+          <div th:text="'Quantity Bringing: ' + ${itemBringer.quantity}"></div>
+        </div>
+        <br>
+      </div>
 
       <div>
         <a th:href="@{|/parties/edit/${party.id}|}" class="btn btn-primary">Edit Party</a>
-        <!--  <a th:href="@{/party/delete/{id}(id=${party.id})}" class="btn btn-danger">delete</a>-->
         <a th:replace="partials/modalsUpdates :: modal"></a>
       </div>
     </div>
