@@ -21,23 +21,10 @@
     <div sec:authorize="isAuthenticated()">
         <h1>Member form works!</h1>
         <form th:action="@{|/rsvp/${party.urlKey}/${member.id}|}" th:method="post" th:object="${partyMember}">
-            <!--Enter First Name-->
-            <div class="form-group">
-                <label for="firstName1">First Name: </label>
-                <input class="form-control" id="firstName1" type="text" th:text="*{member.firstName}"/>
-            </div>
 
-            <!--Enter Last Name-->
-            <div class="form-group">
-                <label for="lastName1">Last Name: </label>
-                <input class="form-control" id="lastName1" type="text" th:text="*{member.lastName}"/>
-            </div>
-
-            <!--Enter Email-->
-            <div class="form-group">
-                <label for="email1">Email: </label>
-                <input class="form-control" id="email1" type="text" th:text="*{member.email}"/>
-            </div>
+            <!--Prefilled Member Information-->
+            <div th:text="'Name: ' + ${member.firstName} + ' ' + ${member.lastName} "></div>
+            <div th:text="'Email: ' + ${member.email}"></div>
 
             <!--Enter RSVP Status-->
             <div class="form-group">

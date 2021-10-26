@@ -30,11 +30,11 @@ public class PartyMembersController {
     @PostMapping(path = "/rsvp/{urlKey}/{memberId}")
     public String createGuest(@PathVariable String urlKey, @PathVariable String memberId, @ModelAttribute PartyMember partyMember, @RequestParam String rsvp, @RequestParam(name="partyItem[]") String[] myPartyItems, @RequestParam(name="quantity[]") String[] quantities){
 
-        System.out.println(rsvp);
+        System.out.println("RSVP: " + rsvp);
         Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); //get logged in member
 
         partyMember.setRsvpStatus(RsvpStatuses.valueOf(rsvp)); //set RSVP status enum
-        System.out.println(partyMember.getRsvpStatus());
+        System.out.println("Set RSVP: " + partyMember.getRsvpStatus());
 
         partyMember.setParty(partyDao.getByUrlKey(urlKey)); //sets Party linked to partyMember
         partyMember.setMember(userInSession); //sets Member to logged in member
