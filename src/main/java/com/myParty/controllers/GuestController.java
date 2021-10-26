@@ -170,11 +170,11 @@ public class GuestController {
     //calculates actual quantity remaining
     public List<Long> calculateQuantity(List<PartyItem> partyItems){ //takes in List of partyItems
         List<Long> totalQuantity= new ArrayList<>(); //list to store total quantity being brought of each partyItem for a party
-        Long quantityGuestsBringing = Long.valueOf(0);
+        Long quantityGuestsBringing = 0L;
 
         for (PartyItem partyItem: partyItems){ //run through each partyItem in partyItem array
             List<ItemBringer> itemBringers = itemBringerDAO.getByPartyItem(partyItem); //gets list of item bringers associated w/ party item
-            quantityGuestsBringing = Long.valueOf(0); //reset quantity to 0
+            quantityGuestsBringing = 0L; //reset quantity to 0
 
             for (ItemBringer itemBringer: itemBringers) { //run though each ItemBringer associated w/ partyItem
                 quantityGuestsBringing += itemBringer.getQuantity(); //tallies quantities of each itemBringer for specific partyItem
