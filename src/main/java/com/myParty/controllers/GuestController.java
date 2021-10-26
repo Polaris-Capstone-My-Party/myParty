@@ -36,10 +36,9 @@ public class GuestController {
 
         Party party = partyDAO.getByUrlKey(urlKey); // gets party info for form
 
-        //TODO: make dropdown
         List<PartyItem> partyItems = partyItemDAO.getByParty(party); //gets item associated with party
         List<Long> quantities = calculateQuantity(partyItems); //gets dynamic quantities left of each party
-        HashMap<PartyItem, List<Long>> partyItemsActual= new HashMap<>();
+        HashMap<PartyItem, List<Long>> partyItemsActual= new HashMap<>(); //hashmap to store party items & list of long quantiity values
         for(int i = 0; i < partyItems.size(); i++){
 
             Long quantityDigit = quantities.get(i);
@@ -120,6 +119,7 @@ public class GuestController {
 
         Party party = partyDAO.getByUrlKey(urlKey);
         Guest guest = guestDAO.getByGuestKey(guestKey);
+
         List<PartyItem> partyItems = partyItemDAO.getByParty(party);
         List<ItemBringer> itemBringers = itemBringerDAO.getByGuest(guest); //gets & sets list of item bringers associated w/ guest
         List<Long> quantities = calculateQuantity(partyItems); //gets dynamic quantities left of each party
@@ -128,21 +128,34 @@ public class GuestController {
             partyItems.get(i).setQuantityRequired(quantities.get(i)); //sets partyItemQuantity on form to be whatever quantity is left
         }
 
+        HashMap<ItemBringer, List<Long>> itemBringerActual= new HashMap<>(); //hashmap to store party items & list of long quantity values
+
+        for(int i = 0; i < itemBringers.size(); i++){ //loop through item bringer instances
+
+            Long quantityDigit = quantities.get(i) + itemBringers.get(i).getQuantity(); //holds quantity remaining + quantity signed up form
+            List<Long> quantityList = new ArrayList<>();
+
+            for(long j = 0; j <= quantityDigit; j++){ //creates List of Longs up until quantity value
+                quantityList.add(j);
+            }
+
+            itemBringerActual.put(itemBringers.get(i), quantityList); //adds party item & associated quantity list to hashmap
+        }
+
         //TODO: set default RSVP status to be the one currently
         //TODO: if quantity = 0, do not show?
         model.addAttribute("party", party); //get party info
         model.addAttribute("guest", guest); //get guest info
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
-        model.addAttribute("itemBringers", itemBringers); //gets ItemBringer info associated with guestId
+        model.addAttribute("itemBringers", itemBringerActual); //gets ItemBringer info associated with guestId
         model.addAttribute("partyItems", partyItems); //gets & sets partyItems for party
-
         return "guests/editRsvp";
     }
 
     //saves Guest edited information
     @PostMapping(path = "/rsvp/{urlKey}/{guestKey}/edit")
     public String saveEditRSVP(@ModelAttribute Guest guest, @RequestParam String rsvp, @RequestParam(name="itemBringer[]") String[] itemBringer, @RequestParam(name="quantity[]") String[] quantities,
-                               @RequestParam(name="partyItem[]") String[] partyItem, @PathVariable String urlKey){
+                               @RequestParam(name="partyItem[]") String[] partyItem, @PathVariable String urlKey, @PathVariable String guestKey){
         guest.setRsvpStatus(RsvpStatuses.valueOf(rsvp));
         guest.setParty(partyDAO.getByUrlKey(urlKey));
         guestDAO.save(guest); //save guest information
@@ -156,7 +169,8 @@ public class GuestController {
                 itemBringerDAO.save(updatedItemBringer); //saves & updates quantity for ItemBringer
             }
         }
-        return "redirect:/guests/successRsvp";
+
+        return "redirect:/guests/successRsvp/" + urlKey + "/" + guestKey;
     }
 
     //calculates actual quantity remaining

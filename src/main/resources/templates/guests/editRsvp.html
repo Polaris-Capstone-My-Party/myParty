@@ -14,7 +14,6 @@
         <div th:text="'End Time: ' + ${party.endTime}"></div>
         <div th:text="'Organizer: ' + ${party.owner.firstName + ' ' + party.owner.lastName}"></div>
         <div th:text="'Location: ' + ${party.location.addressOne} + ', ' + ${party.location.city} + ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}"></div>
-        <!--TODO: For loop each party tag -->
         <!--TODO: Logic to show addressTwo if not null-->
     </div>
 
@@ -42,10 +41,16 @@
         <div class="form-group">
             <label for="rsvp">RSVP: </label>
             <select id="rsvp" name="rsvp">
-                <div th:each="rsvp: ${rsvps}">
-                    <option th:value="${rsvp}" th:text="${rsvp}"></option>
-                </div>
+                <th:block th:each="rsvp: ${rsvps}">
+                    <th:block th:if="${guest.rsvpStatus.toString().equals(rsvp)}">
+                        <option th:value="${rsvp}" th:text="${rsvp}" selected></option>
+                    </th:block>
+                    <th:block th:if="${!guest.rsvpStatus.toString().equals(rsvp)}">
+                        <option th:value="${rsvp}" th:text="${rsvp}"></option>
+                    </th:block>
+                </th:block>
             </select>
+
         </div>
         <input type="hidden" th:field="*{id}" th:placeholder="${guest.id}">
         <br>
@@ -54,22 +59,22 @@
         <table>
             <tr>
                 <th>Item</th>
-                <th>Quantity Requested</th>
+                <th>Remaining Quantity Requested</th>
                 <th>Quantity You're Bringing</th>
             </tr>
 
-           <div th:each="itemBringer : ${itemBringers}">
-               <tr>
-                   <td th:text="${itemBringer.partyItem.item.name}"></td>
-                   <td th:text="${itemBringer.partyItem.quantityRequired}"></td>
-                   <td>
-                       <input type="text" th:value="${itemBringer.quantity}" name="quantity[]">
-                   </td>
-                   <input type="hidden" name="itemBringer[]" th:value="${itemBringer.id}">
-                   <input type="hidden" name="partyItem[]" th:value="${itemBringer.partyItem.id}">
-                   <br>
-               </tr>
-           </div>
+            <tr th:each="itemBringer : ${itemBringers}">
+                <td th:text="${itemBringer.key.partyItem.item.name}"></td>
+                <td th:text="${itemBringer.key.partyItem.quantityRequired}"></td>
+                <td>
+                    <select name="quantity[]">
+                        <option th:each="quantity : ${itemBringer.value}" th:text="${quantity}" th:value="${quantity}" th:selected="${itemBringer.key.quantity == quantity}"></option>
+                    </select>
+                </td>
+                <input type="hidden" name="itemBringer[]" th:value="${itemBringer.key.id}">
+                <input type="hidden" name="partyItem[]" th:value="${itemBringer.key.partyItem.id}">
+                <br>
+            </tr>
         </table>
 
         <input type="submit" value="Submit"/>
