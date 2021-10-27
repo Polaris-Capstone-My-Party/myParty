@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
 import java.util.*;
 
 
@@ -21,16 +20,18 @@ public class MembersController {
     private final GuestRepository guestDao;
     private final PartyItemRepository partyItemDao;
     private final ItemBringerRepository itemBringerDao;
-    private final GuestController guestController;
+    private final GuestController guestControllerDao;
+    private final PartyMemberRepository partyMemberDao;
 
-    public MembersController(MemberRepository memberDao, PartyRepository partyDao, PasswordEncoder passwordEncoder, GuestRepository guestDao, PartyItemRepository partyItemDao, ItemBringerRepository itemBringerDao, GuestController guestController) {
+    public MembersController(MemberRepository memberDao, PartyRepository partyDao, PasswordEncoder passwordEncoder, GuestRepository guestDao, PartyItemRepository partyItemDao, ItemBringerRepository itemBringerDao, GuestController guestControllerDao, PartyMemberRepository partyMemberDao) {
         this.memberDao = memberDao;
         this.partyDao = partyDao;
         this.passwordEncoder = passwordEncoder;
         this.guestDao = guestDao;
         this.partyItemDao = partyItemDao;
         this.itemBringerDao = itemBringerDao;
-        this.guestController = guestController;
+        this.partyMemberDao = partyMemberDao;
+        this.guestControllerDao = guestControllerDao;
     }
 
     //shows signup Page
@@ -72,7 +73,7 @@ public class MembersController {
 
         Party party = partyDao.getByUrlKey(urlKey); //gets party by urlKey
         List<PartyItem> partyItems = partyItemDao.getByParty(party); //gets partyItems associated w/ party
-        List<Long> quantityRemaining = guestController.calculateQuantity(partyItems);//gets list of quantity remaining
+        List<Long> quantityRemaining = guestControllerDao.calculateQuantity(partyItems);//gets list of quantity remaining
         HashMap<Long, PartyItem> completedPartyItems = new HashMap<>(); //Creates Hashmap that stores PartyItem objects & quantitiesRemaining
 
         for(int i = 0; i < partyItems.size(); i++){ //iterates through partyItems list & quantityRemaining list
@@ -87,8 +88,17 @@ public class MembersController {
             completedGuests.put(guest, itemBringers); //adds guest object & ItemBringer List to HashMap
         }
 
+        List<PartyMember> partyMembers = partyMemberDao.getByParty(party); //gets partyMembers associated with party
+        HashMap<PartyMember, List<ItemBringer>> completedPartyMembers = new HashMap<>(); //Creates Hashmap that stores PartyMember objects & list of ItemBringers (assoc. w/ partyMember)
+
+        for (PartyMember partyMember : partyMembers){ //for each guest
+            List<ItemBringer> itemBringers = itemBringerDao.getByPartyMember(partyMember); //get List of itemBringer objects associated w/ guest
+            completedPartyMembers.put(partyMember, itemBringers); //adds guest object & ItemBringer List to HashMap
+        }
+
         model.addAttribute("party", party); //sets party information
         model.addAttribute("guests", completedGuests); //sets guest information
+        model.addAttribute("partyMembers", completedPartyMembers); //sets partyMember information
         model.addAttribute("partyItems", completedPartyItems); //sets partyItem information
         return "member/hostPartyPage";
     }

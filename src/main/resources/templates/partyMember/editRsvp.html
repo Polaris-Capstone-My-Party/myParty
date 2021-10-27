@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 
-<title layout:fragment="title">myParty | Edit RSVP</title>
+<title layout:fragment="title">myParty | Edit RSVP (Member)</title>
 <section layout:fragment="content">
 
     <h1>Edit Your RSVP</h1>
@@ -18,24 +18,10 @@
     </div>
 
     <!--Form to RSVP for Party-->
-    <form th:action="@{|/rsvp/${party.urlKey}/${guest.guestKey}/edit|}" th:method="post" th:object="${guest}">
-        <!--Enter First Name-->
-        <div class="form-group">
-            <label for="firstName">First Name: </label>
-            <input class="form-control" id="firstName" type="text" th:field="*{firstName}"/>
-        </div>
+    <form th:action="@{|/rsvp/${party.urlKey}/member/${partyMember.partyMemberKey}/edit|}" th:method="post" th:object="${partyMember}">
 
-        <!--Enter Last Name-->
-        <div class="form-group">
-            <label for="lastName">Last Name: </label>
-            <input class="form-control" id="lastName" type="text" th:field="*{lastName}"/>
-        </div>
-
-        <!--Enter Email-->
-        <div class="form-group">
-            <label for="email">Email: </label>
-            <input class="form-control" id="email" type="text" th:field="*{email}"/>
-        </div>
+        <div th:text="'Name: ' + ${partyMember.member.firstName} + ' ' + ${partyMember.member.lastName}"></div>
+        <div th:text="'Email: ' + ${partyMember.member.email}"></div>
 
         <!--Enter RSVP Status-->
         <div class="form-group">
@@ -52,10 +38,10 @@
             <input class="form-control" id="additionalGuests" type="text" th:field="*{additionalGuests}"/>
         </div>
 
-        <input type="hidden" th:field="*{id}" th:placeholder="${guest.id}">
+        <input type="hidden" th:field="*{id}" th:placeholder="${partyMember.id}">
         <br>
 
-    <!-- Display Party Items -->
+        <!-- Display Party Items -->
         <table>
             <tr>
                 <th>Item</th>
@@ -63,18 +49,18 @@
                 <th>Quantity You're Bringing</th>
             </tr>
 
-           <div th:each="itemBringer : ${itemBringers}">
-               <tr>
-                   <td th:text="${itemBringer.partyItem.item.name}"></td>
-                   <td th:text="${itemBringer.partyItem.quantityRequired}"></td>
-                   <td>
-                       <input type="text" th:value="${itemBringer.quantity}" name="quantity[]">
-                   </td>
-                   <input type="hidden" name="itemBringer[]" th:value="${itemBringer.id}">
-                   <input type="hidden" name="partyItem[]" th:value="${itemBringer.partyItem.id}">
-                   <br>
-               </tr>
-           </div>
+            <div th:each="itemBringer : ${itemBringers}">
+                <tr>
+                    <td th:text="${itemBringer.partyItem.item.name}"></td>
+                    <td th:text="${itemBringer.partyItem.quantityRequired}"></td>
+                    <td>
+                        <input type="text" th:value="${itemBringer.quantity}" name="quantity[]">
+                    </td>
+                    <input type="hidden" name="itemBringer[]" th:value="${itemBringer.id}">
+                    <input type="hidden" name="partyItem[]" th:value="${itemBringer.partyItem.id}">
+                    <br>
+                </tr>
+            </div>
         </table>
 
         <input type="submit" value="Submit"/>

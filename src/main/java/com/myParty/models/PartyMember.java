@@ -18,7 +18,7 @@ public class PartyMember {
     @Getter @Setter private Long id;
 
     @Column(nullable = false)
-    @Getter @Setter private RsvpStatuses rsvpStatuses ;
+    @Getter @Setter private RsvpStatuses rsvpStatus;
 
     @ManyToOne
     @JoinColumn(name = "party_id")
@@ -27,5 +27,11 @@ public class PartyMember {
     @ManyToOne
     @JoinColumn(name = "member_id")
     @Getter @Setter private Member member;
+
+    @Column(nullable = false, name = "partyMember_key")
+    @Getter @Setter private String partyMemberKey;
+
+    @Column(name = "addtl_guests")
+    @Getter @Setter private int additionalGuests;
 
 }
