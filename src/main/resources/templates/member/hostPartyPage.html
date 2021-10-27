@@ -38,6 +38,7 @@
         <div th:text="'Name: ' + ${guest.key.firstName} + ' ' + ${guest.key.lastName}"></div>
         <div th:text="'Email: ' + ${guest.key.email}"></div>
         <div th:text="'RSVP Status: ' + ${guest.key.rsvpStatus}"></div>
+        <div th:text="'Additional Guests Bringing: ' + ${guest.key.additionalGuests}"></div>
 
         <div th:each="itemBringer : ${guest.value}">
           <div th:text="'Item Bringing: ' + ${itemBringer.partyItem.item.name}"></div>
@@ -50,6 +51,7 @@
         <div th:text="'Name: ' + ${partyMember.key.member.firstName} + ' ' + ${partyMember.key.member.lastName}"></div>
         <div th:text="'Email: ' + ${partyMember.key.member.email}"></div>
         <div th:text="'RSVP Status: ' + ${partyMember.key.rsvpStatus}"></div>
+        <div th:text="'Additional Guests Bringing: ' + ${partyMember.key.additionalGuests}"></div>
 
         <div th:each="itemBringer : ${partyMember.value}">
           <div th:text="'Item Bringing: ' + ${itemBringer.partyItem.item.name}"></div>

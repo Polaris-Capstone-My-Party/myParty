@@ -142,7 +142,7 @@ public class GuestController {
                 itemBringerDAO.save(updatedItemBringer); //saves & updates quantity for ItemBringer
             }
         }
-        return "redirect:/guests/successRsvp" + urlKey + "/" + guestKey;
+        return "redirect:/guests/successRsvp/" + urlKey + "/" + guestKey;
     }
 
     //calculates actual quantity remaining
