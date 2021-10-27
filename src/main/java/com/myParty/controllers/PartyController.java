@@ -44,7 +44,12 @@ public class PartyController {
             @RequestParam String addressTwo,
             @RequestParam String city,
             @RequestParam String state,
-            @RequestParam String zipcode)
+            @RequestParam String zipcode,
+            @RequestParam(name="name[]") String[] names,
+            @RequestParam(name="quantity[]") String[] quantities
+
+    )
+
     {
 
         //Creates & Saves Location
