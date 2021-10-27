@@ -67,9 +67,11 @@ public class PartyController {
         party.setUrlKey(uuid.toString());
         party.setLocation(locationInDb);
         Party newCreatedParty = partyDao.save(party);
-        String partyDetails = "<h2>Your party " + party.getTitle() + " has been created.</h2>, <br>Here are the details: <br>" + party.getDescription() + "<br>"
-                + party.getStartTime() + "<br>" + party.getEndTime() + "<br>" + party.getLocation() ;
-//        boolean html = true;
+        String partyDetails =
+                "<h2>Your party " + party.getTitle() + " has been created.</h2>, <br><i>Here are the details: </i><br>" + "Description: " + party.getDescription() + "<br>"
+                + "Start Time: " + party.getStartTime() + "<br>" + "End Time: " + party.getEndTime() + "<br>" + "Location: " + party.getLocation() + "<br>"
+                + "Here is your custom party URL: " + party.getUrlKey() ;
+
         emailService.prepareAndSend(newCreatedParty, newCreatedParty.getTitle() + " has been created", partyDetails);
 
         return "redirect:/parties/items/" + uuid;
