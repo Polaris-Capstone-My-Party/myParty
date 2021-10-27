@@ -6,7 +6,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 @Service("mailService")
 public class EmailService {
@@ -18,15 +22,18 @@ public class EmailService {
     private String from;
 
     //email confirmation of party created for host
-    public void prepareAndSend(Party party, String subject, String body) {
-        SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setFrom(from);
-        msg.setTo(party.getOwner().getEmail());
-        msg.setSubject(subject);
-        msg.setText(body);
+    public void prepareAndSend(Party party, String subject, String body) throws MessagingException {
+
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+        helper.setFrom(from);
+        helper.setTo(party.getOwner().getEmail());
+        helper.setSubject(subject);
+        boolean html = true;
+        helper.setText(body, html);
 
         try{
-            this.emailSender.send(msg);
+            this.emailSender.send(message);
         }
         catch (MailException ex) {
             // simply log it and go on...

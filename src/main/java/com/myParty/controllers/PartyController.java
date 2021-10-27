@@ -2,11 +2,13 @@ package com.myParty.controllers;
 
 import com.myParty.models.*;
 import com.myParty.repositories.*;
+import com.myParty.services.EmailService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,12 +21,14 @@ public class PartyController {
     private final LocationRepository locationDao;
     private final ItemRepository itemDao;
     private final PartyItemRepository partyItemDao;
+    private final EmailService emailService;
 
-    public PartyController(PartyRepository partyDao, LocationRepository locationDao, ItemRepository itemDao, PartyItemRepository partyItemDao) {
+    public PartyController(PartyRepository partyDao, LocationRepository locationDao, ItemRepository itemDao, PartyItemRepository partyItemDao, EmailService emailService) {
         this.partyDao = partyDao;
         this.locationDao = locationDao;
         this.itemDao = itemDao;
         this.partyItemDao = partyItemDao;
+        this.emailService = emailService;
     }
 
     //show form for creating a party
@@ -44,8 +48,7 @@ public class PartyController {
             @RequestParam String addressTwo,
             @RequestParam String city,
             @RequestParam String state,
-            @RequestParam String zipcode)
-    {
+            @RequestParam String zipcode) throws MessagingException {
 
         //Creates & Saves Location
         Location locationToAdd = new Location(0, addressOne, addressTwo, city, state, zipcode);
@@ -63,7 +66,11 @@ public class PartyController {
         party.setEndTime(party.makeTimestampFromString(end_time));
         party.setUrlKey(uuid.toString());
         party.setLocation(locationInDb);
-        partyDao.save(party);
+        Party newCreatedParty = partyDao.save(party);
+        String partyDetails = "<h2>Your party " + party.getTitle() + " has been created.</h2>, <br>Here are the details: <br>" + party.getDescription() + "<br>"
+                + party.getStartTime() + "<br>" + party.getEndTime() + "<br>" + party.getLocation() ;
+//        boolean html = true;
+        emailService.prepareAndSend(newCreatedParty, newCreatedParty.getTitle() + " has been created", partyDetails);
 
         return "redirect:/parties/items/" + uuid;
     }
@@ -78,7 +85,7 @@ public class PartyController {
 
     //redirects to profile when submit button pushed
     @PostMapping("/parties/{urlKey}")
-    public String successParty(@RequestParam(name="customMessage") String customMessage, @RequestParam(name="emailAddress") String emailAddress){
+    public String successParty(@RequestParam(name = "customMessage") String customMessage, @RequestParam(name = "emailAddress") String emailAddress) {
         return "redirect:profile";
     }
 
@@ -111,10 +118,10 @@ public class PartyController {
             @RequestParam(name = "startTime") String startTime,
             @RequestParam(name = "endTime") String endTime,
             @RequestParam(name = "addressOne") String addressOne,
-            @RequestParam(name ="addressTwo") String addressTwo,
-            @RequestParam(name ="city") String city,
-            @RequestParam(name ="state") String state,
-            @RequestParam(name ="zipcode") String zipcode) throws ParseException {
+            @RequestParam(name = "addressTwo") String addressTwo,
+            @RequestParam(name = "city") String city,
+            @RequestParam(name = "state") String state,
+            @RequestParam(name = "zipcode") String zipcode) throws ParseException {
 
         //get party object
         Party partyToUpdate = partyDao.getById(id);
@@ -145,7 +152,7 @@ public class PartyController {
     //show form for adding partyItems
     //TODO: Check in on
     @GetMapping("/parties/items/{urlKey}")
-    public String showItemForm(Model model, @PathVariable String urlKey){
+    public String showItemForm(Model model, @PathVariable String urlKey) {
         Party party = partyDao.getByUrlKey(urlKey); //gets party
         model.addAttribute("party", party); //sets party
         return "/party/createItems";
@@ -153,10 +160,10 @@ public class PartyController {
 
     //saves party information
     @PostMapping("/parties/items/{urlKey}")
-    public String addItems(@PathVariable String urlKey, @RequestParam(name="name[]") String[] names,@RequestParam(name="quantity[]") String[] quantities ) {
+    public String addItems(@PathVariable String urlKey, @RequestParam(name = "name[]") String[] names, @RequestParam(name = "quantity[]") String[] quantities) {
         Party party = partyDao.getByUrlKey(urlKey);
 
-        for(int i = 0; i< names.length; i++){
+        for (int i = 0; i < names.length; i++) {
             //TODO: If item is null don't add
             //TODO: How to make dynamic, 'add another item'
 
@@ -173,5 +180,8 @@ public class PartyController {
         }
         return "redirect:/parties/success/" + urlKey;
     }
+
+
 }
+
 
