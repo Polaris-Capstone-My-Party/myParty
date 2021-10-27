@@ -9,4 +9,5 @@ public interface ItemBringerRepository extends JpaRepository<ItemBringer, Long> 
     List<ItemBringer> getByGuest(Guest guest);
     List<ItemBringer> getByPartyMember(PartyMember partyMember);
     List<ItemBringer> getByPartyItem(PartyItem partyItem);
+    List<ItemBringer> getByPartyMember(PartyMember partyMember);
 }

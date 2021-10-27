@@ -128,7 +128,7 @@ public class GuestController {
     //saves Guest edited information
     @PostMapping(path = "/rsvp/{urlKey}/{guestKey}/edit")
     public String saveEditRSVP(@ModelAttribute Guest guest, @RequestParam String rsvp, @RequestParam(name="itemBringer[]") String[] itemBringer, @RequestParam(name="quantity[]") String[] quantities,
-                               @RequestParam(name="partyItem[]") String[] partyItem, @PathVariable String urlKey){
+                               @RequestParam(name="partyItem[]") String[] partyItem, @PathVariable String urlKey, @PathVariable String guestKey){
         guest.setRsvpStatus(RsvpStatuses.valueOf(rsvp));
         guest.setParty(partyDAO.getByUrlKey(urlKey));
         guestDAO.save(guest); //save guest information
@@ -142,7 +142,7 @@ public class GuestController {
                 itemBringerDAO.save(updatedItemBringer); //saves & updates quantity for ItemBringer
             }
         }
-        return "redirect:/guests/successRsvp";
+        return "redirect:/guests/successRsvp" + urlKey + "/" + guestKey;
     }
 
     //calculates actual quantity remaining

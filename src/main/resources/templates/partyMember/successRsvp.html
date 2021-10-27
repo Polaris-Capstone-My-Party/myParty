@@ -7,7 +7,7 @@
 <section layout:fragment="content">
   <h1>You Registered for this Party!</h1>
   <label for="editUrl">Edit Your RSVP With This Link:</label>
-  <div id="editUrl" th:text="'http://localhost:8080/rsvp/' + ${urlKey} + '/' + ${memberId} + '/edit'"/></div>
+  <div id="editUrl" th:text="'http://localhost:8080/rsvp/' + ${urlKey} + '/member/' + ${partyMemberKey} + '/edit'"/></div>
 </section>
 
 <footer><p layout:fragment="custom-footer">This is actually working</p></footer>

@@ -28,4 +28,7 @@ public class PartyMember {
     @JoinColumn(name = "member_id")
     @Getter @Setter private Member member;
 
+    @Column(nullable = false, name = "partyMember_key")
+    @Getter @Setter private String partyMemberKey;
+
 }
