@@ -29,18 +29,8 @@ public class GuestController {
     //show RSVP form with corresponding Party & Party Item Information
     @GetMapping(path = "/rsvp/{urlKey}")
     public String showRSVP(@PathVariable String urlKey, Model model){
-        ArrayList<String> rsvpStatuses = new ArrayList<>(); //list of RSVP enum values/options
-        rsvpStatuses.add("yes");
-        rsvpStatuses.add("maybe");
-        rsvpStatuses.add("no");
-
-        ArrayList<String> additionalGuests = new ArrayList<>(); //list of RSVP enum values/options
-        additionalGuests.add("1");
-        additionalGuests.add("2");
-        additionalGuests.add("3");
-        additionalGuests.add("4");
-        additionalGuests.add("5");
-        additionalGuests.add("5+");
+        ArrayList<String> rsvpStatuses = getRsvpStatuses(); //list of RSVP enum values/options
+        ArrayList<String> additionalGuests = getAdditionalGuests(); //list of RSVP enum values/options
 
         Party party = partyDAO.getByUrlKey(urlKey); // gets party info for form
 
@@ -123,18 +113,8 @@ public class GuestController {
     //Shows Guest Info & Allows to Edit
     @GetMapping(path = "/rsvp/{urlKey}/{guestKey}/edit")
     public String showEditRSVP(@PathVariable String urlKey, @PathVariable String guestKey, Model model){
-        ArrayList<String> rsvpStatuses = new ArrayList<>(); //list of RSVP enum values/options
-        rsvpStatuses.add("yes");
-        rsvpStatuses.add("maybe");
-        rsvpStatuses.add("no");
-
-        ArrayList<String> additionalGuests = new ArrayList<>(); //list of RSVP enum values/options
-        additionalGuests.add("1");
-        additionalGuests.add("2");
-        additionalGuests.add("3");
-        additionalGuests.add("4");
-        additionalGuests.add("5");
-        additionalGuests.add("5+");
+        ArrayList<String> rsvpStatuses = getRsvpStatuses(); //list of RSVP enum values/options
+        ArrayList<String> additionalGuests = getAdditionalGuests(); //list of RSVP enum values/options
 
         Party party = partyDAO.getByUrlKey(urlKey);
         Guest guest = guestDAO.getByGuestKey(guestKey);
@@ -142,21 +122,7 @@ public class GuestController {
         List<PartyItem> partyItems = partyItemDAO.getByParty(party); //gets list of party Items w/ party
         List<ItemBringer> itemBringers = itemBringerDAO.getByGuest(guest); //gets & sets list of item bringers associated w/ guest
         List<Long> quantities = calculateQuantity(partyItems); //gets dynamic quantities left of each party
-        HashMap<ItemBringer, List<Long>> itemBringerActual= new HashMap<>(); //hashmap to store party items & list of long quantity values
-
-        for(int i = 0; i < itemBringers.size(); i++){ //loop through item bringer instances
-
-            itemBringers.get(i).getPartyItem().setQuantityRequired(quantities.get(i)); //sets partyItemQuantity on form to be whatever quantity is left
-
-            Long quantityDigit = quantities.get(i) + itemBringers.get(i).getQuantity(); //holds quantity remaining + quantity signed up form
-            List<Long> quantityList = new ArrayList<>();
-
-            for(long j = 0; j <= quantityDigit; j++){ //creates List of Longs up until quantity value
-                quantityList.add(j);
-            }
-
-            itemBringerActual.put(itemBringers.get(i), quantityList); //adds party item & associated quantity list to hashmap
-        }
+        HashMap<ItemBringer, List<Long>> itemBringerActual= getItemBringerActual(itemBringers, quantities); //hashmap to store party items & list of long quantity values
 
         model.addAttribute("party", party); //get party info
         model.addAttribute("guest", guest); //get guest info
@@ -204,4 +170,49 @@ public class GuestController {
         }
         return totalQuantity;
     }
+
+    //returns list of rsvp values
+    public ArrayList<String> getRsvpStatuses(){
+        ArrayList<String> rsvpStatuses = new ArrayList<>(); //list of RSVP enum values/options
+        rsvpStatuses.add("yes");
+        rsvpStatuses.add("maybe");
+        rsvpStatuses.add("no");
+        return rsvpStatuses;
+    }
+
+    //returns list of additional guest values
+    public ArrayList<String> getAdditionalGuests(){
+        ArrayList<String> additionalGuests = new ArrayList<>(); //list of RSVP enum values/options
+        additionalGuests.add("1");
+        additionalGuests.add("2");
+        additionalGuests.add("3");
+        additionalGuests.add("4");
+        additionalGuests.add("5");
+        additionalGuests.add("5+");
+        return additionalGuests;
+    }
+
+    //returns hashMap of ItemBringers & Updated Quantities
+    public HashMap<ItemBringer, List<Long>> getItemBringerActual(List<ItemBringer> itemBringers, List<Long> quantities){
+
+        HashMap<ItemBringer, List<Long>> itemBringerActual= new HashMap<>(); //hashmap to store party items & list of long quantity values
+        for(int i = 0; i < itemBringers.size(); i++){ //loop through item bringer instances
+
+            itemBringers.get(i).getPartyItem().setQuantityRequired(quantities.get(i)); //sets partyItemQuantity on form to be whatever quantity is left
+
+            Long quantityDigit = quantities.get(i) + itemBringers.get(i).getQuantity(); //holds quantity remaining + quantity signed up form
+            List<Long> quantityList = new ArrayList<>();
+
+            for(long j = 0; j <= quantityDigit; j++){ //creates List of Longs up until quantity value
+                quantityList.add(j);
+            }
+
+            itemBringerActual.put(itemBringers.get(i), quantityList); //adds party item & associated quantity list to hashmap
+        }
+
+        return itemBringerActual;
+    }
+
+
+
 }

@@ -80,43 +80,16 @@ public class PartyMembersController {
     //Shows PartyMember Info & Allows to Edit
     @GetMapping(path = "/rsvp/{urlKey}/member/{partyMemberKey}/edit")
     public String showEditRSVP(@PathVariable String urlKey, @PathVariable String partyMemberKey, Model model){
-        ArrayList<String> rsvpStatuses = new ArrayList<>(); //list of RSVP enum values/options
-        rsvpStatuses.add("yes");
-        rsvpStatuses.add("maybe");
-        rsvpStatuses.add("no");
-
-        ArrayList<String> additionalGuests = new ArrayList<>(); //list of RSVP enum values/options
-        additionalGuests.add("1");
-        additionalGuests.add("2");
-        additionalGuests.add("3");
-        additionalGuests.add("4");
-        additionalGuests.add("5");
-        additionalGuests.add("5+");
+        ArrayList<String> rsvpStatuses = guestController.getRsvpStatuses(); //list of RSVP enum values/options
+        ArrayList<String> additionalGuests = guestController.getAdditionalGuests(); //list of RSVP enum values/options
 
         Party party = partyDao.getByUrlKey(urlKey); //gets party
         PartyMember partyMember = partyMemberDao.getByPartyMemberKey(partyMemberKey); //gets partyMember
 
-//        System.out.println(partyMember.getMember().getFirstName());
-
         List<PartyItem> partyItems = partyItemDao.getByParty(party); //gets partyItems associated with party
         List<ItemBringer> itemBringers = itemBringerDao.getByPartyMember(partyMember); //gets & sets list of item bringers associated w/ guest
         List<Long> quantities = guestController.calculateQuantity(partyItems); //gets dynamic quantities left of each party
-
-        HashMap<ItemBringer, List<Long>> itemBringerActual= new HashMap<>(); //hashmap to store party items & list of long quantity values
-
-        for(int i = 0; i < itemBringers.size(); i++){ //loop through item bringer instances
-
-            itemBringers.get(i).getPartyItem().setQuantityRequired(quantities.get(i)); //sets partyItemQuantity on form to be whatever quantity is left
-
-            Long quantityDigit = quantities.get(i) + itemBringers.get(i).getQuantity(); //holds quantity remaining + quantity signed up form
-            List<Long> quantityList = new ArrayList<>();
-
-            for(long j = 0; j <= quantityDigit; j++){ //creates List of Longs up until quantity value
-                quantityList.add(j);
-            }
-
-            itemBringerActual.put(itemBringers.get(i), quantityList); //adds party item & associated quantity list to hashmap
-        }
+        HashMap<ItemBringer, List<Long>> itemBringerActual= guestController.getItemBringerActual(itemBringers, quantities); //hashmap to store party items & list of long quantity values
 
         //TODO: if quantity = 0, do not show?
         model.addAttribute("party", party); //get party info
