@@ -36,7 +36,6 @@ public class GuestController {
 
         Party party = partyDAO.getByUrlKey(urlKey); // gets party info for form
 
-        //TODO: make dropdown
         List<PartyItem> partyItems = partyItemDAO.getByParty(party); //gets item associated with party
         List<Long> quantities = calculateQuantity(partyItems); //gets dynamic quantities left of each party
         for(int i =0; i < partyItems.size(); i++){
@@ -69,11 +68,8 @@ public class GuestController {
         guest.setGuestKey(uuid.toString()); //https://www.baeldung.com/java-uui
         Guest guest1 =  guestDAO.save(guest); //save guest information & creates item to reference
 
+        //TODO: Add error message to avoid negative values in the database (someone signs up for stuff before you submit)
         for(int i = 0; i < myPartyItems.length; i++){ //goes through partyItems guest submitted
-
-            if(quantities[i].equals("0")){ //if quantity is 0, no need to create Item Bringer instance
-                continue;
-            }
 
             ItemBringer itemBringer = new ItemBringer(); //new instance of Item Bringer
             PartyItem partyItem = partyItemDAO.getById(Long.valueOf(myPartyItems[i])); //get partyItem object by id
@@ -82,7 +78,6 @@ public class GuestController {
             itemBringer.setGuest(guest1); //sets guest object
             itemBringer.setPartyItem(partyItem); // sets partyItem object
             itemBringerDAO.save(itemBringer); // saves item bringer
-            //TODO: Add error message to avoid negative values in the database (someone signs up for stuff before you submit)
         }
 
         return  "redirect:/guests/successRsvp/" + urlKey + "/" + uuid;
@@ -114,8 +109,6 @@ public class GuestController {
             partyItems.get(i).setQuantityRequired(quantities.get(i)); //sets partyItemQuantity on form to be whatever quantity is left
         }
 
-        //TODO: set default RSVP status to be the one currently
-        //TODO: if quantity = 0, do not show?
         model.addAttribute("party", party); //get party info
         model.addAttribute("guest", guest); //get guest info
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
@@ -127,20 +120,19 @@ public class GuestController {
 
     //saves Guest edited information
     @PostMapping(path = "/rsvp/{urlKey}/{guestKey}/edit")
-    public String saveEditRSVP(@ModelAttribute Guest guest, @RequestParam String rsvp, @RequestParam(name="itemBringer[]") String[] itemBringer, @RequestParam(name="quantity[]") String[] quantities,
-                               @RequestParam(name="partyItem[]") String[] partyItem, @PathVariable String urlKey, @PathVariable String guestKey){
+    public String saveEditRSVP(@ModelAttribute Guest guest, @RequestParam String rsvp, @RequestParam(name="itemBringer[]") String[] itemBringer,
+                               @RequestParam(name="quantity[]") String[] quantities, @RequestParam(name="partyItem[]") String[] partyItem,
+                               @PathVariable String urlKey, @PathVariable String guestKey){
+
         guest.setRsvpStatus(RsvpStatuses.valueOf(rsvp));
         guest.setParty(partyDAO.getByUrlKey(urlKey));
         guestDAO.save(guest); //save guest information
 
-        //TODO: Error message, something to check this bc if no items, then gives error
         //TODO: Add error message to avoid negative values in the database (someone signs up for stuff before you submit)
-        if(itemBringer != null){
-            for(int i = 0; i < itemBringer.length; i++){ //updates itemBringer quantity
-                ItemBringer updatedItemBringer = itemBringerDAO.getById(Long.valueOf(itemBringer[i])); //get itemBringer object associated w/ itemBringerID
-                updatedItemBringer.setQuantity((Long.valueOf(quantities[i]))); //sets updated quantity
-                itemBringerDAO.save(updatedItemBringer); //saves & updates quantity for ItemBringer
-            }
+        for(int i = 0; i < itemBringer.length; i++){ //updates itemBringer quantity
+            ItemBringer updatedItemBringer = itemBringerDAO.getById(Long.valueOf(itemBringer[i])); //get itemBringer object associated w/ itemBringerID
+            updatedItemBringer.setQuantity((Long.valueOf(quantities[i]))); //sets updated quantity
+            itemBringerDAO.save(updatedItemBringer); //saves & updates quantity for ItemBringer
         }
         return "redirect:/guests/successRsvp/" + urlKey + "/" + guestKey;
     }

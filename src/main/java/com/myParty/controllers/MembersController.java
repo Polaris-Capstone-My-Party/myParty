@@ -88,10 +88,11 @@ public class MembersController {
             completedGuests.put(guest, itemBringers); //adds guest object & ItemBringer List to HashMap
         }
 
+
         List<PartyMember> partyMembers = partyMemberDao.getByParty(party); //gets partyMembers associated with party
         HashMap<PartyMember, List<ItemBringer>> completedPartyMembers = new HashMap<>(); //Creates Hashmap that stores PartyMember objects & list of ItemBringers (assoc. w/ partyMember)
 
-        for (PartyMember partyMember : partyMembers){ //for each guest
+        for (PartyMember partyMember : partyMembers){ //for each partyMember
             List<ItemBringer> itemBringers = itemBringerDao.getByPartyMember(partyMember); //get List of itemBringer objects associated w/ guest
             completedPartyMembers.put(partyMember, itemBringers); //adds guest object & ItemBringer List to HashMap
         }
