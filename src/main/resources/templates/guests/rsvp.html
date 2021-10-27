@@ -37,8 +37,12 @@
             </div>
 
             <div class="form-group">
-                <label for="additionalGuests">Additional Guests You're Bringing: </label>
-                <input class="form-control" id="additionalGuests" type="text" th:field="*{additionalGuests}"/>
+                <label for="additionalGuests1">Additional Guests You're Bringing: </label>
+                <select id="additionalGuests1" th:field="*{additionalGuests}">
+                    <div th:each="additionalGuest : ${additionalGuests}">
+                        <option th:value="${additionalGuest}" th:text="${additionalGuest}"></option>
+                    </div>
+                </select>
             </div>
 
             <!--Sign Up For Items -->
@@ -106,7 +110,11 @@
 
             <div class="form-group">
                 <label for="additionalGuests">Additional Guests You're Bringing: </label>
-                <input class="form-control" id="additionalGuests" type="text" th:field="*{additionalGuests}"/>
+                <select id="additionalGuests" th:field="*{additionalGuests}">
+                    <div th:each="additionalGuest : ${additionalGuests}">
+                        <option th:value="${additionalGuest}" th:text="${additionalGuest}"></option>
+                    </div>
+                </select>
             </div>
 
 

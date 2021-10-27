@@ -34,6 +34,14 @@ public class GuestController {
         rsvpStatuses.add("maybe");
         rsvpStatuses.add("no");
 
+        ArrayList<String> additionalGuests = new ArrayList<>(); //list of RSVP enum values/options
+        additionalGuests.add("1");
+        additionalGuests.add("2");
+        additionalGuests.add("3");
+        additionalGuests.add("4");
+        additionalGuests.add("5");
+        additionalGuests.add("5+");
+
         Party party = partyDAO.getByUrlKey(urlKey); // gets party info for form
 
         List<PartyItem> partyItems = partyItemDAO.getByParty(party); //gets item associated with party
@@ -58,8 +66,11 @@ public class GuestController {
 
         model.addAttribute("party", party); //sets party info for form
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
+        model.addAttribute("additionalGuests", additionalGuests); //sets additional guests drop down
         model.addAttribute("partyItems", partyItemsActual); //sets partyItem info form
         model.addAttribute("guest", new Guest()); //thing to allow form to recognize new guest
+
+        System.out.println(additionalGuests.get(2));
 
         //Checks if Member is logged in or not
         if(!SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString().equals("anonymousUser")){
@@ -117,6 +128,14 @@ public class GuestController {
         rsvpStatuses.add("maybe");
         rsvpStatuses.add("no");
 
+        ArrayList<String> additionalGuests = new ArrayList<>(); //list of RSVP enum values/options
+        additionalGuests.add("1");
+        additionalGuests.add("2");
+        additionalGuests.add("3");
+        additionalGuests.add("4");
+        additionalGuests.add("5");
+        additionalGuests.add("5+");
+
         Party party = partyDAO.getByUrlKey(urlKey);
         Guest guest = guestDAO.getByGuestKey(guestKey);
 
@@ -142,6 +161,7 @@ public class GuestController {
         model.addAttribute("party", party); //get party info
         model.addAttribute("guest", guest); //get guest info
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
+        model.addAttribute("additionalGuests", additionalGuests); //sets additional guests drop down
         model.addAttribute("itemBringers", itemBringerActual); //gets ItemBringer info associated with guestId
         return "guests/editRsvp";
     }
