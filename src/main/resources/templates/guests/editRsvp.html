@@ -22,19 +22,19 @@
         <!--Enter First Name-->
         <div class="form-group">
             <label for="firstName">First Name: </label>
-            <input class="form-control" id="firstName" type="text" th:field="*{firstName}" th:placeholder="${guest.firstName}"/>
+            <input class="form-control" id="firstName" type="text" th:field="*{firstName}"/>
         </div>
 
         <!--Enter Last Name-->
         <div class="form-group">
             <label for="lastName">Last Name: </label>
-            <input class="form-control" id="lastName" type="text" th:field="*{lastName}" th:placeholder="${guest.lastName}"/>
+            <input class="form-control" id="lastName" type="text" th:field="*{lastName}"/>
         </div>
 
         <!--Enter Email-->
         <div class="form-group">
             <label for="email">Email: </label>
-            <input class="form-control" id="email" type="text" th:field="*{email}" th:placeholder="${guest.email}"/>
+            <input class="form-control" id="email" type="text" th:field="*{email}"/>
         </div>
 
         <!--Enter RSVP Status-->
@@ -52,6 +52,12 @@
             </select>
 
         </div>
+
+        <div class="form-group">
+            <label for="additionalGuests">Additional Guests You're Bringing: </label>
+            <input class="form-control" id="additionalGuests" type="text" th:field="*{additionalGuests}"/>
+        </div>
+
         <input type="hidden" th:field="*{id}" th:placeholder="${guest.id}">
         <br>
 
