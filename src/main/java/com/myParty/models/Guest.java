@@ -34,4 +34,7 @@ public class Guest {
     @JoinColumn (name = "party_id")
     @Getter @Setter private Party party;
 
+    @Column(name = "addtl_guests")
+    @Getter @Setter private int additionalGuests;
+
 }

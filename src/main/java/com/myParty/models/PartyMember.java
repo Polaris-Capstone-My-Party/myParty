@@ -31,4 +31,7 @@ public class PartyMember {
     @Column(nullable = false, name = "partyMember_key")
     @Getter @Setter private String partyMemberKey;
 
+    @Column(name = "addtl_guests")
+    @Getter @Setter private int additionalGuests;
+
 }
