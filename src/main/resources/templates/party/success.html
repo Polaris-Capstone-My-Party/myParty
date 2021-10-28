@@ -37,6 +37,26 @@
         <input type="submit" value="Send Invites!"/>
     </form>
 
+    <script>
+        window.onload = (function() {
+            const additionalEmail = document.getElementById('addEmailButton');
+
+            const emailForm = `<div class="form-group">
+                  <label for="email[]">Email Address:</label>
+                  <input type="email" name="email[]" id="email[]">
+
+                </div>`
+
+            additionalEmail.addEventListener('click', function(event) {
+                event.preventDefault();
+
+                const yeahBaby = document.getElementById('additionalEmails');
+                let newEmail = document.createElement("div");
+                newEmail.innerHTML = emailForm;
+                yeahBaby.appendChild(newEmail);
+            });
+        })
+    </script>
 
 </section>
 
