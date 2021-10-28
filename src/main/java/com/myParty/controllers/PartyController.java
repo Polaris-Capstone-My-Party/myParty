@@ -45,13 +45,8 @@ public class PartyController {
             @RequestParam String city,
             @RequestParam String state,
             @RequestParam String zipcode,
-            @RequestParam(name="name[]") String[] names,
-            @RequestParam(name="quantity[]") String[] quantities
-
-    )
-
-    {
-
+            @RequestParam(name = "name[]") String[] names,
+            @RequestParam(name = "quantity[]") String[] quantities) {
         //Creates & Saves Location
         Location locationToAdd = new Location(0, addressOne, addressTwo, city, state, zipcode);
         Location locationInDb = locationDao.save(locationToAdd);
@@ -72,10 +67,8 @@ public class PartyController {
 
         //Creates and saves party Items
 
-        for(int i = 0; i< names.length; i++){
-            //TODO: If item is null don't add
-            //TODO: How to make dynamic, 'add another item'
-
+        for (int i = 0; i < names.length; i++) {
+            //TODO: If item is null don't add - Error Message
             Item item = new Item(); //create new item instance //TODO: check if item already exists
             item.setName(names[i]); //set item name from name[]
             itemDao.save(item); //save item instance
@@ -102,7 +95,7 @@ public class PartyController {
 
     //redirects to profile when submit button pushed
     @PostMapping("/parties/{urlKey}")
-    public String successParty(@RequestParam(name="customMessage") String customMessage, @RequestParam(name="emailAddress") String emailAddress){
+    public String successParty(@RequestParam(name = "customMessage") String customMessage, @RequestParam(name = "emailAddress") String emailAddress) {
         return "redirect:profile";
     }
 
@@ -135,10 +128,10 @@ public class PartyController {
             @RequestParam(name = "startTime") String startTime,
             @RequestParam(name = "endTime") String endTime,
             @RequestParam(name = "addressOne") String addressOne,
-            @RequestParam(name ="addressTwo") String addressTwo,
-            @RequestParam(name ="city") String city,
-            @RequestParam(name ="state") String state,
-            @RequestParam(name ="zipcode") String zipcode) throws ParseException {
+            @RequestParam(name = "addressTwo") String addressTwo,
+            @RequestParam(name = "city") String city,
+            @RequestParam(name = "state") String state,
+            @RequestParam(name = "zipcode") String zipcode) throws ParseException {
 
         //get party object
         Party partyToUpdate = partyDao.getById(id);
@@ -166,36 +159,4 @@ public class PartyController {
         return "redirect:/profile";
     }
 
-    //show form for adding partyItems
-    //TODO: Check in on
-//    @GetMapping("/parties/items/{urlKey}")
-//    public String showItemForm(Model model, @PathVariable String urlKey){
-//        Party party = partyDao.getByUrlKey(urlKey); //gets party
-//        model.addAttribute("party", party); //sets party
-//        return "/party/createItems";
-//    }
-//
-//    //saves party information
-//    @PostMapping("/parties/items/{urlKey}")
-//    public String addItems(@PathVariable String urlKey, @RequestParam(name="name[]") String[] names,@RequestParam(name="quantity[]") String[] quantities ) {
-//        Party party = partyDao.getByUrlKey(urlKey);
-//
-//        for(int i = 0; i< names.length; i++){
-//            //TODO: If item is null don't add
-//            //TODO: How to make dynamic, 'add another item'
-//
-//            Item item = new Item(); //create new item instance //TODO: check if item already exists
-//            item.setName(names[i]); //set item name from name[]
-//            itemDao.save(item); //save item instance
-//
-//            //creates & Saves party item
-//            PartyItem partyItem = new PartyItem();
-//            partyItem.setItem(item);
-//            partyItem.setQuantityRequired(Long.valueOf(quantities[i]));
-//            partyItem.setParty(party);
-//            partyItemDao.save(partyItem);
-//        }
-//        return "redirect:/parties/success/" + urlKey;
-//    }
 }
-

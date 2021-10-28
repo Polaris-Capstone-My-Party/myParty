@@ -33,5 +33,4 @@ public class PartyMember {
 
     @Column(name = "addtl_guests")
     @Getter @Setter private String additionalGuests;
-
 }
