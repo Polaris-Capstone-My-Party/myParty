@@ -42,13 +42,14 @@ public class EmailService {
     }
 
     //RSVP confirmation for guests/members with items they signed up to bring & link to edit RSVP
-    public void prepareAndSend(Party party, String subject, String customMessage, String email){
-        SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setFrom(from);
-//        msg.setTo(party.getGuests().getEmail());
-        msg.setTo(email);
-        msg.setSubject(subject);
-        msg.setText(customMessage);
+    public void prepareAndSend(String subject,  String email, String customMessage) throws MessagingException {
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+        helper.setFrom(from);
+        helper.setTo(email);
+        helper.setSubject(subject);
+        boolean html = true;
+        helper.setText(customMessage, html);
 
         try{
             this.emailSender.send(msg);

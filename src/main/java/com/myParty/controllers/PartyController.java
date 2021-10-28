@@ -60,7 +60,7 @@ public class PartyController {
         //get UUID for urlKey
         UUID uuid = UUID.randomUUID();
 
-        //sets & save party details
+        //sets & save party details plus sends email
         party.setOwner(loggedInMember);
         party.setStartTime(party.makeTimestampFromString(start_time));
         party.setEndTime(party.makeTimestampFromString(end_time));
@@ -87,9 +87,24 @@ public class PartyController {
 
     //redirects to profile when submit button pushed
     @PostMapping("/parties/{urlKey}")
-    public String successParty(@RequestParam(name = "customMessage") String customMessage, @RequestParam(name = "emailAddress") String emailAddress) {
-        return "redirect:profile";
+    public String successParty(@PathVariable String urlKey, @RequestParam(name = "emailAddress[]") String[] emailAddresses) {
+        Party party = partyDao.getByUrlKey(urlKey);
+
+        String partyDetails =
+                "<h2>You're Invited to " + party.getTitle() + " by " + party.getOwner() + "</h2>, <br><i>Here are the details: </i><br>" + "Description: " + party.getDescription() + "<br>"
+                        + "Start Time: " + party.getStartTime() + "<br>" + "End Time: " + party.getEndTime() + "<br>" + "Location: " + party.getLocation() + "<br>"
+                        + "RSVP Here: " + party.getUrlKey();
+
+        for (int i = 0; i < emailAddresses.length; i++) {
+
+
+            emailService.prepareAndSend(party, );
+
+        }
+            return "redirect:profile";
+
     }
+
 
     //show form for editing party
     @GetMapping("/parties/edit/{id}")
