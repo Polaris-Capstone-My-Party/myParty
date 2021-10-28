@@ -76,6 +76,11 @@ public class GuestController {
                 return "redirect:/rsvp/" + urlKey + "/member/" + checkMember.getPartyMemberKey() + "/edit";
             }
 
+            //checks if member is the host of the party, redirect to view party page not RSVP
+            if(actualMember == party.getOwner()){
+                return "redirect:/member/" + urlKey + "/view";
+            }
+
             model.addAttribute("member", actualMember); //sets member info for prefilled in stuff
             model.addAttribute("partyMember", new PartyMember()); //allows form to recognize new guest
         }
