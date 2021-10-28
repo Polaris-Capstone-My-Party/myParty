@@ -3,6 +3,8 @@
 
 <title layout:fragment="title" >myParty | Create</title>
 
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
 <section layout:fragment="content">
 
     <div class="container">
@@ -56,10 +58,44 @@
                 <label for="zipcode">Zipcode:</label>
                 <input id="zipcode" name="zipcode" type="number"/>
             </div>
+            <div id="additionalItems">
+                <h1> Add Items</h1>
+                <div class="form-group">
+                    <label for="name[]">Item Name:</label>
+                    <input type="text" name="name[]" id="name[]">
+
+                    <label for="quantity[]">Quantity:</label>
+                    <input type="text" name="quantity[]" id="quantity[]">
+                </div>
+            </div>
+            <button id="addItemButton">Add Another Item</button>
 
             <input value="Create Party!" type="submit"/>
         </form>
     </div>
+    <script>
+        window.onload = (function() {
+            const additionalItem = document.getElementById('addItemButton');
+
+            const itemForm = `<div class="form-group">
+                  <label for="name[]">Item Name:</label>
+                  <input type="text" name="name[]" id="name[]">
+
+                  <label for="quantity[]">Quantity:</label>
+                  <input type="text" name="quantity[]" id="quantity[]">
+                </div>`
+
+            additionalItem.addEventListener('click', function(event) {
+                event.preventDefault();
+
+
+                const testyBoi = document.getElementById('additionalItems');
+                let newItem = document.createElement("div");
+                newItem.innerHTML = itemForm;
+                testyBoi.appendChild(newItem);
+            });
+        })
+    </script>
 </section>
 
 <footer><p layout:fragment="custom-footer">This is actually working</p></footer>
