@@ -68,9 +68,28 @@ public class PartyController {
         party.setEndTime(party.makeTimestampFromString(end_time));
         party.setUrlKey(uuid.toString());
         party.setLocation(locationInDb);
-        partyDao.save(party);
+        Party partyInDb = partyDao.save(party);
 
-        return "redirect:/parties/items/" + uuid;
+        //Creates and saves party Items
+
+        for(int i = 0; i< names.length; i++){
+            //TODO: If item is null don't add
+            //TODO: How to make dynamic, 'add another item'
+
+            Item item = new Item(); //create new item instance //TODO: check if item already exists
+            item.setName(names[i]); //set item name from name[]
+            itemDao.save(item); //save item instance
+
+            //creates & Saves party item
+            PartyItem partyItem = new PartyItem();
+            partyItem.setItem(item);
+            partyItem.setQuantityRequired(Long.valueOf(quantities[i]));
+            partyItem.setParty(partyInDb);
+            partyItemDao.save(partyItem);
+
+        }
+
+        return "redirect:/parties/success/" + uuid;
     }
 
     //show page when party successfully created
@@ -149,34 +168,34 @@ public class PartyController {
 
     //show form for adding partyItems
     //TODO: Check in on
-    @GetMapping("/parties/items/{urlKey}")
-    public String showItemForm(Model model, @PathVariable String urlKey){
-        Party party = partyDao.getByUrlKey(urlKey); //gets party
-        model.addAttribute("party", party); //sets party
-        return "/party/createItems";
-    }
-
-    //saves party information
-    @PostMapping("/parties/items/{urlKey}")
-    public String addItems(@PathVariable String urlKey, @RequestParam(name="name[]") String[] names,@RequestParam(name="quantity[]") String[] quantities ) {
-        Party party = partyDao.getByUrlKey(urlKey);
-
-        for(int i = 0; i< names.length; i++){
-            //TODO: If item is null don't add
-            //TODO: How to make dynamic, 'add another item'
-
-            Item item = new Item(); //create new item instance //TODO: check if item already exists
-            item.setName(names[i]); //set item name from name[]
-            itemDao.save(item); //save item instance
-
-            //creates & Saves party item
-            PartyItem partyItem = new PartyItem();
-            partyItem.setItem(item);
-            partyItem.setQuantityRequired(Long.valueOf(quantities[i]));
-            partyItem.setParty(party);
-            partyItemDao.save(partyItem);
-        }
-        return "redirect:/parties/success/" + urlKey;
-    }
+//    @GetMapping("/parties/items/{urlKey}")
+//    public String showItemForm(Model model, @PathVariable String urlKey){
+//        Party party = partyDao.getByUrlKey(urlKey); //gets party
+//        model.addAttribute("party", party); //sets party
+//        return "/party/createItems";
+//    }
+//
+//    //saves party information
+//    @PostMapping("/parties/items/{urlKey}")
+//    public String addItems(@PathVariable String urlKey, @RequestParam(name="name[]") String[] names,@RequestParam(name="quantity[]") String[] quantities ) {
+//        Party party = partyDao.getByUrlKey(urlKey);
+//
+//        for(int i = 0; i< names.length; i++){
+//            //TODO: If item is null don't add
+//            //TODO: How to make dynamic, 'add another item'
+//
+//            Item item = new Item(); //create new item instance //TODO: check if item already exists
+//            item.setName(names[i]); //set item name from name[]
+//            itemDao.save(item); //save item instance
+//
+//            //creates & Saves party item
+//            PartyItem partyItem = new PartyItem();
+//            partyItem.setItem(item);
+//            partyItem.setQuantityRequired(Long.valueOf(quantities[i]));
+//            partyItem.setParty(party);
+//            partyItemDao.save(partyItem);
+//        }
+//        return "redirect:/parties/success/" + urlKey;
+//    }
 }
 
