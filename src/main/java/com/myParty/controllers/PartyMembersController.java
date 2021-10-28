@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,7 +36,6 @@ public class PartyMembersController {
     }
 
     //saves PartyMember & ItemBringer information
-    //partyMember needs, rsvp status, party & Member
     @PostMapping(path = "/rsvp/{urlKey}/{memberId}")
     public String createGuest(@PathVariable String urlKey, @PathVariable String memberId, @ModelAttribute PartyMember partyMember, @RequestParam String rsvp, @RequestParam(name="partyItem[]") String[] myPartyItems, @RequestParam(name="quantity[]") String[] quantities){
 
@@ -80,30 +80,23 @@ public class PartyMembersController {
     //Shows PartyMember Info & Allows to Edit
     @GetMapping(path = "/rsvp/{urlKey}/member/{partyMemberKey}/edit")
     public String showEditRSVP(@PathVariable String urlKey, @PathVariable String partyMemberKey, Model model){
-        ArrayList<String> rsvpStatuses = new ArrayList<>(); //list of RSVP enum values/options
-        rsvpStatuses.add("yes");
-        rsvpStatuses.add("maybe");
-        rsvpStatuses.add("no");
+        ArrayList<String> rsvpStatuses = guestController.getRsvpStatuses(); //list of RSVP enum values/options
+        ArrayList<String> additionalGuests = guestController.getAdditionalGuests(); //list of RSVP enum values/options
 
         Party party = partyDao.getByUrlKey(urlKey); //gets party
         PartyMember partyMember = partyMemberDao.getByPartyMemberKey(partyMemberKey); //gets partyMember
 
-//        System.out.println(partyMember.getMember().getFirstName());
-
         List<PartyItem> partyItems = partyItemDao.getByParty(party); //gets partyItems associated with party
         List<ItemBringer> itemBringers = itemBringerDao.getByPartyMember(partyMember); //gets & sets list of item bringers associated w/ guest
         List<Long> quantities = guestController.calculateQuantity(partyItems); //gets dynamic quantities left of each party
+        HashMap<ItemBringer, List<Long>> itemBringerActual= guestController.getItemBringerActual(itemBringers, quantities); //hashmap to store party items & list of long quantity values
 
-        for(int i =0; i < partyItems.size(); i++){
-            partyItems.get(i).setQuantityRequired(quantities.get(i)); //sets partyItemQuantity on form to be whatever quantity is left
-        }
-
-        //TODO: set default RSVP status to be the one currently
         //TODO: if quantity = 0, do not show?
         model.addAttribute("party", party); //get party info
         model.addAttribute("partyMember", partyMember); //get guest info
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
-        model.addAttribute("itemBringers", itemBringers); //gets ItemBringer info associated with guestId
+        model.addAttribute("additionalGuests", additionalGuests); //sets additional guests drop down
+        model.addAttribute("itemBringers", itemBringerActual); //gets ItemBringer info associated with guestId
         model.addAttribute("partyItems", partyItems); //gets & sets partyItems for party
 
         return "partyMember/editRsvp";
@@ -133,7 +126,5 @@ public class PartyMembersController {
         }
         return "redirect:/member/successRsvp" + "/" + urlKey + "/" + partyMemberKey;
     }
-
-
 
 }
