@@ -25,10 +25,10 @@
     <div>
       <h1>Party Item Information</h1>
       <div th:each="partyItem: ${partyItems}">
-        <div th:text="'Item: ' + ${partyItem.value.item.id}"></div>
-        <div th:text="'Item: ' + ${partyItem.value.item.name}"></div>
-        <div th:text="'Quantity Required: ' + ${partyItem.value.quantityRequired}"></div>
-        <div th:text="'Quantity Remaining: ' + ${partyItem.key}"></div>
+        <div th:text="'Item: ' + ${partyItem.key.item.id}"></div>
+        <div th:text="'Item: ' + ${partyItem.key.item.name}"></div>
+        <div th:text="'Quantity Required: ' + ${partyItem.key.quantityRequired}"></div>
+        <div th:text="'Quantity Remaining: ' + ${partyItem.value}"></div>
         <br>
       </div>
     </div>
