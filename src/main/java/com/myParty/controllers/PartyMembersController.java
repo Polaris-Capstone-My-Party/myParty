@@ -72,11 +72,27 @@ public class PartyMembersController {
     //Shows PartyMember Info & Allows to Edit
     @GetMapping(path = "/rsvp/{urlKey}/member/{partyMemberKey}/edit")
     public String showEditRSVP(@PathVariable String urlKey, @PathVariable String partyMemberKey, Model model){
-        ArrayList<String> rsvpStatuses = guestController.getRsvpStatuses(); //list of RSVP enum values/options
-        ArrayList<String> additionalGuests = guestController.getAdditionalGuests(); //list of RSVP enum values/options
 
         Party party = partyDao.getByUrlKey(urlKey); //gets party
         PartyMember partyMember = partyMemberDao.getByPartyMemberKey(partyMemberKey); //gets partyMember
+
+        //If Member is not logged in, redirect to login Page
+        if(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString().equals("anonymousUser")){
+            return "redirect:/login";
+
+        }
+
+        Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); //get member in session
+        Member actualMember = memberDao.getById(userInSession.getId()); //get member info associated with member in session
+        PartyMember checkMember = partyMemberDao.getByMember(actualMember); //gets partyMember associated with logged in member (can only be one)
+
+        //If logged in Member is not the member associated with the PartyMember, redirect to profile page
+        if(checkMember == null || partyMember.getId() != checkMember.getId()){
+            return "redirect:/profile";
+        }
+
+        ArrayList<String> rsvpStatuses = guestController.getRsvpStatuses(); //list of RSVP enum values/options
+        ArrayList<String> additionalGuests = guestController.getAdditionalGuests(); //list of RSVP enum values/options
 
         List<PartyItem> partyItems = partyItemDao.getByParty(party); //gets partyItems associated with party
         List<ItemBringer> itemBringers = itemBringerDao.getByPartyMember(partyMember); //gets & sets list of item bringers associated w/ guest

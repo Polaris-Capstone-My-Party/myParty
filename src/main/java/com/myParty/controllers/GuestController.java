@@ -17,13 +17,15 @@ public class GuestController {
     private final PartyItemRepository partyItemDAO;
     private final ItemBringerRepository itemBringerDAO;
     private final MemberRepository memberDao;
+    private final PartyMemberRepository partyMemberDao;
 
-    public GuestController(PartyRepository partyDAO, GuestRepository guestDAO, PartyItemRepository partyItemDAO, ItemBringerRepository itemBringerDAO, MemberRepository memberDao){
+    public GuestController(PartyRepository partyDAO, GuestRepository guestDAO, PartyItemRepository partyItemDAO, ItemBringerRepository itemBringerDAO, MemberRepository memberDao, PartyMemberRepository partyMemberDao){
         this.partyDAO = partyDAO;
         this.guestDAO = guestDAO;
         this.partyItemDAO = partyItemDAO;
         this.itemBringerDAO = itemBringerDAO;
         this.memberDao = memberDao;
+        this.partyMemberDao = partyMemberDao;
     }
 
     //show RSVP form with corresponding Party & Party Item Information
@@ -66,6 +68,19 @@ public class GuestController {
         if(!SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString().equals("anonymousUser")){
             Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); //get member in session
             Member actualMember = memberDao.getById(userInSession.getId()); //get member info associated with member in session
+
+            PartyMember checkMember = partyMemberDao.getByMember(actualMember);
+
+            //check if member already has partyMember associated with account
+            if(checkMember != null){
+                return "redirect:/rsvp/" + urlKey + "/member/" + checkMember.getPartyMemberKey() + "/edit";
+            }
+
+            //checks if member is the host of the party, redirect to view party page not RSVP
+            if(actualMember == party.getOwner()){
+                return "redirect:/member/" + urlKey + "/view";
+            }
+
             model.addAttribute("member", actualMember); //sets member info for prefilled in stuff
             model.addAttribute("partyMember", new PartyMember()); //allows form to recognize new guest
         }
