@@ -83,6 +83,7 @@ public class GuestController {
         guest.setGuestKey(uuid.toString()); //https://www.baeldung.com/java-uui
         Guest guest1 =  guestDAO.save(guest); //save guest information & creates item to reference
 
+        //TODO: Add error message to avoid negative values in the database (someone signs up for stuff before you submit)
         for(int i = 0; i < myPartyItems.length; i++){ //goes through partyItems guest submitted
 
             if(quantities[i].equals("0")){ //if quantity is 0, no need to create Item Bringer instance
@@ -96,7 +97,6 @@ public class GuestController {
             itemBringer.setGuest(guest1); //sets guest object
             itemBringer.setPartyItem(partyItem); // sets partyItem object
             itemBringerDAO.save(itemBringer); // saves item bringer
-            //TODO: Add error message to avoid negative values in the database (someone signs up for stuff before you submit)
         }
 
         return  "redirect:/guests/successRsvp/" + urlKey + "/" + uuid;
