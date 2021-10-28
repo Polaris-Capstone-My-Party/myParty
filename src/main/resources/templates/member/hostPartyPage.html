@@ -20,9 +20,12 @@
 
     <br>
 
+
+    <!--TODO Error Here-->
     <div>
       <h1>Party Item Information</h1>
       <div th:each="partyItem: ${partyItems}">
+        <div th:text="'Item: ' + ${partyItem.value.item.id}"></div>
         <div th:text="'Item: ' + ${partyItem.value.item.name}"></div>
         <div th:text="'Quantity Required: ' + ${partyItem.value.quantityRequired}"></div>
         <div th:text="'Quantity Remaining: ' + ${partyItem.key}"></div>
