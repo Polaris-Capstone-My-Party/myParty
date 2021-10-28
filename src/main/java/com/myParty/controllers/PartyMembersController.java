@@ -7,7 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
+
 
 @Controller
 public class PartyMembersController {
@@ -68,10 +72,8 @@ public class PartyMembersController {
     //Shows PartyMember Info & Allows to Edit
     @GetMapping(path = "/rsvp/{urlKey}/member/{partyMemberKey}/edit")
     public String showEditRSVP(@PathVariable String urlKey, @PathVariable String partyMemberKey, Model model){
-        ArrayList<String> rsvpStatuses = new ArrayList<>(); //list of RSVP enum values/options
-        rsvpStatuses.add("yes");
-        rsvpStatuses.add("maybe");
-        rsvpStatuses.add("no");
+        ArrayList<String> rsvpStatuses = guestController.getRsvpStatuses(); //list of RSVP enum values/options
+        ArrayList<String> additionalGuests = guestController.getAdditionalGuests(); //list of RSVP enum values/options
 
         Party party = partyDao.getByUrlKey(urlKey); //gets party
         PartyMember partyMember = partyMemberDao.getByPartyMemberKey(partyMemberKey); //gets partyMember
@@ -79,15 +81,13 @@ public class PartyMembersController {
         List<PartyItem> partyItems = partyItemDao.getByParty(party); //gets partyItems associated with party
         List<ItemBringer> itemBringers = itemBringerDao.getByPartyMember(partyMember); //gets & sets list of item bringers associated w/ guest
         List<Long> quantities = guestController.calculateQuantity(partyItems); //gets dynamic quantities left of each party
-
-        for(int i =0; i < partyItems.size(); i++){
-            partyItems.get(i).setQuantityRequired(quantities.get(i)); //sets partyItemQuantity on form to be whatever quantity is left
-        }
+        HashMap<ItemBringer, List<Long>> itemBringerActual= guestController.getItemBringerActual(itemBringers, quantities); //hashmap to store party items & list of long quantity values
 
         model.addAttribute("party", party); //get party info
         model.addAttribute("partyMember", partyMember); //get guest info
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
-        model.addAttribute("itemBringers", itemBringers); //gets ItemBringer info associated with guestId
+        model.addAttribute("additionalGuests", additionalGuests); //sets additional guests drop down
+        model.addAttribute("itemBringers", itemBringerActual); //gets ItemBringer info associated with guestId
         model.addAttribute("partyItems", partyItems); //gets & sets partyItems for party
 
         return "partyMember/editRsvp";
