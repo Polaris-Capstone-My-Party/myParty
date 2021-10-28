@@ -72,12 +72,14 @@ public class MembersController {
     public String showHostPartyPage(Model model, @PathVariable String urlKey){
 
         Party party = partyDao.getByUrlKey(urlKey); //gets party by urlKey
+
         List<PartyItem> partyItems = partyItemDao.getByParty(party); //gets partyItems associated w/ party
         List<Long> quantityRemaining = guestControllerDao.calculateQuantity(partyItems);//gets list of quantity remaining
-        HashMap<Long, PartyItem> completedPartyItems = new HashMap<>(); //Creates Hashmap that stores PartyItem objects & quantitiesRemaining
+        HashMap<PartyItem, Long> completedPartyItems = new HashMap<>(); //Creates Hashmap that stores PartyItem objects & quantitiesRemaining
 
+        //TODO Works But Keep an Eye on - CG
         for(int i = 0; i < partyItems.size(); i++){ //iterates through partyItems list & quantityRemaining list
-            completedPartyItems.put(quantityRemaining.get(i), partyItems.get(i)); //sets quantityRemaining Long & PartyItem object for HashMap
+            completedPartyItems.put(partyItems.get(i), quantityRemaining.get(i)); //sets quantityRemaining Long & PartyItem object for HashMap
         }
 
         List<Guest> guests = guestDao.getByParty(party); //gets guests associated w/ party
@@ -91,7 +93,7 @@ public class MembersController {
         List<PartyMember> partyMembers = partyMemberDao.getByParty(party); //gets partyMembers associated with party
         HashMap<PartyMember, List<ItemBringer>> completedPartyMembers = new HashMap<>(); //Creates Hashmap that stores PartyMember objects & list of ItemBringers (assoc. w/ partyMember)
 
-        for (PartyMember partyMember : partyMembers){ //for each guest
+        for (PartyMember partyMember : partyMembers){ //for each partyMember
             List<ItemBringer> itemBringers = itemBringerDao.getByPartyMember(partyMember); //get List of itemBringer objects associated w/ guest
             completedPartyMembers.put(partyMember, itemBringers); //adds guest object & ItemBringer List to HashMap
         }
@@ -100,6 +102,7 @@ public class MembersController {
         model.addAttribute("guests", completedGuests); //sets guest information
         model.addAttribute("partyMembers", completedPartyMembers); //sets partyMember information
         model.addAttribute("partyItems", completedPartyItems); //sets partyItem information
+
         return "member/hostPartyPage";
     }
 
@@ -153,7 +156,6 @@ public class MembersController {
         memberDao.deleteById(id);
         logout();
         return "redirect:/";}
-
 }
 
 

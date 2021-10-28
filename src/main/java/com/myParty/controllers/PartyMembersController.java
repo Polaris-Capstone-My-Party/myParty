@@ -3,7 +3,6 @@ package com.myParty.controllers;
 import com.myParty.models.*;
 import com.myParty.repositories.*;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,16 +17,14 @@ import java.util.UUID;
 public class PartyMembersController {
 
     private final PartyRepository partyDao;
-    private final GuestRepository guestDao;
     private final PartyItemRepository partyItemDao;
     private final ItemBringerRepository itemBringerDao;
     private final PartyMemberRepository partyMemberDao;
     private final MemberRepository memberDao;
     private final GuestController guestController;
 
-    public PartyMembersController(PartyRepository partyDao, GuestRepository guestDao, PartyItemRepository partyItemDao, ItemBringerRepository itemBringerDao, PartyMemberRepository partyMemberDao, MemberRepository memberDao, GuestController guestController) {
+    public PartyMembersController(PartyRepository partyDao, PartyItemRepository partyItemDao, ItemBringerRepository itemBringerDao, PartyMemberRepository partyMemberDao, MemberRepository memberDao, GuestController guestController) {
         this.partyDao = partyDao;
-        this.guestDao = guestDao;
         this.partyItemDao = partyItemDao;
         this.itemBringerDao = itemBringerDao;
         this.partyMemberDao = partyMemberDao;
@@ -49,12 +46,8 @@ public class PartyMembersController {
         partyMember.setMember(member); //sets Member to logged in member
         PartyMember partyMember1 = partyMemberDao.save(partyMember); //saves partyMember instance
 
+        //TODO: Add error message to avoid negative values in the database (someone signs up for stuff before you submit)
         for(int i = 0; i < myPartyItems.length; i++){ //goes through partyItems guest submitted
-
-            if(quantities[i].equals("0")){ //if quantity is 0, no need to create Item Bringer instance
-                continue;
-            }
-
             ItemBringer itemBringer = new ItemBringer(); //new instance of Item Bringer
             PartyItem partyItem = partyItemDao.getById(Long.valueOf(myPartyItems[i])); //get partyItem object by id
 
@@ -62,7 +55,6 @@ public class PartyMembersController {
             itemBringer.setPartyMember(partyMember1); //sets partyMember object
             itemBringer.setPartyItem(partyItem); // sets partyItem object
             itemBringerDao.save(itemBringer); // saves item bringer
-            //TODO: Add error message to avoid negative values in the database (someone signs up for stuff before you submit)
         }
 
         return  "redirect:/member/successRsvp/" + urlKey + "/" + uuid;
@@ -91,7 +83,6 @@ public class PartyMembersController {
         List<Long> quantities = guestController.calculateQuantity(partyItems); //gets dynamic quantities left of each party
         HashMap<ItemBringer, List<Long>> itemBringerActual= guestController.getItemBringerActual(itemBringers, quantities); //hashmap to store party items & list of long quantity values
 
-        //TODO: if quantity = 0, do not show?
         model.addAttribute("party", party); //get party info
         model.addAttribute("partyMember", partyMember); //get guest info
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
@@ -115,15 +106,12 @@ public class PartyMembersController {
         partyMember.setMember(member);
         partyMemberDao.save(partyMember); //saves partyMember information
 
-        //TODO: Error message, something to check this bc if no items, then gives error
         //TODO: Add error message to avoid negative values in the database (someone signs up for stuff before you submit)
-        if(itemBringer != null){
             for(int i = 0; i < itemBringer.length; i++){ //updates itemBringer quantity
                 ItemBringer updatedItemBringer = itemBringerDao.getById(Long.valueOf(itemBringer[i])); //get itemBringer object associated w/ itemBringerID
                 updatedItemBringer.setQuantity((Long.valueOf(quantities[i]))); //sets updated quantity
                 itemBringerDao.save(updatedItemBringer); //saves & updates quantity for ItemBringer
             }
-        }
         return "redirect:/member/successRsvp" + "/" + urlKey + "/" + partyMemberKey;
     }
 

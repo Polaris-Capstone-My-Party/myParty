@@ -8,7 +8,7 @@
     <a href="/profile">Back to Profile</a>
 
     <h1>SUCCESS!</h1>
-    <h2 th:text="${party.title} + 'has been successfully created!'"></h2>
+    <h2 th:text="${party.title} + ' has been successfully created!'"></h2>
 
     <form th:action="@{/profile}" th:method="get">
         <!--TODO: Need to change the above back to POST method, send back to profile and add a controller
