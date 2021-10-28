@@ -41,8 +41,8 @@ public class EmailService {
         }
     }
 
-    //RSVP confirmation for guests/members with items they signed up to bring & link to edit RSVP
-    public void prepareAndSend(String subject,  String email, String customMessage) throws MessagingException {
+    //Send Invitations to guests
+    public void sendInvites(String subject,  String email, String customMessage) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
         helper.setFrom(from);
@@ -52,7 +52,7 @@ public class EmailService {
         helper.setText(customMessage, html);
 
         try{
-            this.emailSender.send(msg);
+            this.emailSender.send(message);
         }
         catch (MailException ex) {
             // simply log it and go on...

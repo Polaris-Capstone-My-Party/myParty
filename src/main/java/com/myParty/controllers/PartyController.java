@@ -87,21 +87,21 @@ public class PartyController {
 
     //redirects to profile when submit button pushed
     @PostMapping("/parties/{urlKey}")
-    public String successParty(@PathVariable String urlKey, @RequestParam(name = "emailAddress[]") String[] emailAddresses) {
+    public String successParty(@PathVariable String urlKey, @RequestParam(name = "email[]") String[] emailAddresses) throws MessagingException {
         Party party = partyDao.getByUrlKey(urlKey);
 
         String partyDetails =
-                "<h2>You're Invited to " + party.getTitle() + " by " + party.getOwner() + "</h2>, <br><i>Here are the details: </i><br>" + "Description: " + party.getDescription() + "<br>"
+                "<h2>You're Invited to " + party.getTitle() + " by " + party.getOwner().getFirstName() + "</h2>, <br><i>Here are the details: </i><br>" + "Description: " + party.getDescription() + "<br>"
                         + "Start Time: " + party.getStartTime() + "<br>" + "End Time: " + party.getEndTime() + "<br>" + "Location: " + party.getLocation() + "<br>"
                         + "RSVP Here: " + party.getUrlKey();
 
         for (int i = 0; i < emailAddresses.length; i++) {
+            System.out.println(emailAddresses[i]);
 
-
-            emailService.prepareAndSend(party, );
+            emailService.sendInvites(party.getTitle(), emailAddresses[i], partyDetails);
 
         }
-            return "redirect:profile";
+            return "redirect:/profile";
 
     }
 
