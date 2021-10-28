@@ -73,30 +73,14 @@ public class MembersController {
 
         Party party = partyDao.getByUrlKey(urlKey); //gets party by urlKey
 
-
         List<PartyItem> partyItems = partyItemDao.getByParty(party); //gets partyItems associated w/ party
         List<Long> quantityRemaining = guestControllerDao.calculateQuantity(partyItems);//gets list of quantity remaining
-
         HashMap<PartyItem, Long> completedPartyItems = new HashMap<>(); //Creates Hashmap that stores PartyItem objects & quantitiesRemaining
 
-        //TODO Issue Here
+        //TODO Works But Keep an Eye on - CG
         for(int i = 0; i < partyItems.size(); i++){ //iterates through partyItems list & quantityRemaining list
-            System.out.println("Party Item ID: " + partyItems.get(i).getItem().getId());
-            System.out.println("Party Item Name: " + partyItems.get(i).getItem().getName()); //check PI works
-            System.out.println("Quantity Remaining: " + quantityRemaining.get(i)); //check quantity works
-
             completedPartyItems.put(partyItems.get(i), quantityRemaining.get(i)); //sets quantityRemaining Long & PartyItem object for HashMap
-
-//            System.out.println("Quantity added: " + completedPartyItems.containsKey(quantityRemaining.get(i))); //check saved as key
-//            System.out.println("Item Added: " + completedPartyItems.containsValue(partyItems.get(i))); //check saved as value
-//            System.out.println("Hashmap Size: " + completedPartyItems.size());
-            System.out.println(" ");
         }
-
-        System.out.println(completedPartyItems.size());
-
-        model.addAttribute("partyItems", completedPartyItems); //sets partyItem information
-
 
         List<Guest> guests = guestDao.getByParty(party); //gets guests associated w/ party
         HashMap<Guest, List<ItemBringer>> completedGuests = new HashMap<>(); //Creates Hashmap that stores Guest objects & list of ItemBringers (assoc. w/ guest)
@@ -117,6 +101,7 @@ public class MembersController {
         model.addAttribute("party", party); //sets party information
         model.addAttribute("guests", completedGuests); //sets guest information
         model.addAttribute("partyMembers", completedPartyMembers); //sets partyMember information
+        model.addAttribute("partyItems", completedPartyItems); //sets partyItem information
 
         return "member/hostPartyPage";
     }
