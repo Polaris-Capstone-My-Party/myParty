@@ -48,8 +48,14 @@ public class PartyController {
             @RequestParam String addressTwo,
             @RequestParam String city,
             @RequestParam String state,
+<<<<<<< HEAD
             @RequestParam String zipcode) throws MessagingException {
 
+=======
+            @RequestParam String zipcode,
+            @RequestParam(name = "name[]") String[] names,
+            @RequestParam(name = "quantity[]") String[] quantities) {
+>>>>>>> main
         //Creates & Saves Location
         Location locationToAdd = new Location(0, addressOne, addressTwo, city, state, zipcode);
         Location locationInDb = locationDao.save(locationToAdd);
@@ -66,6 +72,7 @@ public class PartyController {
         party.setEndTime(party.makeTimestampFromString(end_time));
         party.setUrlKey(uuid.toString());
         party.setLocation(locationInDb);
+<<<<<<< HEAD
         Party newCreatedParty = partyDao.save(party);
         String partyDetails =
                 "<h2>Your party " + party.getTitle() + " has been created.</h2>, <br><i>Here are the details: </i><br>" + "Description: " + party.getDescription() + "<br>"
@@ -73,8 +80,28 @@ public class PartyController {
                 + "Here is your custom party URL: " + party.getUrlKey() ;
 
         emailService.prepareAndSend(newCreatedParty, newCreatedParty.getTitle() + " has been created", partyDetails);
+=======
+        Party partyInDb = partyDao.save(party);
 
-        return "redirect:/parties/items/" + uuid;
+        //Creates and saves party Items
+
+        for (int i = 0; i < names.length; i++) {
+            //TODO: If item is null don't add - Error Message
+            Item item = new Item(); //create new item instance //TODO: check if item already exists
+            item.setName(names[i]); //set item name from name[]
+            itemDao.save(item); //save item instance
+
+            //creates & Saves party item
+            PartyItem partyItem = new PartyItem();
+            partyItem.setItem(item);
+            partyItem.setQuantityRequired(Long.valueOf(quantities[i]));
+            partyItem.setParty(partyInDb);
+            partyItemDao.save(partyItem);
+>>>>>>> main
+
+        }
+
+        return "redirect:/parties/success/" + uuid;
     }
 
     //show page when party successfully created
@@ -87,6 +114,7 @@ public class PartyController {
 
     //redirects to profile when submit button pushed
     @PostMapping("/parties/{urlKey}")
+<<<<<<< HEAD
     public String successParty(@PathVariable String urlKey, @RequestParam(name = "email[]") String[] emailAddresses) throws MessagingException {
         Party party = partyDao.getByUrlKey(urlKey);
 
@@ -103,6 +131,10 @@ public class PartyController {
         }
             return "redirect:/profile";
 
+=======
+    public String successParty(@RequestParam(name = "customMessage") String customMessage, @RequestParam(name = "emailAddress") String emailAddress) {
+        return "redirect:profile";
+>>>>>>> main
     }
 
 
@@ -166,6 +198,7 @@ public class PartyController {
         return "redirect:/profile";
     }
 
+<<<<<<< HEAD
     //show form for adding partyItems
     //TODO: Check in on
     @GetMapping("/parties/items/{urlKey}")
@@ -202,3 +235,6 @@ public class PartyController {
 }
 
 
+=======
+}
+>>>>>>> main
