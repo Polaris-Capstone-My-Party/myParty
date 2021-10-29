@@ -48,14 +48,10 @@ public class PartyController {
             @RequestParam String addressTwo,
             @RequestParam String city,
             @RequestParam String state,
-<<<<<<< HEAD
-            @RequestParam String zipcode) throws MessagingException {
-
-=======
             @RequestParam String zipcode,
             @RequestParam(name = "name[]") String[] names,
-            @RequestParam(name = "quantity[]") String[] quantities) {
->>>>>>> main
+            @RequestParam(name = "quantity[]") String[] quantities) throws MessagingException {
+
         //Creates & Saves Location
         Location locationToAdd = new Location(0, addressOne, addressTwo, city, state, zipcode);
         Location locationInDb = locationDao.save(locationToAdd);
@@ -72,15 +68,17 @@ public class PartyController {
         party.setEndTime(party.makeTimestampFromString(end_time));
         party.setUrlKey(uuid.toString());
         party.setLocation(locationInDb);
-<<<<<<< HEAD
+
         Party newCreatedParty = partyDao.save(party);
+
+        //TODO: fix location to show cleaner
         String partyDetails =
                 "<h2>Your party " + party.getTitle() + " has been created.</h2>, <br><i>Here are the details: </i><br>" + "Description: " + party.getDescription() + "<br>"
                 + "Start Time: " + party.getStartTime() + "<br>" + "End Time: " + party.getEndTime() + "<br>" + "Location: " + party.getLocation() + "<br>"
                 + "Here is your custom party URL: " + party.getUrlKey() ;
 
         emailService.prepareAndSend(newCreatedParty, newCreatedParty.getTitle() + " has been created", partyDetails);
-=======
+
         Party partyInDb = partyDao.save(party);
 
         //Creates and saves party Items
@@ -97,7 +95,7 @@ public class PartyController {
             partyItem.setQuantityRequired(Long.valueOf(quantities[i]));
             partyItem.setParty(partyInDb);
             partyItemDao.save(partyItem);
->>>>>>> main
+
 
         }
 
@@ -114,10 +112,11 @@ public class PartyController {
 
     //redirects to profile when submit button pushed
     @PostMapping("/parties/{urlKey}")
-<<<<<<< HEAD
+
     public String successParty(@PathVariable String urlKey, @RequestParam(name = "email[]") String[] emailAddresses) throws MessagingException {
         Party party = partyDao.getByUrlKey(urlKey);
 
+        //TODO: fix location to be cleaner
         String partyDetails =
                 "<h2>You're Invited to " + party.getTitle() + " by " + party.getOwner().getFirstName() + "</h2>, <br><i>Here are the details: </i><br>" + "Description: " + party.getDescription() + "<br>"
                         + "Start Time: " + party.getStartTime() + "<br>" + "End Time: " + party.getEndTime() + "<br>" + "Location: " + party.getLocation() + "<br>"
@@ -129,14 +128,8 @@ public class PartyController {
             emailService.sendInvites(party.getTitle(), emailAddresses[i], partyDetails);
 
         }
-            return "redirect:/profile";
-
-=======
-    public String successParty(@RequestParam(name = "customMessage") String customMessage, @RequestParam(name = "emailAddress") String emailAddress) {
-        return "redirect:profile";
->>>>>>> main
+        return "redirect:/profile";
     }
-
 
     //show form for editing party
     @GetMapping("/parties/edit/{id}")
@@ -198,7 +191,7 @@ public class PartyController {
         return "redirect:/profile";
     }
 
-<<<<<<< HEAD
+
     //show form for adding partyItems
     //TODO: Check in on
     @GetMapping("/parties/items/{urlKey}")
@@ -233,8 +226,3 @@ public class PartyController {
 
 
 }
-
-
-=======
-}
->>>>>>> main
