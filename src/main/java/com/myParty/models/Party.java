@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-@ToString
+//@ToString
 @Entity
 @Table(name = "parties")
 @AllArgsConstructor
