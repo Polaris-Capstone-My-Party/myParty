@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
-
 @Controller
 public class GuestController {
 
@@ -50,8 +49,6 @@ public class GuestController {
             }
 
             partyItemsActual.put(partyItems.get(i), quantityList); //adds party item & associated quantity list to hashmap
-
-
             partyItems.get(i).setQuantityRequired(quantities.get(i)); //sets partyItemQuantity on form to be whatever quantity is left
         }
 
@@ -86,7 +83,8 @@ public class GuestController {
 
     //saves Guest & ItemBringer information
     @PostMapping(path = "/rsvp/{urlKey}")
-    public String createGuest(@PathVariable String urlKey, @ModelAttribute Guest guest, @RequestParam String rsvp,  @RequestParam(name="partyItem[]") String[] myPartyItems, @RequestParam(name="quantity[]") String[] quantities){
+    public String createGuest(@PathVariable String urlKey, @ModelAttribute Guest guest, @RequestParam String rsvp,
+                              @RequestParam(name="partyItem[]") String[] myPartyItems, @RequestParam(name="quantity[]") String[] quantities){
 
         Party party = partyDAO.getByUrlKey(urlKey); //gets party
 
@@ -100,7 +98,6 @@ public class GuestController {
         List<PartyItem> dbPartyItems = partyItemDAO.getByParty(party); //gets most current/up-to-date partyItems associated w/ party from db
         List<Long> updatedQuantities = calculateQuantity(dbPartyItems); //gets list of updated quantity remaining for dbPartyItems
 
-        //TODO: Add error message to avoid negative values in the database (someone signs up for stuff before you submit)
         for(int i = 0; i < myPartyItems.length; i++){ //goes through partyItems guest submitted
             Long quantity = Long.valueOf(quantities[i]);
 
@@ -119,7 +116,6 @@ public class GuestController {
             itemBringer.setPartyItem(partyItem); // sets partyItem object
             itemBringerDAO.save(itemBringer); // saves item bringer
         }
-
         return  "redirect:/guests/successRsvp/" + urlKey + "/" + uuid;
     }
 
@@ -159,16 +155,28 @@ public class GuestController {
                                @RequestParam(name="quantity[]") String[] quantities, @RequestParam(name="partyItem[]") String[] partyItem,
                                @PathVariable String urlKey, @PathVariable String guestKey){
 
+        Party party = partyDAO.getByUrlKey(urlKey);
         guest.setRsvpStatus(RsvpStatuses.valueOf(rsvp));
-        guest.setParty(partyDAO.getByUrlKey(urlKey));
-        guestDAO.save(guest); //save guest information
+        guest.setParty(party);
+        guestDAO.save(guest);
 
-        //TODO: Add error message to avoid negative values in the database (someone signs up for stuff before you submit)
+        List<PartyItem> dbPartyItems = partyItemDAO.getByParty(party); //gets most current/up-to-date partyItems associated w/ party from db
+        List<Long> updatedQuantities = calculateQuantity(dbPartyItems); //gets list of updated quantity remaining for dbPartyItems
+
         for(int i = 0; i < itemBringer.length; i++){ //updates itemBringer quantity
+            Long quantity = Long.valueOf(quantities[i]);
+
+            //if quantity signing up for is greater than what is available in the db, reload page with updated info
+            if (quantity > updatedQuantities.get(i)) {
+                System.out.println("Error: quantity signing up for is greater than available in the database");
+                return "redirect:/rsvp/" + urlKey + "/" + guestKey + "/edit";
+            }
+
             ItemBringer updatedItemBringer = itemBringerDAO.getById(Long.valueOf(itemBringer[i])); //get itemBringer object associated w/ itemBringerID
-            updatedItemBringer.setQuantity((Long.valueOf(quantities[i]))); //sets updated quantity
+            updatedItemBringer.setQuantity(quantity); //sets updated quantity
             itemBringerDAO.save(updatedItemBringer); //saves & updates quantity for ItemBringer
         }
+
         return "redirect:/guests/successRsvp/" + urlKey + "/" + guestKey;
     }
 
@@ -229,10 +237,7 @@ public class GuestController {
 
             itemBringerActual.put(itemBringers.get(i), quantityList); //adds party item & associated quantity list to hashmap
         }
-
         return itemBringerActual;
     }
-
-
 
 }
