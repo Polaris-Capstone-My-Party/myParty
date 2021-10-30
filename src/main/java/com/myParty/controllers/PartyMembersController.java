@@ -35,6 +35,20 @@ public class PartyMembersController {
         Member member = memberDao.getById(Long.valueOf(memberId));
         Party party = partyDao.getByUrlKey(urlKey);
 
+        List<PartyItem> dbPartyItems = partyItemDao.getByParty(party); //gets most current/up-to-date partyItems associated w/ party from db
+        List<Long> updatedQuantities = guestController.calculateQuantity(dbPartyItems); //gets list of updated quantity remaining for dbPartyItems
+
+        //checks guest is still able to sign up for that quantity
+        for(int i = 0; i < quantities.length; i++){
+            Long quantity = Long.valueOf(quantities[i]);
+
+            //if quantity signing up for is greater than what is available in the db, reload page with updated info
+            if(quantity > updatedQuantities.get(i)){
+                System.out.println("Error: quantity signing up for is greater than available in the database");
+                return "redirect:/rsvp/" + urlKey;
+            }
+        }
+
         UUID uuid = UUID.randomUUID(); // creates UUID unique for given partyMember
         partyMember.setPartyMemberKey(uuid.toString()); //https://www.baeldung.com/java-uui
 
@@ -43,22 +57,12 @@ public class PartyMembersController {
         partyMember.setMember(member); //sets Member to logged in member
         PartyMember partyMember1 = partyMemberDao.save(partyMember); //saves partyMember instance
 
-        List<PartyItem> dbPartyItems = partyItemDao.getByParty(party); //gets most current/up-to-date partyItems associated w/ party from db
-        List<Long> updatedQuantities = guestController.calculateQuantity(dbPartyItems); //gets list of updated quantity remaining for dbPartyItems
-
         for(int i = 0; i < myPartyItems.length; i++){ //goes through partyItems guest submitted
-            Long quantity = Long.valueOf(quantities[i]);
-
-            //if quantity signing up for is greater than what is available in the db, reload page with updated info
-            if(quantity > updatedQuantities.get(i)){
-                System.out.println("Error: quantity signing up for is greater than available in the database");
-                return "redirect:/rsvp/" + urlKey;
-            }
 
             ItemBringer itemBringer = new ItemBringer(); //new instance of Item Bringer
             PartyItem partyItem = partyItemDao.getById(Long.valueOf(myPartyItems[i])); //get partyItem object by id
 
-            itemBringer.setQuantity(quantity); //sets quantity
+            itemBringer.setQuantity(Long.valueOf(quantities[i])); //sets quantity
             itemBringer.setPartyMember(partyMember1); //sets partyMember object
             itemBringer.setPartyItem(partyItem); // sets partyItem object
             itemBringerDao.save(itemBringer); // saves item bringer
@@ -120,26 +124,30 @@ public class PartyMembersController {
                                @RequestParam(name="partyItem[]") String[] partyItem, @PathVariable String urlKey, @PathVariable String partyMemberKey){
 
         Party party = partyDao.getByUrlKey(urlKey);
-        partyMember.setRsvpStatus(RsvpStatuses.valueOf(rsvp));
-        partyMember.setParty(party);
-
-        Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Member member = memberDao.getById(userInSession.getId());
-        partyMember.setMember(member);
-        partyMemberDao.save(partyMember); //saves partyMember information
 
         List<PartyItem> dbPartyItems = partyItemDao.getByParty(party); //gets most current/up-to-date partyItems associated w/ party from db
         List<Long> updatedQuantities = guestController.calculateQuantity(dbPartyItems); //gets list of updated quantity remaining for dbPartyItems
 
-        for(int i = 0; i < itemBringer.length; i++){ //updates itemBringer quantity
+        //checks guest can still sign up for items
+        for(int i = 0; i < quantities.length; i++) { //updates itemBringer quantity
             Long quantity = Long.valueOf(quantities[i]);
 
             //if quantity signing up for is greater than what is available in the db, reload page with updated info
             if (quantity > updatedQuantities.get(i)) {
                 System.out.println("Error: quantity signing up for is greater than available in the database");
-                return "redirect:/rsvp/" + urlKey;
+                return "redirect:/rsvp/" + urlKey + "/member/" + partyMemberKey + "/edit";
             }
+        }
 
+        Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member member = memberDao.getById(userInSession.getId());
+
+        partyMember.setRsvpStatus(RsvpStatuses.valueOf(rsvp));
+        partyMember.setParty(party);
+        partyMember.setMember(member);
+        partyMemberDao.save(partyMember); //saves partyMember information
+
+        for(int i = 0; i < itemBringer.length; i++){ //updates itemBringer quantity
             ItemBringer updatedItemBringer = itemBringerDao.getById(Long.valueOf(itemBringer[i])); //get itemBringer object associated w/ itemBringerID
             updatedItemBringer.setQuantity((Long.valueOf(quantities[i]))); //sets updated quantity
             itemBringerDao.save(updatedItemBringer); //saves & updates quantity for ItemBringer

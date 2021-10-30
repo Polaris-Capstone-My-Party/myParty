@@ -37,6 +37,7 @@ public class GuestController {
 
         List<PartyItem> partyItems = partyItemDAO.getByParty(party); //gets item associated with party
         List<Long> quantities = calculateQuantity(partyItems); //gets dynamic quantities left of each party
+
         HashMap<PartyItem, List<Long>> partyItemsActual= new HashMap<>(); //hashmap to store party items & list of long quantiity values
         for(int i = 0; i < partyItems.size(); i++){
 
@@ -88,30 +89,32 @@ public class GuestController {
 
         Party party = partyDAO.getByUrlKey(urlKey); //gets party
 
-        guest.setRsvpStatus(RsvpStatuses.valueOf(rsvp)); //set RSVP status enum
-        guest.setParty(party); //sets Party linked to guest
-
-        UUID uuid = UUID.randomUUID(); // creates UUID unique for given guest
-        guest.setGuestKey(uuid.toString()); //https://www.baeldung.com/java-uui
-        Guest guest1 =  guestDAO.save(guest); //save guest information & creates item to reference
-
         List<PartyItem> dbPartyItems = partyItemDAO.getByParty(party); //gets most current/up-to-date partyItems associated w/ party from db
         List<Long> updatedQuantities = calculateQuantity(dbPartyItems); //gets list of updated quantity remaining for dbPartyItems
 
-        for(int i = 0; i < myPartyItems.length; i++){ //goes through partyItems guest submitted
+        //checks guest is still able to sign up for that quantity
+        for(int i = 0; i < quantities.length; i++){
             Long quantity = Long.valueOf(quantities[i]);
 
             //if quantity signing up for is greater than what is available in the db, reload page with updated info
-           if(quantity > updatedQuantities.get(i)){
-               System.out.println("Error: quantity signing up for is greater than available in the database");
-               return "redirect:/rsvp/" + urlKey;
-           }
+            if(quantity > updatedQuantities.get(i)){
+                System.out.println("Error: quantity signing up for is greater than available in the database");
+                return "redirect:/rsvp/" + urlKey;
+            }
+        }
 
-            //Logic to Create New Item Bringer instance at "i"
+        UUID uuid = UUID.randomUUID(); // creates UUID unique for given guest
+
+        guest.setRsvpStatus(RsvpStatuses.valueOf(rsvp)); //set RSVP status enum
+        guest.setParty(party); //sets Party linked to guest
+        guest.setGuestKey(uuid.toString()); //https://www.baeldung.com/java-uui
+        Guest guest1 =  guestDAO.save(guest); //save guest information & creates item to reference
+
+        for(int i = 0; i < myPartyItems.length; i++){ //goes through partyItems guest submitted
             ItemBringer itemBringer = new ItemBringer(); //new instance of Item Bringer
             PartyItem partyItem = partyItemDAO.getById(Long.valueOf(myPartyItems[i])); //get partyItem object by id
 
-            itemBringer.setQuantity(quantity); //sets quantity
+            itemBringer.setQuantity(Long.valueOf(quantities[i])); //sets quantity
             itemBringer.setGuest(guest1); //sets guest object
             itemBringer.setPartyItem(partyItem); // sets partyItem object
             itemBringerDAO.save(itemBringer); // saves item bringer
@@ -156,14 +159,12 @@ public class GuestController {
                                @PathVariable String urlKey, @PathVariable String guestKey){
 
         Party party = partyDAO.getByUrlKey(urlKey);
-        guest.setRsvpStatus(RsvpStatuses.valueOf(rsvp));
-        guest.setParty(party);
-        guestDAO.save(guest);
 
         List<PartyItem> dbPartyItems = partyItemDAO.getByParty(party); //gets most current/up-to-date partyItems associated w/ party from db
         List<Long> updatedQuantities = calculateQuantity(dbPartyItems); //gets list of updated quantity remaining for dbPartyItems
 
-        for(int i = 0; i < itemBringer.length; i++){ //updates itemBringer quantity
+        //checks guest can still sign up for items
+        for(int i = 0; i < quantities.length; i++) { //updates itemBringer quantity
             Long quantity = Long.valueOf(quantities[i]);
 
             //if quantity signing up for is greater than what is available in the db, reload page with updated info
@@ -171,9 +172,16 @@ public class GuestController {
                 System.out.println("Error: quantity signing up for is greater than available in the database");
                 return "redirect:/rsvp/" + urlKey + "/" + guestKey + "/edit";
             }
+        }
 
+        //saves guest information
+        guest.setRsvpStatus(RsvpStatuses.valueOf(rsvp));
+        guest.setParty(party);
+        guestDAO.save(guest);
+
+        for(int i = 0; i < itemBringer.length; i++){ //updates itemBringer quantity
             ItemBringer updatedItemBringer = itemBringerDAO.getById(Long.valueOf(itemBringer[i])); //get itemBringer object associated w/ itemBringerID
-            updatedItemBringer.setQuantity(quantity); //sets updated quantity
+            updatedItemBringer.setQuantity(Long.valueOf(quantities[i])); //sets updated quantity
             itemBringerDAO.save(updatedItemBringer); //saves & updates quantity for ItemBringer
         }
 
@@ -183,7 +191,7 @@ public class GuestController {
     //calculates actual quantity remaining
     public List<Long> calculateQuantity(List<PartyItem> partyItems){ //takes in List of partyItems
         List<Long> totalQuantity= new ArrayList<>(); //list to store total quantity being brought of each partyItem for a party
-        Long quantityGuestsBringing = 0L;
+        Long quantityGuestsBringing;
 
         for (PartyItem partyItem: partyItems){ //run through each partyItem in partyItem array
             List<ItemBringer> itemBringers = itemBringerDAO.getByPartyItem(partyItem); //gets list of item bringers associated w/ party item
@@ -237,6 +245,7 @@ public class GuestController {
 
             itemBringerActual.put(itemBringers.get(i), quantityList); //adds party item & associated quantity list to hashmap
         }
+
         return itemBringerActual;
     }
 
