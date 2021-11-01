@@ -9,9 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
-import java.sql.Timestamp;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -68,7 +66,6 @@ public class PartyController {
         party.setEndTime(party.makeTimestampFromString(end_time));
         party.setUrlKey(uuid.toString());
         party.setLocation(locationInDb);
-
         Party newCreatedParty = partyDao.save(party);
 
         //TODO: fix location to show cleaner
@@ -79,10 +76,7 @@ public class PartyController {
 
         emailService.prepareAndSend(newCreatedParty, newCreatedParty.getTitle() + " has been created", partyDetails);
 
-        Party partyInDb = partyDao.save(party);
-
         //Creates and saves party Items
-
         for (int i = 0; i < names.length; i++) {
             //TODO: If item is null don't add - Error Message
             Item item = new Item(); //create new item instance //TODO: check if item already exists
@@ -93,10 +87,8 @@ public class PartyController {
             PartyItem partyItem = new PartyItem();
             partyItem.setItem(item);
             partyItem.setQuantityRequired(Long.valueOf(quantities[i]));
-            partyItem.setParty(partyInDb);
+            partyItem.setParty(newCreatedParty);
             partyItemDao.save(partyItem);
-
-
         }
 
         return "redirect:/parties/success/" + uuid;
@@ -112,7 +104,6 @@ public class PartyController {
 
     //redirects to profile when submit button pushed
     @PostMapping("/parties/{urlKey}")
-
     public String successParty(@PathVariable String urlKey, @RequestParam(name = "email[]") String[] emailAddresses) throws MessagingException {
         Party party = partyDao.getByUrlKey(urlKey);
 
@@ -190,39 +181,4 @@ public class PartyController {
         partyDao.deleteById(id);
         return "redirect:/profile";
     }
-
-
-    //show form for adding partyItems
-    //TODO: Check in on
-    @GetMapping("/parties/items/{urlKey}")
-    public String showItemForm(Model model, @PathVariable String urlKey) {
-        Party party = partyDao.getByUrlKey(urlKey); //gets party
-        model.addAttribute("party", party); //sets party
-        return "/party/createItems";
-    }
-
-    //saves party information
-    @PostMapping("/parties/items/{urlKey}")
-    public String addItems(@PathVariable String urlKey, @RequestParam(name = "name[]") String[] names, @RequestParam(name = "quantity[]") String[] quantities) {
-        Party party = partyDao.getByUrlKey(urlKey);
-
-        for (int i = 0; i < names.length; i++) {
-            //TODO: If item is null don't add
-            //TODO: How to make dynamic, 'add another item'
-
-            Item item = new Item(); //create new item instance //TODO: check if item already exists
-            item.setName(names[i]); //set item name from name[]
-            itemDao.save(item); //save item instance
-
-            //creates & Saves party item
-            PartyItem partyItem = new PartyItem();
-            partyItem.setItem(item);
-            partyItem.setQuantityRequired(Long.valueOf(quantities[i]));
-            partyItem.setParty(party);
-            partyItemDao.save(partyItem);
-        }
-        return "redirect:/parties/success/" + urlKey;
-    }
-
-
 }
