@@ -17,9 +17,11 @@
         <input id="username" name="username" type="text"/>
         <label for="password">Password</label>
         <input id="password" name="password" type="password"/>
+
         <input type="submit" value="Log In"/>
     </form>
-
+    <a th:href="@{/forgotPassword.html}"
+       th:text="#{message.resetPassword}">Forgot Password?</a>
     <a href="/sign-up">Don't have an account? Sign up here</a>
 
 </section>

@@ -36,6 +36,9 @@ public class Member {
     @Column(nullable = false, name = "last_name")
     @Getter @Setter private String lastName;
 
+    @Column
+    @Getter @Setter private String resetpassword;
+
     @Getter @Setter
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
     private List<Party> party;
