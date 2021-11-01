@@ -2,7 +2,7 @@ package com.myParty.controllers;
 
 import com.myParty.models.*;
 import com.myParty.repositories.*;
-//import com.myParty.services.EmailService;
+import com.myParty.services.EmailService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,14 +19,14 @@ public class PartyController {
     private final LocationRepository locationDao;
     private final ItemRepository itemDao;
     private final PartyItemRepository partyItemDao;
-//    private final EmailService emailService;
+    private final EmailService emailService;
 
-    public PartyController(PartyRepository partyDao, LocationRepository locationDao, ItemRepository itemDao, PartyItemRepository partyItemDao) {
+    public PartyController(PartyRepository partyDao, LocationRepository locationDao, ItemRepository itemDao, PartyItemRepository partyItemDao, EmailService emailService) {
         this.partyDao = partyDao;
         this.locationDao = locationDao;
         this.itemDao = itemDao;
         this.partyItemDao = partyItemDao;
-//        this.emailService = emailService;
+        this.emailService = emailService;
     }
 
     //show form for creating a party
@@ -74,7 +74,7 @@ public class PartyController {
                 + "Start Time: " + party.getStartTime() + "<br>" + "End Time: " + party.getEndTime() + "<br>" + "Location: " + party.getLocation() + "<br>"
                 + "Here is your custom party URL: " + party.getUrlKey() ;
 
-//        emailService.prepareAndSend(newCreatedParty, newCreatedParty.getTitle() + " has been created", partyDetails);
+        emailService.prepareAndSend(newCreatedParty, newCreatedParty.getTitle() + " has been created", partyDetails);
 
         //Creates and saves party Items
         for (int i = 0; i < names.length; i++) {
@@ -116,7 +116,7 @@ public class PartyController {
         for (int i = 0; i < emailAddresses.length; i++) {
             System.out.println(emailAddresses[i]);
 
-//            emailService.sendInvites(party.getTitle(), emailAddresses[i], partyDetails);
+            emailService.sendInvites(party.getTitle(), emailAddresses[i], partyDetails);
 
         }
         return "redirect:/profile";
