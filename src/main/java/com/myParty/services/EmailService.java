@@ -1,5 +1,6 @@
 package com.myParty.services;
 
+import com.myParty.models.Member;
 import com.myParty.models.Party;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,5 +60,25 @@ public class EmailService {
             System.err.println(ex.getMessage());
         }
     }
+
+    public void sendResetPassword(Member member, String customMessage) throws MessagingException {
+    MimeMessage message = emailSender.createMimeMessage();
+    MimeMessageHelper helper = new MimeMessageHelper(message);
+        helper.setFrom(from);
+        helper.setTo(member.getEmail());
+        helper.setSubject("Reset Your myParty Password");
+        boolean html = true;
+        helper.setText(customMessage, html);
+
+        try{
+        this.emailSender.send(message);
+    }
+        catch (MailException ex) {
+        // simply log it and go on...
+        System.err.println(ex.getMessage());
+    }
+}
+
+
 
 }

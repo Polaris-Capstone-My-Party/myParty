@@ -37,7 +37,7 @@ public class Member {
     @Getter @Setter private String lastName;
 
     @Column
-    @Getter @Setter private String resetpassword;
+    @Getter @Setter private String resetToken;
 
     @Getter @Setter
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
@@ -63,5 +63,6 @@ public class Member {
         username = copy.username;
         password = copy.password;
     }
+
 
 }

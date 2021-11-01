@@ -122,6 +122,8 @@ public class PartyController {
                         + "Start Time: " + party.getStartTime() + "<br>" + "End Time: " + party.getEndTime() + "<br>" + "Location: " + party.getLocation() + "<br>"
                         + "RSVP Here: " + party.getUrlKey();
 
+        //TODO: fix link for party URL
+
         for (int i = 0; i < emailAddresses.length; i++) {
             System.out.println(emailAddresses[i]);
 
