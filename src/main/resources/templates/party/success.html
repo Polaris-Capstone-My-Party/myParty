@@ -3,7 +3,8 @@
 
 <body id="success" style="height: 100vh; justify-content: center; justify-items: center; ">
 
-<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"
+        integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
 
@@ -22,30 +23,53 @@
 
     <h3>Now let's invite people!</h3>
 
-        <!--TODO: Need to change the above back to POST method, send back to profile and add a controller
-                    once email functionality is completed to send emails too-->
+    <!--TODO: Need to change the above back to POST method, send back to profile and add a controller
+                once email functionality is completed to send emails too-->
 
-        <label for="customUrl">Custom Party Url:</label>
-        <input type="text" id="customUrl" th:value="'http://localhost:8080/rsvp/' + ${party.urlKey}"/>
+    <label for="customUrl">Custom Party Url:</label>
+    <input type="text" id="customUrl" th:value="'http://localhost:8080/rsvp/' + ${party.urlKey}"/>
+    <button onclick="myFunction()">Copy url</button>
 
-<!--        <label for="emailAddress">Email Addresses</label>-->
-        <form th:action="@{|/parties/${party.urlKey}|}" th:method="post">
-            <div id="additionalEmails">
-                <div class="form-group">
-                    <label for="email[]">Email Address:</label>
-                    <input type="email" name="email[]" id="email[]">
-                </div>
+
+    <!--        <label for="emailAddress">Email Addresses</label>-->
+    <form th:action="@{|/parties/${party.urlKey}|}" th:method="post">
+
+
+        <div id="additionalEmails">
+            <div class="form-group">
+                <label for="email[]">Email Address:</label>
+                <input type="email" name="email[]" id="email[]">
             </div>
-            <button id="addEmailButton">Add Another Email</button>
-            <input type="submit" class="btn btn-info" value="Send Invites!">
-        </form>
+        </div>
+        <button id="addEmailButton">Add Another Email</button>
+        <input type="submit" class="btn btn-info" value="Send Invites!">
+    </form>
 
+    // Confetti Animation
     <script>
         party.confetti(document.getElementById("partymessage"))
     </script>
 
+    // Copy url button
     <script>
-        window.onload = (function() {
+        function myFunction() {
+            var copyText = document.getElementById("customUrl");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(copyText.value);
+
+            var tooltip = document.getElementById("myTooltip");
+            tooltip.innerHTML = "Copied: " + copyText.value;
+        }
+
+        function outFunc() {
+            var tooltip = document.getElementById("myTooltip");
+            tooltip.innerHTML = "Copy to clipboard";
+        }
+    </script>
+
+    <script>
+        window.onload = (function () {
             const additionalEmail = document.getElementById('addEmailButton');
 
             const emailForm = `<div class="form-group">
@@ -54,7 +78,7 @@
 
                 </div>`
 
-            additionalEmail.addEventListener('click', function(event) {
+            additionalEmail.addEventListener('click', function (event) {
                 event.preventDefault();
 
                 const yeahBaby = document.getElementById('additionalEmails');
