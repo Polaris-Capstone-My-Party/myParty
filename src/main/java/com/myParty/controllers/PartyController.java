@@ -111,7 +111,9 @@ public class PartyController {
         String partyDetails =
                 "<h2>You're Invited to " + party.getTitle() + " by " + party.getOwner().getFirstName() + "</h2>, <br><i>Here are the details: </i><br>" + "Description: " + party.getDescription() + "<br>"
                         + "Start Time: " + party.getStartTime() + "<br>" + "End Time: " + party.getEndTime() + "<br>" + "Location: " + party.getLocation() + "<br>"
-                        + "RSVP Here: " + party.getUrlKey();
+                        + "RSVP  " + "<a href=\"http://localhost:8080/rsvp/" + party.getUrlKey() + "\">here</a>";
+
+        //TODO: fix link for party URL to make dynamic with new domain name
 
         for (int i = 0; i < emailAddresses.length; i++) {
             System.out.println(emailAddresses[i]);

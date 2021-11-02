@@ -13,25 +13,29 @@
             <div class="p-2 bd-highlight"><h1>Log In</h1></div>
 
             <div th:if="${param.error}">Invalid Username and Password.</div>
-
             <div th:if="${param.logout}">You have been logged out.</div>
 
             <div class="p-2 bd-highlight">
 
                 <form th:action="@{/login}" method="post">
 
-                    <div class="p-2 bd-highlight"><label for="username">Username</label>
+                    <div class="p-2 bd-highlight"><label for="username">Username</label></div>
                         <input id="username" name="username" type="text"/>
-                        <div class="p-2 bd-highlight"><label for="password">Password</label>
+                    <div class="p-2 bd-highlight"><label for="password">Password</label></div>
                             <input id="password" name="password" type="password"/>
-                            <div class="p-2 bd-highlight"><input type="submit" value="Log In"/>
+                    <div class="p-2 bd-highlight"><input type="submit" value="Log In"/></div>
                 </form>
+                <a th:href="@{/member/forgotpassword}">Forgot Password?</a>
 
+            </div>
                 <div class="p-2 bd-highlight"><a href="/sign-up">Don't have an account? Sign up here</a>
 
+
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
-</div>
-</div>
 <footer><p layout:fragment="custom-footer">This is actually working</p></footer>
 
 </html>
