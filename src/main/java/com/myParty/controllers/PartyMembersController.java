@@ -7,11 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
-
+import java.util.*;
 
 @Controller
 public class PartyMembersController {
@@ -37,17 +33,32 @@ public class PartyMembersController {
     public String createGuest(@PathVariable String urlKey, @PathVariable String memberId, @ModelAttribute PartyMember partyMember, @RequestParam String rsvp, @RequestParam(name="partyItem[]") String[] myPartyItems, @RequestParam(name="quantity[]") String[] quantities){
 
         Member member = memberDao.getById(Long.valueOf(memberId));
+        Party party = partyDao.getByUrlKey(urlKey);
+
+        List<PartyItem> dbPartyItems = partyItemDao.getByParty(party); //gets most current/up-to-date partyItems associated w/ party from db
+        List<Long> updatedQuantities = guestController.calculateQuantity(dbPartyItems); //gets list of updated quantity remaining for dbPartyItems
+
+        //checks guest is still able to sign up for that quantity
+        for(int i = 0; i < quantities.length; i++){
+            Long quantity = Long.valueOf(quantities[i]);
+
+            //if quantity signing up for is greater than what is available in the db, reload page with updated info
+            if(quantity > updatedQuantities.get(i)){
+                System.out.println("Error: quantity signing up for is greater than available in the database");
+                return "redirect:/rsvp/" + urlKey;
+            }
+        }
 
         UUID uuid = UUID.randomUUID(); // creates UUID unique for given partyMember
         partyMember.setPartyMemberKey(uuid.toString()); //https://www.baeldung.com/java-uui
 
         partyMember.setRsvpStatus(RsvpStatuses.valueOf(rsvp)); //set RSVP status enum
-        partyMember.setParty(partyDao.getByUrlKey(urlKey)); //sets Party linked to partyMember
+        partyMember.setParty(party); //sets Party linked to partyMember
         partyMember.setMember(member); //sets Member to logged in member
         PartyMember partyMember1 = partyMemberDao.save(partyMember); //saves partyMember instance
 
-        //TODO: Add error message to avoid negative values in the database (someone signs up for stuff before you submit)
         for(int i = 0; i < myPartyItems.length; i++){ //goes through partyItems guest submitted
+
             ItemBringer itemBringer = new ItemBringer(); //new instance of Item Bringer
             PartyItem partyItem = partyItemDao.getById(Long.valueOf(myPartyItems[i])); //get partyItem object by id
 
@@ -68,7 +79,6 @@ public class PartyMembersController {
         return "partyMember/successRsvp";
     }
 
-
     //Shows PartyMember Info & Allows to Edit
     @GetMapping(path = "/rsvp/{urlKey}/member/{partyMemberKey}/edit")
     public String showEditRSVP(@PathVariable String urlKey, @PathVariable String partyMemberKey, Model model){
@@ -79,7 +89,6 @@ public class PartyMembersController {
         //If Member is not logged in, redirect to login Page
         if(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString().equals("anonymousUser")){
             return "redirect:/login";
-
         }
 
         Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); //get member in session
@@ -114,20 +123,35 @@ public class PartyMembersController {
     public String saveEditRSVP(@ModelAttribute PartyMember partyMember, @RequestParam String rsvp, @RequestParam(name="itemBringer[]") String[] itemBringer, @RequestParam(name="quantity[]") String[] quantities,
                                @RequestParam(name="partyItem[]") String[] partyItem, @PathVariable String urlKey, @PathVariable String partyMemberKey){
 
-        partyMember.setRsvpStatus(RsvpStatuses.valueOf(rsvp));
-        partyMember.setParty(partyDao.getByUrlKey(urlKey));
+        Party party = partyDao.getByUrlKey(urlKey);
+
+        List<PartyItem> dbPartyItems = partyItemDao.getByParty(party); //gets most current/up-to-date partyItems associated w/ party from db
+        List<Long> updatedQuantities = guestController.calculateQuantity(dbPartyItems); //gets list of updated quantity remaining for dbPartyItems
+
+        //checks guest can still sign up for items
+        for(int i = 0; i < quantities.length; i++) { //updates itemBringer quantity
+            Long quantity = Long.valueOf(quantities[i]);
+
+            //if quantity signing up for is greater than what is available in the db, reload page with updated info
+            if (quantity > updatedQuantities.get(i)) {
+                System.out.println("Error: quantity signing up for is greater than available in the database");
+                return "redirect:/rsvp/" + urlKey + "/member/" + partyMemberKey + "/edit";
+            }
+        }
 
         Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member member = memberDao.getById(userInSession.getId());
+
+        partyMember.setRsvpStatus(RsvpStatuses.valueOf(rsvp));
+        partyMember.setParty(party);
         partyMember.setMember(member);
         partyMemberDao.save(partyMember); //saves partyMember information
 
-        //TODO: Add error message to avoid negative values in the database (someone signs up for stuff before you submit)
-            for(int i = 0; i < itemBringer.length; i++){ //updates itemBringer quantity
-                ItemBringer updatedItemBringer = itemBringerDao.getById(Long.valueOf(itemBringer[i])); //get itemBringer object associated w/ itemBringerID
-                updatedItemBringer.setQuantity((Long.valueOf(quantities[i]))); //sets updated quantity
-                itemBringerDao.save(updatedItemBringer); //saves & updates quantity for ItemBringer
-            }
+        for(int i = 0; i < itemBringer.length; i++){ //updates itemBringer quantity
+            ItemBringer updatedItemBringer = itemBringerDao.getById(Long.valueOf(itemBringer[i])); //get itemBringer object associated w/ itemBringerID
+            updatedItemBringer.setQuantity((Long.valueOf(quantities[i]))); //sets updated quantity
+            itemBringerDao.save(updatedItemBringer); //saves & updates quantity for ItemBringer
+        }
         return "redirect:/member/successRsvp" + "/" + urlKey + "/" + partyMemberKey;
     }
 
