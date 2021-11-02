@@ -63,7 +63,7 @@ public class EmailService {
 
     public void sendResetPassword(Member member, String customMessage) throws MessagingException {
     MimeMessage message = emailSender.createMimeMessage();
-    MimeMessageHelper helper = new MimeMessageHelper(message);
+    MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom(from);
         helper.setTo(member.getEmail());
         helper.setSubject("Reset Your myParty Password");
