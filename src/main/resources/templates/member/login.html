@@ -5,25 +5,32 @@
 <title layout:fragment="title">myParty | Login</title>
 
 <section layout:fragment="content">
+    <div class="d-flex justify-content-center">
 
-    <h1>Log In</h1>
+        <div class="d-flex flex-column bd-highlight mb-3">
 
-    <div th:if="${param.error}">Invalid Username and Password.</div>
+            <div class="p-2 bd-highlight"><h1>Log In</h1></div>
 
-    <div th:if="${param.logout}">You have been logged out.</div>
+            <div th:if="${param.error}">Invalid Username and Password.</div>
 
-    <form th:action="@{/login}" method="post">
-        <label for="username">Username</label>
-        <input id="username" name="username" type="text"/>
-        <label for="password">Password</label>
-        <input id="password" name="password" type="password"/>
-        <input type="submit" value="Log In"/>
-    </form>
+            <div th:if="${param.logout}">You have been logged out.</div>
 
-    <a href="/sign-up">Don't have an account? Sign up here</a>
+            <div class="p-2 bd-highlight">
+
+                <form th:action="@{/login}" method="post">
+
+                    <div class="p-2 bd-highlight"><label for="username">Username</label>
+                        <input id="username" name="username" type="text"/>
+                        <div class="p-2 bd-highlight"><label for="password">Password</label>
+                            <input id="password" name="password" type="password"/>
+                            <div class="p-2 bd-highlight"><input type="submit" value="Log In"/>
+                </form>
+
+                <div class="p-2 bd-highlight"><a href="/sign-up">Don't have an account? Sign up here</a>
 
 </section>
-
+</div>
+</div>
 <footer><p layout:fragment="custom-footer">This is actually working</p></footer>
 
 </html>
