@@ -5,33 +5,37 @@
 <title layout:fragment="title">myParty | Sign Up</title>
 
 <section layout:fragment="content">
+    <div class="d-flex justify-content-center">
+        <div class="d-flex flex-column bd-highlight mb-3">
 
-    <h1>Create an account</h1>
 
-    <form th:action="@{/sign-up}" method="POST" th:object="${member}">
-        <label for="username">Username</label>
+            <div class="p-2 bd-highlight"><h1>Create an account</h1></div>
+
+            <form th:action="@{/sign-up}" method="POST" th:object="${member}">
+
+                <div class="p-2 bd-highlight">
+                    <label for="username">Username</label>
         <input id="username" th:field="*{username}"/>
-
-        <label for="first_name">First Name</label>
+                    <div class="p-2 bd-highlight"><label for="first_name">First Name</label>
         <input id="first_name" type="text" th:field="*{firstName}"/>
-
-        <label for="last_name">Last Name</label>
+                        <div class="p-2 bd-highlight"><label for="last_name">Last Name</label>
         <input id="last_name" type="text" th:field="*{lastName}"/>
 
-        <label for="email">Email</label>
+                    <div class="p-2 bd-highlight"><label for="email">Email</label>
         <input id="email" type="email" th:field="*{email}"/>
 
-        <label for="phone">Phone Number</label>
+                        <div class="p-2 bd-highlight"><label for="phone">Phone Number</label>
         <input id="phone" type="number" th:field="*{phone}"/>
 
-        <label for="password">Password</label>
+                        <div class="p-2 bd-highlight"><label for="password">Password</label>
         <input id="password" type="password" th:field="*{password}"/>
 
-        <input value="Let's Party!" type="submit"/>
+                            <div class="p-2 bd-highlight"><input value="Let's Party!" type="submit"/>
     </form>
     <a href="/login">Already have an account? Log in here</a>
 </section>
-
+</div>
+</div>
 <footer><p layout:fragment="custom-footer">This is actually working</p></footer>
 
 </html>

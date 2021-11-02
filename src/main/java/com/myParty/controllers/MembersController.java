@@ -2,12 +2,15 @@ package com.myParty.controllers;
 
 import com.myParty.models.*;
 import com.myParty.repositories.*;
+import com.myParty.services.EmailService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 
@@ -22,8 +25,9 @@ public class MembersController {
     private final ItemBringerRepository itemBringerDao;
     private final GuestController guestControllerDao;
     private final PartyMemberRepository partyMemberDao;
+    private final EmailService emailService;
 
-    public MembersController(MemberRepository memberDao, PartyRepository partyDao, PasswordEncoder passwordEncoder, GuestRepository guestDao, PartyItemRepository partyItemDao, ItemBringerRepository itemBringerDao, GuestController guestControllerDao, PartyMemberRepository partyMemberDao) {
+    public MembersController(MemberRepository memberDao, PartyRepository partyDao, PasswordEncoder passwordEncoder, GuestRepository guestDao, PartyItemRepository partyItemDao, ItemBringerRepository itemBringerDao, GuestController guestControllerDao, PartyMemberRepository partyMemberDao, EmailService emailService) {
         this.memberDao = memberDao;
         this.partyDao = partyDao;
         this.passwordEncoder = passwordEncoder;
@@ -32,6 +36,7 @@ public class MembersController {
         this.itemBringerDao = itemBringerDao;
         this.partyMemberDao = partyMemberDao;
         this.guestControllerDao = guestControllerDao;
+        this.emailService = emailService;
     }
 
     //shows signup Page
@@ -63,13 +68,13 @@ public class MembersController {
     public String memberProfile(Model model) {
         Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member memberToDisplay = memberDao.getById(userInSession.getId());
-        model.addAttribute("owner",memberToDisplay);
+        model.addAttribute("owner", memberToDisplay);
         return "member/personalProfile";
     }
 
     //show host party page to member
     @GetMapping("/member/{urlKey}/view")
-    public String showHostPartyPage(Model model, @PathVariable String urlKey){
+    public String showHostPartyPage(Model model, @PathVariable String urlKey) {
 
         Party party = partyDao.getByUrlKey(urlKey); //gets party by urlKey
 
@@ -78,14 +83,14 @@ public class MembersController {
         HashMap<PartyItem, Long> completedPartyItems = new HashMap<>(); //Creates Hashmap that stores PartyItem objects & quantitiesRemaining
 
         //TODO Works But Keep an Eye on - CG
-        for(int i = 0; i < partyItems.size(); i++){ //iterates through partyItems list & quantityRemaining list
+        for (int i = 0; i < partyItems.size(); i++) { //iterates through partyItems list & quantityRemaining list
             completedPartyItems.put(partyItems.get(i), quantityRemaining.get(i)); //sets quantityRemaining Long & PartyItem object for HashMap
         }
 
         List<Guest> guests = guestDao.getByParty(party); //gets guests associated w/ party
         HashMap<Guest, List<ItemBringer>> completedGuests = new HashMap<>(); //Creates Hashmap that stores Guest objects & list of ItemBringers (assoc. w/ guest)
 
-        for (Guest guest : guests){ //for each guest
+        for (Guest guest : guests) { //for each guest
             List<ItemBringer> itemBringers = itemBringerDao.getByGuest(guest); //get List of itemBringer objects associated w/ guest
             completedGuests.put(guest, itemBringers); //adds guest object & ItemBringer List to HashMap
         }
@@ -93,7 +98,7 @@ public class MembersController {
         List<PartyMember> partyMembers = partyMemberDao.getByParty(party); //gets partyMembers associated with party
         HashMap<PartyMember, List<ItemBringer>> completedPartyMembers = new HashMap<>(); //Creates Hashmap that stores PartyMember objects & list of ItemBringers (assoc. w/ partyMember)
 
-        for (PartyMember partyMember : partyMembers){ //for each partyMember
+        for (PartyMember partyMember : partyMembers) { //for each partyMember
             List<ItemBringer> itemBringers = itemBringerDao.getByPartyMember(partyMember); //get List of itemBringer objects associated w/ guest
             completedPartyMembers.put(partyMember, itemBringers); //adds guest object & ItemBringer List to HashMap
         }
@@ -108,7 +113,9 @@ public class MembersController {
 
     //logs out user
     @PostMapping("/logout")
-    public String logout(){return "redirect:/";}
+    public String logout() {
+        return "redirect:/";
+    }
 
     //show form for editing member
     @GetMapping("/members/editProfile/{id}")
@@ -134,7 +141,7 @@ public class MembersController {
             @RequestParam(name = "lastName") String lastName,
             @RequestParam(name = "phone") Long phone,
             @RequestParam(name = "username") String username,
-            @RequestParam(name ="password") String password) {
+            @RequestParam(name = "password") String password) {
 
         //get member object
         Member memberToUpdate = memberDao.getById(id);
@@ -155,7 +162,10 @@ public class MembersController {
     public String deleteMember(@PathVariable("id") long id) {
         memberDao.deleteById(id);
         logout();
-        return "redirect:/";}
+        return "redirect:/";
+    }
+
+
 }
 
 
