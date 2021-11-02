@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.mail.MessagingException;
 import java.util.UUID;
@@ -16,10 +18,12 @@ import java.util.UUID;
 public class ResetPasswordController {
     private final MemberRepository memberDao;
     private final EmailService emailService;
+    private final PasswordEncoder passwordEncoder;
 
-    public ResetPasswordController(MemberRepository memberDao, EmailService emailService){
+    public ResetPasswordController(MemberRepository memberDao, EmailService emailService, PasswordEncoder passwordEncoder){
         this.memberDao = memberDao;
         this.emailService = emailService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/member/forgotpassword")
@@ -37,7 +41,8 @@ public class ResetPasswordController {
     @PostMapping("/member/resetpassword/{token}")
     public String resetPassword(@PathVariable String token, @RequestParam(name = "password") String password){
         Member pwToReset = memberDao.findByResetToken(token);
-        pwToReset.setPassword(password);
+        String hash = passwordEncoder.encode(password);
+        pwToReset.setPassword(hash);
         memberDao.save(pwToReset);
 
         return "redirect:/login";
@@ -50,7 +55,7 @@ public class ResetPasswordController {
         String token = UUID.randomUUID().toString();
         member.setResetToken(token);
         memberDao.save(member);
-        String resetDetails = "Click to reset your password " + "<a href=\"http://localhost:8080/member/resetpassword/" + token + "\">here</a>";
+        String resetDetails = "Click to reset your password" + "<a href=\"http://localhost:8080/member/resetpassword/" + token + "\">HERE</a>";
 //TODO: add domain + the token in an anchor tag
         emailService.sendResetPassword(member, resetDetails);
 
