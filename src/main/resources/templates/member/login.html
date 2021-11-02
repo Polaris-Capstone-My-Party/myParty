@@ -12,18 +12,6 @@
             <div class="p-2 bd-highlight"><h1>Log In</h1></div>
 
             <div th:if="${param.error}">Invalid Username and Password.</div>
-
-            <form th:action="@{/login}" method="post">
-                <label for="username">Username</label>
-                <input id="username" name="username" type="text"/>
-                <label for="password">Password</label>
-                <input id="password" name="password" type="password"/>
-
-                <input type="submit" value="Log In"/>
-            </form>
-            <a th:href="@{/forgotPassword.html}">Forgot Password?</a>
-            <a href="/sign-up">Don't have an account? Sign up here</a>
-
             <div th:if="${param.logout}">You have been logged out.</div>
 
             <div class="p-2 bd-highlight">
@@ -36,6 +24,7 @@
                             <input id="password" name="password" type="password"/>
                     <div class="p-2 bd-highlight"><input type="submit" value="Log In"/></div>
                 </form>
+                <a th:href="@{/forgotPassword.html}">Forgot Password?</a>
 
             </div>
                 <div class="p-2 bd-highlight"><a href="/sign-up">Don't have an account? Sign up here</a>
