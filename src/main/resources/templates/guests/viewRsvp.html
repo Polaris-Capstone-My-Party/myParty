@@ -1,44 +1,46 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 
-<title layout:fragment="title">myParty | View RSVP</title>
-
-<style type="text/css">
-    /* Set the size of the div element that contains the map */
-    #map {
-        height: 400px; /* The height is 400 pixels */
-        width: 100%; /* The width is the width of the web page */
-    }
-</style>
-
-<script>
-    // Initialize and add the map
-    function initMap() {
-        // The location of Uluru
-        const uluru = { lat: -25.344, lng: 131.036 };
-        // The map, centered at Uluru
-        const map = new google.maps.Map(document.getElementById("map"), {
-            zoom: 10,
-            center: uluru,
-        });
-        // The marker, positioned at Uluru
-        const marker = new google.maps.Marker({
-            position: uluru,
-            map: map,
-        });
-    }
-</script>
-
-
-
-
+<head>
+    <title layout:fragment="title">myParty | View RSVP</title>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+</head>
 
 <section layout:fragment="content">
 
-    <div id="map"></div>
+    <!--Show The Party Info-->
+    <div>
+        <div th:text="${party.location.addressOne} + ', ' + ${party.location.city} + ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}"
+             id="fullAddress" th:value="${party.location.addressOne} + ', ' + ${party.location.city} + ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}">
+        </div>
+    </div>
 
-    <script async
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNknRrNSCm6rSiSbqfLBnwrrzkqc9rHA4&callback=initMap">
+    <div id='map' style='width: 25%; height: 40vh'></div>
+
+    <script src="/keys.js"></script>
+    <script src="/js/jquery.js"></script>
+    <script src="/js/mapbox-geocoder-utils.js"></script>
+
+    <!--Start of JS-->
+    <script>
+        const address = $("#fullAddress").html();
+
+        geocode(address, mapboxApiKey).then(function (result) {
+            mapboxgl.accessToken = mapboxApiKey;
+
+            var map = new mapboxgl.Map({
+                container: 'map',
+                style: 'mapbox://styles/mapbox/streets-v9',
+                zoom: 15,
+                center: (result)
+             });
+
+            var marker = new mapboxgl.Marker({
+                draggable: true
+            }).setLngLat(result).addTo(map);
+
+        });
     </script>
 
 </section>

@@ -3,6 +3,7 @@ package com.myParty.controllers;
 import com.myParty.models.*;
 import com.myParty.repositories.*;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -188,6 +189,15 @@ public class GuestController {
         return "redirect:/guests/successRsvp/" + urlKey + "/" + guestKey;
     }
 
+
+    @GetMapping(path = "/rsvp/{urlKey}/{guestKey}/view")
+    public String showRSVPInfo(Model model, @PathVariable String urlKey, @PathVariable String guestKey){
+        Party party = partyDAO.getByUrlKey(urlKey);
+        Guest guest = guestDAO.getByGuestKey(guestKey);
+        model.addAttribute("party", party);
+        return "guests/viewRsvp";
+    }
+
     //calculates actual quantity remaining
     public List<Long> calculateQuantity(List<PartyItem> partyItems){ //takes in List of partyItems
         List<Long> totalQuantity= new ArrayList<>(); //list to store total quantity being brought of each partyItem for a party
@@ -219,6 +229,7 @@ public class GuestController {
     //returns list of additional guest values
     public ArrayList<String> getAdditionalGuests(){
         ArrayList<String> additionalGuests = new ArrayList<>(); //list of RSVP enum values/options
+        additionalGuests.add("0");
         additionalGuests.add("1");
         additionalGuests.add("2");
         additionalGuests.add("3");
