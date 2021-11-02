@@ -1,15 +1,23 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html">
+
+<body id="success" style="height: 100vh; justify-content: center; justify-items: center; ">
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
 
 <title layout:fragment="title">myParty | Party Created!</title>
 
-<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
 <section layout:fragment="content">
 
     <a href="/profile">Back to Profile</a>
 
-    <h1>SUCCESS!</h1>
+    <div class="js-container"></div>
+
+    <h1 id="partymessage">Let's Get This Party Started!!!</h1>
+
     <h2 th:text="${party.title} + ' has been successfully created!'"></h2>
 
     <h3>Now let's invite people!</h3>
@@ -33,6 +41,10 @@
         </form>
 
     <script>
+        party.confetti(document.getElementById("partymessage"))
+    </script>
+
+    <script>
         window.onload = (function() {
             const additionalEmail = document.getElementById('addEmailButton');
 
@@ -52,9 +64,8 @@
             });
         })
     </script>
-
 </section>
-
+</body>
 <footer><p layout:fragment="custom-footer">This is actually working</p></footer>
 
 </html>
