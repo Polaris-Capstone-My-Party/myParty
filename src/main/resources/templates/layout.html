@@ -3,7 +3,6 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head>
-    <link th:href="@{/css/style.css}" rel="stylesheet" />
     <title layout:fragment="title">
         Default
     </title>
@@ -19,13 +18,11 @@
     <nav th:replace="partials/guestNavbar :: navbar"></nav>
 </div>
 
-<header>
 
-
-</header>
 <section layout:fragment="content">
     <p>Page content goes here, you should not see this. ADD THIS TO THE TEMPLATES</p>
 </section>
+
 <footer th:replace="partials/footer :: footer">
     <p>My footer</p>
     <p layout:fragment="custom-footer">Custom footer here</p>
