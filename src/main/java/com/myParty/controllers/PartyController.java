@@ -113,7 +113,7 @@ public class PartyController {
                         + "Start Time: " + party.getStartTime() + "<br>" + "End Time: " + party.getEndTime() + "<br>" + "Location: " + party.getLocation() + "<br>"
                         + "RSVP  " + "<a href=\"http://localhost:8080/rsvp/" + party.getUrlKey() + "\">here</a>";
 
-        //TODO: fix link for party URL
+        //TODO: fix link for party URL to make dynamic with new domain name
 
         for (int i = 0; i < emailAddresses.length; i++) {
             System.out.println(emailAddresses[i]);
