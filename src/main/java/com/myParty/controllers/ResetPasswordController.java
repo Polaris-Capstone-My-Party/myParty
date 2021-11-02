@@ -35,8 +35,12 @@ public class ResetPasswordController {
     }
 
     @PostMapping("/member/resetpassword/{token}")
-    public String resetPassword{
+    public String resetPassword(@PathVariable String token, @RequestParam(name = "password") String password){
+        Member pwToReset = memberDao.findByResetToken(token);
+        pwToReset.setPassword(password);
+        memberDao.save(pwToReset);
 
+        return "redirect:/login";
     }
 
     @PostMapping("/member/resetpassword")
@@ -46,7 +50,7 @@ public class ResetPasswordController {
         String token = UUID.randomUUID().toString();
         member.setResetToken(token);
         memberDao.save(member);
-        String resetDetails = "Click to reset your password" + "<a href=\"http://localhost:8080/member/resetpassword/" + token + "\">HERE</a>";
+        String resetDetails = "Click to reset your password " + "<a href=\"http://localhost:8080/member/resetpassword/" + token + "\">here</a>";
 //TODO: add domain + the token in an anchor tag
         emailService.sendResetPassword(member, resetDetails);
 
