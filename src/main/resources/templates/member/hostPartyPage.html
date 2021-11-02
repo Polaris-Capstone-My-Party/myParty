@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title layout:fragment="title">My Party | Host View</title>
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 </head>
 <section layout:fragment="content">
   <a href="/profile" class="btn btn-primary">Return to Profile</a>
@@ -66,6 +67,40 @@
         <br>
       </div>
 
+      <div>
+        <h2>Send Invites</h2>
+
+        <form th:action="@{|/parties/${party.urlKey}|}" th:method="post">
+          <div id="additionalEmails">
+            <div class="form-group">
+              <label for="email[]">Email Address:</label>
+              <input type="email" name="email[]" id="email[]">
+            </div>
+          </div>
+          <button id="addEmailButton">Add Another Email</button>
+          <input type="submit" class="btn btn-info" value="Send Invites!">
+        </form>
+
+        <script>
+          window.onload = (function() {
+            const additionalEmail = document.getElementById('addEmailButton');
+
+            const emailForm = `<div class="form-group">
+                  <label for="email[]">Email Address:</label>
+                  <input type="email" name="email[]" id="email[]">
+
+                </div>`
+
+            additionalEmail.addEventListener('click', function(event) {
+              event.preventDefault();
+
+              const yeahBaby = document.getElementById('additionalEmails');
+              let newEmail = document.createElement("div");
+              newEmail.innerHTML = emailForm;
+              yeahBaby.appendChild(newEmail);
+            });
+          })
+        </script>
       <div>
         <a th:href="@{|/parties/edit/${party.id}|}" class="btn btn-primary">Edit Party</a>
         <a th:replace="partials/modalsUpdates :: modal"></a>
