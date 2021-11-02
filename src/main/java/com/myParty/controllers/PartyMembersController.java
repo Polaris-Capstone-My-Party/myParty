@@ -2,6 +2,7 @@ package com.myParty.controllers;
 
 import com.myParty.models.*;
 import com.myParty.repositories.*;
+import com.myParty.services.EmailService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,14 +19,16 @@ public class PartyMembersController {
     private final PartyMemberRepository partyMemberDao;
     private final MemberRepository memberDao;
     private final GuestController guestController;
+    private final EmailService emailService;
 
-    public PartyMembersController(PartyRepository partyDao, PartyItemRepository partyItemDao, ItemBringerRepository itemBringerDao, PartyMemberRepository partyMemberDao, MemberRepository memberDao, GuestController guestController) {
+    public PartyMembersController(PartyRepository partyDao, PartyItemRepository partyItemDao, ItemBringerRepository itemBringerDao, PartyMemberRepository partyMemberDao, MemberRepository memberDao, GuestController guestController, EmailService emailService) {
         this.partyDao = partyDao;
         this.partyItemDao = partyItemDao;
         this.itemBringerDao = itemBringerDao;
         this.partyMemberDao = partyMemberDao;
         this.memberDao = memberDao;
         this.guestController = guestController;
+        this.emailService = emailService;
     }
 
     //saves PartyMember & ItemBringer information
@@ -66,7 +69,17 @@ public class PartyMembersController {
             itemBringer.setPartyMember(partyMember1); //sets partyMember object
             itemBringer.setPartyItem(partyItem); // sets partyItem object
             itemBringerDao.save(itemBringer); // saves item bringer
+
+            String rsvpDetails =
+                    "<h2>You are RSVP'd to " + party.getTitle() + "</h2>, <br><i>Here are the details: </i><br>" + "Description: " + party.getDescription() + "<br>"
+                            + "Start Time: " + party.getStartTime() + "<br>" + "End Time: " + party.getEndTime() + "<br>" + "Location: " + party.getLocation() + "<br>"
+                            + "You have signed up to bring the following: " + itemBringer.getPartyItem() + "<br>" + partyMember.getAdditionalGuests() + "<br>"
+                            + "View or edit your RSVP: " + "<a href\"http://localhost:8080/rsvp/" + party.getUrlKey() + partyMember.getId() + "\">here</a>";
+
+            emailService.sendRSVPconfirmation("Your RSVP to " + party.getTitle(), );
         }
+
+
 
         return  "redirect:/member/successRsvp/" + urlKey + "/" + uuid;
     }
@@ -76,6 +89,7 @@ public class PartyMembersController {
     public String showRSVPSuccess(Model model, @PathVariable String partyMemberKey, @PathVariable String urlKey){
         model.addAttribute("urlKey", urlKey);
         model.addAttribute("partyMemberKey", partyMemberKey);
+
         return "partyMember/successRsvp";
     }
 

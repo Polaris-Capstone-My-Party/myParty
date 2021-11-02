@@ -2,6 +2,7 @@ package com.myParty.services;
 
 import com.myParty.models.Member;
 import com.myParty.models.Party;
+import com.myParty.models.PartyMember;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
@@ -33,17 +34,16 @@ public class EmailService {
         boolean html = true;
         helper.setText(body, html);
 
-        try{
+        try {
             this.emailSender.send(message);
-        }
-        catch (MailException ex) {
+        } catch (MailException ex) {
             // simply log it and go on...
             System.err.println(ex.getMessage());
         }
     }
 
     //Send Invitations to guests
-    public void sendInvites(String subject,  String email, String customMessage) throws MessagingException {
+    public void sendInvites(String subject, String email, String customMessage) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
         helper.setFrom(from);
@@ -52,33 +52,46 @@ public class EmailService {
         boolean html = true;
         helper.setText(customMessage, html);
 
-        try{
+        try {
             this.emailSender.send(message);
-        }
-        catch (MailException ex) {
+        } catch (MailException ex) {
             // simply log it and go on...
             System.err.println(ex.getMessage());
         }
     }
 
     public void sendResetPassword(Member member, String customMessage) throws MessagingException {
-    MimeMessage message = emailSender.createMimeMessage();
-    MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom(from);
         helper.setTo(member.getEmail());
         helper.setSubject("Reset Your myParty Password");
         boolean html = true;
         helper.setText(customMessage, html);
 
-        try{
-        this.emailSender.send(message);
+        try {
+            this.emailSender.send(message);
+        } catch (MailException ex) {
+            // simply log it and go on...
+            System.err.println(ex.getMessage());
+        }
     }
-        catch (MailException ex) {
-        // simply log it and go on...
-        System.err.println(ex.getMessage());
+
+    public void sendRSVPconfirmation(String subject, String email, String customMessage) throws MessagingException {
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+        helper.setFrom(from);
+        helper.setTo(email);
+        helper.setSubject(subject);
+        boolean html = true;
+        helper.setText(customMessage, html);
+
+        try {
+            this.emailSender.send(message);
+        } catch (MailException ex) {
+            // simply log it and go on...
+            System.err.println(ex.getMessage());
+        }
     }
-}
-
-
 
 }
