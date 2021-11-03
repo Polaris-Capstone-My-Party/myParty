@@ -122,7 +122,7 @@ public class PartyController {
                         + "End Time: " + party.getEndTime() + "<br>"
                         + "Location: " + party.getLocation().getAddressOne() + "<br>"
                         + party.getLocation().getAddressTwo() + "<br>"
-                        + party.getLocation().getCity() + party.getLocation().getState() + party.getLocation().getZipcode() + "<br>"
+                        + party.getLocation().getCity() + " " + party.getLocation().getState() + " " + party.getLocation().getZipcode() + "<br>"
                         + "RSVP " + "<a href=\"http://localhost:8080/rsvp/" + party.getUrlKey() + "\">here</a>";
 
         //TODO: fix link for party URL to make dynamic with new domain name

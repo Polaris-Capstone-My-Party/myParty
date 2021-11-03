@@ -125,7 +125,7 @@ public class GuestController {
             itemBringer.setPartyItem(partyItem); // sets partyItem object
             itemBringerDAO.save(itemBringer); // saves item bringer
 
-            partyItemsDetails += "\" Item: " + partyItem.getItem().getName() + "      Quantity: " + quantities[i] + "\n";
+            partyItemsDetails += "\"Item: " + partyItem.getItem().getName() + "      Quantity: " + quantities[i] + "\n";
         }
         String rsvpDetails =
                 "<h2>You are RSVP'd to " + party.getTitle() + "!</h2> "
@@ -133,9 +133,9 @@ public class GuestController {
                         + "Description: " + party.getDescription() + "<br>"
                         + "Start Time: " + party.getStartTime() + "<br>"
                         + "End Time: " + party.getEndTime() + "<br>"
-                        + "Location:\n" + party.getLocation().getAddressOne() + "\n"
-                        + party.getLocation().getAddressTwo() + "\n"
-                        + party.getLocation().getCity() + " " + party.getLocation().getState() + " " + party.getLocation().getZipcode() + "\n"
+                        + "Location:\n" + party.getLocation().getAddressOne() + "<br>"
+                        + party.getLocation().getAddressTwo() + "<br>"
+                        + party.getLocation().getCity() + " " + party.getLocation().getState() + " " + party.getLocation().getZipcode() + "<br>"
                         + "\nYou have signed up to bring the following: \n" + partyItemsDetails + "\n"
                         + "Additional Guests: " + guest.getAdditionalGuests() + "\n"
                         + "View or edit your RSVP: " + "<a href=\"http://localhost:8080/rsvp/" + party.getUrlKey() + "/" + guest1.getGuestKey() + "/view" + "\">here</a>";
