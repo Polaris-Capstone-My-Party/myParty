@@ -133,11 +133,11 @@ public class GuestController {
                         + "Description: " + party.getDescription() + "<br>"
                         + "Start Time: " + party.getStartTime() + "<br>"
                         + "End Time: " + party.getEndTime() + "<br>"
-                        + "Location: " + party.getLocation().getAddressOne() + "<br>"
-                        + party.getLocation().getAddressTwo() + "<br>"
-                        + party.getLocation().getCity() + party.getLocation().getState() + party.getLocation().getZipcode() + "<br>"
-                        + "\nYou have signed up to bring the following: \n" + partyItemsDetails + "<br>"
-                        + "Additional Guests: " + guest.getAdditionalGuests() + "<br>"
+                        + "Location:\n" + party.getLocation().getAddressOne() + "\n"
+                        + party.getLocation().getAddressTwo() + "\n"
+                        + party.getLocation().getCity() + " " + party.getLocation().getState() + " " + party.getLocation().getZipcode() + "\n"
+                        + "\nYou have signed up to bring the following: \n" + partyItemsDetails + "\n"
+                        + "Additional Guests: " + guest.getAdditionalGuests() + "\n"
                         + "View or edit your RSVP: " + "<a href=\"http://localhost:8080/rsvp/" + party.getUrlKey() + "/" + guest1.getGuestKey() + "/view" + "\">here</a>";
 
         emailService.sendRSVPConfirmGuest(guest, "Your RSVP to " + party.getTitle(), rsvpDetails);

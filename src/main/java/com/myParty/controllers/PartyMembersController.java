@@ -82,11 +82,11 @@ public class PartyMembersController {
                         + "Description: " + party.getDescription() + "<br>"
                         + "Start Time: " + party.getStartTime() + "<br>"
                         + "End Time: " + party.getEndTime() + "<br>"
-                        + "Location: " + party.getLocation().getAddressOne() + "<br>"
-                        + party.getLocation().getAddressTwo() + "<br>"
-                        + party.getLocation().getCity() + party.getLocation().getState() + party.getLocation().getZipcode() + "<br>"
-                        + "\nYou have signed up to bring the following: \n" + partyItemsDetails + "<br>"
-                        + "Additional Guests: " + partyMember.getAdditionalGuests() + "<br>"
+                        + "Location: <br> " + party.getLocation().getAddressOne() + "\n"
+                        + party.getLocation().getAddressTwo() + "\n"
+                        + party.getLocation().getCity() + " " + party.getLocation().getState() + " " + party.getLocation().getZipcode() + "\n"
+                        + "\nYou have signed up to bring the following: \n" + partyItemsDetails + "\n"
+                        + "Additional Guests: " + partyMember.getAdditionalGuests() + "\n"
                 + "View or edit your RSVP: " + "<a href=\"http://localhost:8080/rsvp/" + party.getUrlKey() + "/" + partyMember1.getPartyMemberKey() + "/view" + "\">here</a>";
 
 

@@ -75,9 +75,9 @@ public class PartyController {
                         + "Description: " + party.getDescription() + "<br>"
                         + "Start Time: " + party.getStartTime() + "<br>"
                         + "End Time: " + party.getEndTime() + "<br>"
-                        + "Location: " + party.getLocation().getAddressOne() + "<br>"
-                        + party.getLocation().getAddressTwo() + "<br>"
-                        + party.getLocation().getCity() + party.getLocation().getState() + party.getLocation().getZipcode() + "<br>"
+                        + "Location: <br>" + party.getLocation().getAddressOne() + "\n"
+                        + party.getLocation().getAddressTwo() + "\n"
+                        + party.getLocation().getCity() + " " +party.getLocation().getState() + " " + party.getLocation().getZipcode() + "\n"
                 + "Here is your custom party URL: " + party.getUrlKey() ;
 
         emailService.partyCreatedConfirmation(newCreatedParty, newCreatedParty.getTitle() + " has been created", partyDetails);
