@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.util.*;
 
 @Controller
@@ -33,7 +34,7 @@ public class PartyMembersController {
 
     //saves PartyMember & ItemBringer information
     @PostMapping(path = "/rsvp/{urlKey}/{memberId}")
-    public String createGuest(@PathVariable String urlKey, @PathVariable String memberId, @ModelAttribute PartyMember partyMember, @RequestParam String rsvp, @RequestParam(name="partyItem[]") String[] myPartyItems, @RequestParam(name="quantity[]") String[] quantities){
+    public String createPartyMember(@PathVariable String urlKey, @PathVariable String memberId, @ModelAttribute PartyMember partyMember, @RequestParam String rsvp, @RequestParam(name="partyItem[]") String[] myPartyItems, @RequestParam(name="quantity[]") String[] quantities) throws MessagingException {
 
         Member member = memberDao.getById(Long.valueOf(memberId));
         Party party = partyDao.getByUrlKey(urlKey);
@@ -59,6 +60,7 @@ public class PartyMembersController {
         partyMember.setParty(party); //sets Party linked to partyMember
         partyMember.setMember(member); //sets Member to logged in member
         PartyMember partyMember1 = partyMemberDao.save(partyMember); //saves partyMember instance
+       String partyItemsDetails = "";
 
         for(int i = 0; i < myPartyItems.length; i++){ //goes through partyItems guest submitted
 
@@ -70,16 +72,19 @@ public class PartyMembersController {
             itemBringer.setPartyItem(partyItem); // sets partyItem object
             itemBringerDao.save(itemBringer); // saves item bringer
 
-            String rsvpDetails =
-                    "<h2>You are RSVP'd to " + party.getTitle() + "</h2>, <br><i>Here are the details: </i><br>" + "Description: " + party.getDescription() + "<br>"
-                            + "Start Time: " + party.getStartTime() + "<br>" + "End Time: " + party.getEndTime() + "<br>" + "Location: " + party.getLocation() + "<br>"
-                            + "You have signed up to bring the following: " + itemBringer.getPartyItem() + "<br>" + partyMember.getAdditionalGuests() + "<br>"
-                            + "View or edit your RSVP: " + "<a href\"http://localhost:8080/rsvp/" + party.getUrlKey() + partyMember.getId() + "\">here</a>";
-
-            emailService.sendRSVPconfirmation("Your RSVP to " + party.getTitle(), );
+            partyItemsDetails += "Item: " + partyItem.getItem().getName() + " Quantity: " + quantities[i] + "\n";
         }
+        System.out.println(partyItemsDetails);
+
+        String rsvpDetails =
+                "<h2>You are RSVP'd to " + party.getTitle() + "</h2>, <br><i>Here are the details: </i><br>" + "Description: " + party.getDescription() + "<br>"
+                        + "Start Time: " + party.getStartTime() + "<br>" + "End Time: " + party.getEndTime() + "<br>" + "Location: " + party.getLocation() + "<br>"
+                        + "\nYou have signed up to bring the following: \n" + partyItemsDetails + "<br>" + "Additional Guests: " + partyMember.getAdditionalGuests() + "<br>"
+                        + "View or edit your RSVP: " + "<a href=\"http://localhost:8080/rsvp/" + party.getUrlKey() + "/" + partyMember1.getPartyMemberKey() + "/view" + "\">here</a>";
 
 
+
+        emailService.sendRSVPConfirmMember(member, "Your RSVP to " + party.getTitle(), rsvpDetails);
 
         return  "redirect:/member/successRsvp/" + urlKey + "/" + uuid;
     }

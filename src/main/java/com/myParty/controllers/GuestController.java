@@ -109,6 +109,7 @@ public class GuestController {
         guest.setParty(party); //sets Party linked to guest
         guest.setGuestKey(uuid.toString()); //https://www.baeldung.com/java-uui
         Guest guest1 =  guestDAO.save(guest); //save guest information & creates item to reference
+        String partyItemsDetails = "";
 
         for(int i = 0; i < myPartyItems.length; i++){ //goes through partyItems guest submitted
             ItemBringer itemBringer = new ItemBringer(); //new instance of Item Bringer
@@ -118,7 +119,10 @@ public class GuestController {
             itemBringer.setGuest(guest1); //sets guest object
             itemBringer.setPartyItem(partyItem); // sets partyItem object
             itemBringerDAO.save(itemBringer); // saves item bringer
+
+            partyItemsDetails += "\" Item: " + partyItem.getItem().getName() + "      Quantity: " + quantities[i] + "\n";
         }
+
         return  "redirect:/guests/successRsvp/" + urlKey + "/" + uuid;
     }
 

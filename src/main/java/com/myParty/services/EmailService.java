@@ -1,5 +1,6 @@
 package com.myParty.services;
 
+import com.myParty.models.Guest;
 import com.myParty.models.Member;
 import com.myParty.models.Party;
 import com.myParty.models.PartyMember;
@@ -24,7 +25,7 @@ public class EmailService {
     private String from;
 
     //email confirmation of party created for host
-    public void prepareAndSend(Party party, String subject, String body) throws MessagingException {
+    public void partyCreatedConfirmation(Party party, String subject, String body) throws MessagingException {
 
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -45,7 +46,7 @@ public class EmailService {
     //Send Invitations to guests
     public void sendInvites(String subject, String email, String customMessage) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom(from);
         helper.setTo(email);
         helper.setSubject(subject);
@@ -77,11 +78,13 @@ public class EmailService {
         }
     }
 
-    public void sendRSVPconfirmation(String subject, String email, String customMessage) throws MessagingException {
+
+
+    public void sendRSVPConfirmGuest(Guest guest, String subject, String customMessage) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom(from);
-        helper.setTo(email);
+        helper.setTo(guest.getEmail());
         helper.setSubject(subject);
         boolean html = true;
         helper.setText(customMessage, html);
@@ -94,4 +97,20 @@ public class EmailService {
         }
     }
 
+    public void sendRSVPConfirmMember(Member member, String subject, String customMessage) throws MessagingException {
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+        helper.setFrom(from);
+        helper.setTo(member.getEmail());
+        helper.setSubject(subject);
+        boolean html = true;
+        helper.setText(customMessage, html);
+
+        try {
+            this.emailSender.send(message);
+        } catch (MailException ex) {
+            // simply log it and go on...
+            System.err.println(ex.getMessage());
+        }
+    }
 }

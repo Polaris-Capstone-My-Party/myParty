@@ -74,7 +74,7 @@ public class PartyController {
                 + "Start Time: " + party.getStartTime() + "<br>" + "End Time: " + party.getEndTime() + "<br>" + "Location: " + party.getLocation() + "<br>"
                 + "Here is your custom party URL: " + party.getUrlKey() ;
 
-        emailService.prepareAndSend(newCreatedParty, newCreatedParty.getTitle() + " has been created", partyDetails);
+        emailService.partyCreatedConfirmation(newCreatedParty, newCreatedParty.getTitle() + " has been created", partyDetails);
 
         //Creates and saves party Items
         for (int i = 0; i < names.length; i++) {
@@ -183,4 +183,6 @@ public class PartyController {
         partyDao.deleteById(id);
         return "redirect:/profile";
     }
+
+
 }
