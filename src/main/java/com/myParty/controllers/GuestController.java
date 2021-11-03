@@ -68,7 +68,7 @@ public class GuestController {
 
             //check if member already has partyMember associated with account
             if(checkMember != null){
-                return "redirect:/rsvp/" + urlKey + "/member/" + checkMember.getPartyMemberKey() + "/edit";
+                return "redirect:/rsvp/" + urlKey + "/member/" + checkMember.getPartyMemberKey() + "/view";
             }
 
             //checks if member is the host of the party, redirect to view party page not RSVP
@@ -134,6 +134,26 @@ public class GuestController {
         return "guests/successRsvp";
     }
 
+    //shows RSVP Information to guests
+    @GetMapping(path = "/rsvp/{urlKey}/{guestKey}/view")
+    public String showRSVPInfo(Model model, @PathVariable String urlKey, @PathVariable String guestKey){
+
+        //gets RSVP info
+        Party party = partyDAO.getByUrlKey(urlKey);
+        Guest guest = guestDAO.getByGuestKey(guestKey);
+
+        List<PartyItem> partyItems = partyItemDAO.getByParty(party); //gets list of party Items w/ party
+        List<ItemBringer> itemBringers = itemBringerDAO.getByGuest(guest); //gets & sets list of item bringers associated w/ guest
+        List<Long> quantities = calculateQuantity(partyItems); //gets dynamic quantities left of each party
+        HashMap<ItemBringer, List<Long>> itemBringerActual= getItemBringerActual(itemBringers, quantities); //hashmap to store party items & list of long quantity values
+
+        model.addAttribute("party", party);
+        model.addAttribute("guest", guest);
+        model.addAttribute("itemBringers", itemBringerActual); //gets ItemBringer info associated with guestId
+
+        return "guests/viewRsvp";
+    }
+
     //Shows Guest Info & Allows to Edit
     @GetMapping(path = "/rsvp/{urlKey}/{guestKey}/edit")
     public String showEditRSVP(@PathVariable String urlKey, @PathVariable String guestKey, Model model){
@@ -192,6 +212,7 @@ public class GuestController {
         return "redirect:/guests/successRsvp/" + urlKey + "/" + guestKey;
     }
 
+
     //calculates actual quantity remaining
     public List<Long> calculateQuantity(List<PartyItem> partyItems){ //takes in List of partyItems
         List<Long> totalQuantity= new ArrayList<>(); //list to store total quantity being brought of each partyItem for a party
@@ -223,6 +244,7 @@ public class GuestController {
     //returns list of additional guest values
     public ArrayList<String> getAdditionalGuests(){
         ArrayList<String> additionalGuests = new ArrayList<>(); //list of RSVP enum values/options
+        additionalGuests.add("0");
         additionalGuests.add("1");
         additionalGuests.add("2");
         additionalGuests.add("3");
