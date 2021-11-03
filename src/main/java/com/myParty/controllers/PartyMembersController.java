@@ -34,7 +34,7 @@ public class PartyMembersController {
 
     //saves PartyMember & ItemBringer information
     @PostMapping(path = "/rsvp/{urlKey}/{memberId}")
-    public String createPartyMember(@PathVariable String urlKey, @PathVariable String memberId, @ModelAttribute PartyMember partyMember, @RequestParam String rsvp, @RequestParam(name="partyItem[]") String[] myPartyItems, @RequestParam(name="quantity[]") String[] quantities) throws MessagingException {
+    public String createPartyMember(@PathVariable String urlKey, @PathVariable String memberId, @ModelAttribute PartyMember partyMember, @RequestParam String rsvp, @RequestParam(name = "partyItem[]") String[] myPartyItems, @RequestParam(name = "quantity[]") String[] quantities) throws MessagingException {
 
         Member member = memberDao.getById(Long.valueOf(memberId));
         Party party = partyDao.getByUrlKey(urlKey);
@@ -43,11 +43,11 @@ public class PartyMembersController {
         List<Long> updatedQuantities = guestController.calculateQuantity(dbPartyItems); //gets list of updated quantity remaining for dbPartyItems
 
         //checks guest is still able to sign up for that quantity
-        for(int i = 0; i < quantities.length; i++){
+        for (int i = 0; i < quantities.length; i++) {
             Long quantity = Long.valueOf(quantities[i]);
 
             //if quantity signing up for is greater than what is available in the db, reload page with updated info
-            if(quantity > updatedQuantities.get(i)){
+            if (quantity > updatedQuantities.get(i)) {
                 System.out.println("Error: quantity signing up for is greater than available in the database");
                 return "redirect:/rsvp/" + urlKey;
             }
@@ -60,9 +60,9 @@ public class PartyMembersController {
         partyMember.setParty(party); //sets Party linked to partyMember
         partyMember.setMember(member); //sets Member to logged in member
         PartyMember partyMember1 = partyMemberDao.save(partyMember); //saves partyMember instance
-       String partyItemsDetails = "";
+        String partyItemsDetails = "";
 
-        for(int i = 0; i < myPartyItems.length; i++){ //goes through partyItems guest submitted
+        for (int i = 0; i < myPartyItems.length; i++) { //goes through partyItems guest submitted
 
             ItemBringer itemBringer = new ItemBringer(); //new instance of Item Bringer
             PartyItem partyItem = partyItemDao.getById(Long.valueOf(myPartyItems[i])); //get partyItem object by id
@@ -77,21 +77,27 @@ public class PartyMembersController {
         System.out.println(partyItemsDetails);
 
         String rsvpDetails =
-                "<h2>You are RSVP'd to " + party.getTitle() + "</h2>, <br><i>Here are the details: </i><br>" + "Description: " + party.getDescription() + "<br>"
-                        + "Start Time: " + party.getStartTime() + "<br>" + "End Time: " + party.getEndTime() + "<br>" + "Location: " + party.getLocation() + "<br>"
-                        + "\nYou have signed up to bring the following: \n" + partyItemsDetails + "<br>" + "Additional Guests: " + partyMember.getAdditionalGuests() + "<br>"
-                        + "View or edit your RSVP: " + "<a href=\"http://localhost:8080/rsvp/" + party.getUrlKey() + "/" + partyMember1.getPartyMemberKey() + "/view" + "\">here</a>";
-
+                "<h2>You are RSVP'd to " + party.getTitle() + "!</h2>, " +
+                        "<br><i>Here are the details: </i><br>"
+                        + "Description: " + party.getDescription() + "<br>"
+                        + "Start Time: " + party.getStartTime() + "<br>"
+                        + "End Time: " + party.getEndTime() + "<br>"
+                        + "Location: " + party.getLocation().getAddressOne() + "<br>"
+                        + party.getLocation().getAddressTwo() + "<br>"
+                        + party.getLocation().getCity() + party.getLocation().getState() + party.getLocation().getZipcode() + "<br>"
+                        + "\nYou have signed up to bring the following: \n" + partyItemsDetails + "<br>"
+                        + "Additional Guests: " + partyMember.getAdditionalGuests() + "<br>"
+                + "View or edit your RSVP: " + "<a href=\"http://localhost:8080/rsvp/" + party.getUrlKey() + "/" + partyMember1.getPartyMemberKey() + "/view" + "\">here</a>";
 
 
         emailService.sendRSVPConfirmMember(member, "Your RSVP to " + party.getTitle(), rsvpDetails);
 
-        return  "redirect:/member/successRsvp/" + urlKey + "/" + uuid;
+        return "redirect:/member/successRsvp/" + urlKey + "/" + uuid;
     }
 
     //shows RSVPSuccess page to PartyMembers
     @GetMapping(path = "/member/successRsvp/{urlKey}/{partyMemberKey}")
-    public String showRSVPSuccess(Model model, @PathVariable String partyMemberKey, @PathVariable String urlKey){
+    public String showRSVPSuccess(Model model, @PathVariable String partyMemberKey, @PathVariable String urlKey) {
         model.addAttribute("urlKey", urlKey);
         model.addAttribute("partyMemberKey", partyMemberKey);
 
@@ -99,13 +105,13 @@ public class PartyMembersController {
     }
 
     @GetMapping(path = "/rsvp/{urlKey}/member/{partyMemberKey}/view")
-    public String showPartyMemberRSVPInfo(@PathVariable String urlKey, @PathVariable String partyMemberKey, Model model){
+    public String showPartyMemberRSVPInfo(@PathVariable String urlKey, @PathVariable String partyMemberKey, Model model) {
 
         Party party = partyDao.getByUrlKey(urlKey); //gets party
         PartyMember partyMember = partyMemberDao.getByPartyMemberKey(partyMemberKey); //gets partyMember
 
         //If Member is not logged in, redirect to login Page
-        if(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString().equals("anonymousUser")){
+        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString().equals("anonymousUser")) {
             return "redirect:/login";
         }
 
@@ -114,14 +120,14 @@ public class PartyMembersController {
         PartyMember checkMember = partyMemberDao.getByMember(actualMember); //gets partyMember associated with logged in member (can only be one)
 
         //If logged in Member is not the member associated with the PartyMember, redirect to profile page
-        if(checkMember == null || partyMember.getId() != checkMember.getId()){
+        if (checkMember == null || partyMember.getId() != checkMember.getId()) {
             return "redirect:/profile";
         }
 
         List<PartyItem> partyItems = partyItemDao.getByParty(party); //gets partyItems associated with party
         List<ItemBringer> itemBringers = itemBringerDao.getByPartyMember(partyMember); //gets & sets list of item bringers associated w/ guest
         List<Long> quantities = guestController.calculateQuantity(partyItems); //gets dynamic quantities left of each party
-        HashMap<ItemBringer, List<Long>> itemBringerActual= guestController.getItemBringerActual(itemBringers, quantities); //hashmap to store party items & list of long quantity values
+        HashMap<ItemBringer, List<Long>> itemBringerActual = guestController.getItemBringerActual(itemBringers, quantities); //hashmap to store party items & list of long quantity values
 
         model.addAttribute("party", party); //get party info
         model.addAttribute("partyMember", partyMember); //get guest info
@@ -133,13 +139,13 @@ public class PartyMembersController {
 
     //Shows PartyMember Info & Allows to Edit
     @GetMapping(path = "/rsvp/{urlKey}/member/{partyMemberKey}/edit")
-    public String showEditRSVP(@PathVariable String urlKey, @PathVariable String partyMemberKey, Model model){
+    public String showEditRSVP(@PathVariable String urlKey, @PathVariable String partyMemberKey, Model model) {
 
         Party party = partyDao.getByUrlKey(urlKey); //gets party
         PartyMember partyMember = partyMemberDao.getByPartyMemberKey(partyMemberKey); //gets partyMember
 
         //If Member is not logged in, redirect to login Page
-        if(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString().equals("anonymousUser")){
+        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString().equals("anonymousUser")) {
             return "redirect:/login";
         }
 
@@ -148,7 +154,7 @@ public class PartyMembersController {
         PartyMember checkMember = partyMemberDao.getByMember(actualMember); //gets partyMember associated with logged in member (can only be one)
 
         //If logged in Member is not the member associated with the PartyMember, redirect to profile page
-        if(checkMember == null || partyMember.getId() != checkMember.getId()){
+        if (checkMember == null || partyMember.getId() != checkMember.getId()) {
             return "redirect:/profile";
         }
 
@@ -158,7 +164,7 @@ public class PartyMembersController {
         List<PartyItem> partyItems = partyItemDao.getByParty(party); //gets partyItems associated with party
         List<ItemBringer> itemBringers = itemBringerDao.getByPartyMember(partyMember); //gets & sets list of item bringers associated w/ guest
         List<Long> quantities = guestController.calculateQuantity(partyItems); //gets dynamic quantities left of each party
-        HashMap<ItemBringer, List<Long>> itemBringerActual= guestController.getItemBringerActual(itemBringers, quantities); //hashmap to store party items & list of long quantity values
+        HashMap<ItemBringer, List<Long>> itemBringerActual = guestController.getItemBringerActual(itemBringers, quantities); //hashmap to store party items & list of long quantity values
 
         model.addAttribute("party", party); //get party info
         model.addAttribute("partyMember", partyMember); //get guest info
@@ -172,8 +178,8 @@ public class PartyMembersController {
 
     //saves partyMember edited information
     @PostMapping(path = "/rsvp/{urlKey}/member/{partyMemberKey}/edit")
-    public String saveEditRSVP(@ModelAttribute PartyMember partyMember, @RequestParam String rsvp, @RequestParam(name="itemBringer[]") String[] itemBringer, @RequestParam(name="quantity[]") String[] quantities,
-                               @RequestParam(name="partyItem[]") String[] partyItem, @PathVariable String urlKey, @PathVariable String partyMemberKey){
+    public String saveEditRSVP(@ModelAttribute PartyMember partyMember, @RequestParam String rsvp, @RequestParam(name = "itemBringer[]") String[] itemBringer, @RequestParam(name = "quantity[]") String[] quantities,
+                               @RequestParam(name = "partyItem[]") String[] partyItem, @PathVariable String urlKey, @PathVariable String partyMemberKey) {
 
         Party party = partyDao.getByUrlKey(urlKey);
 
@@ -181,7 +187,7 @@ public class PartyMembersController {
         List<Long> updatedQuantities = guestController.calculateQuantity(dbPartyItems); //gets list of updated quantity remaining for dbPartyItems
 
         //checks guest can still sign up for items
-        for(int i = 0; i < quantities.length; i++) { //updates itemBringer quantity
+        for (int i = 0; i < quantities.length; i++) { //updates itemBringer quantity
             Long quantity = Long.valueOf(quantities[i]);
 
             //if quantity signing up for is greater than what is available in the db, reload page with updated info
@@ -199,7 +205,7 @@ public class PartyMembersController {
         partyMember.setMember(member);
         partyMemberDao.save(partyMember); //saves partyMember information
 
-        for(int i = 0; i < itemBringer.length; i++){ //updates itemBringer quantity
+        for (int i = 0; i < itemBringer.length; i++) { //updates itemBringer quantity
             ItemBringer updatedItemBringer = itemBringerDao.getById(Long.valueOf(itemBringer[i])); //get itemBringer object associated w/ itemBringerID
             updatedItemBringer.setQuantity((Long.valueOf(quantities[i]))); //sets updated quantity
             itemBringerDao.save(updatedItemBringer); //saves & updates quantity for ItemBringer
