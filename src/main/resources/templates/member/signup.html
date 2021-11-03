@@ -13,24 +13,32 @@
 
             <form th:action="@{/sign-up}" method="POST" th:object="${member}">
 
-                <div class="p-2 bd-highlight">
+                <div class="form-group">
                     <label for="username">Username</label>
-        <input id="username" th:field="*{username}"/>
-                    <div class="p-2 bd-highlight"><label for="first_name">First Name</label>
-        <input id="first_name" type="text" th:field="*{firstName}"/>
-                        <div class="p-2 bd-highlight"><label for="last_name">Last Name</label>
-        <input id="last_name" type="text" th:field="*{lastName}"/>
+                    <input id="username" th:field="*{username}">
+                </div>
+                <div class="form-group">
+                    <label for="first_name">First Name</label>
+                    <input id="first_name" type="text" th:field="*{firstName}">
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Last Name</label>
+                    <input id="last_name" type="text" th:field="*{lastName}">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input id="email" type="email" th:field="*{email}">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input id="phone" type="number" th:field="*{phone}">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input id="password" type="password" th:field="*{password}">
+                </div>
 
-                    <div class="p-2 bd-highlight"><label for="email">Email</label>
-        <input id="email" type="email" th:field="*{email}"/>
-
-                        <div class="p-2 bd-highlight"><label for="phone">Phone Number</label>
-        <input id="phone" type="number" th:field="*{phone}"/>
-
-                        <div class="p-2 bd-highlight"><label for="password">Password</label>
-        <input id="password" type="password" th:field="*{password}"/>
-
-                            <div class="p-2 bd-highlight"><input value="Let's Party!" type="submit"/>
+                <input value="Let's Party!" type="submit"/>
     </form>
     <a href="/login">Already have an account? Log in here</a>
 </section>
