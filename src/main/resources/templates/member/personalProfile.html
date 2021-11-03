@@ -23,6 +23,7 @@
 
             <div th:replace="partials/scripts :: scripts"></div>
 
+            <!--Display Parties Created -->
             <div class="justify-content" th:each="party : ${owner.party}">
                 <div class="card text-center" style="width: 18rem;">
                     <div class="card-body">
@@ -31,6 +32,17 @@
                     </div>
                 </div>
             </div>
+
+            <!--Display Parties Attending-->
+            <div class="justify-content">
+                <div class="card text-center" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5>Parties To View</h5>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
     </div>
 </section>
