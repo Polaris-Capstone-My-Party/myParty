@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
-<title layout:fragment="title">myParty | RSVP</title>
+<head>
+    <title layout:fragment="title">myParty | RSVP</title>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+</head>
+
 <section layout:fragment="content">
 
     <h1>Complete Your RSVP</h1>
@@ -13,8 +18,10 @@
         <div th:text="'Start Time: ' + ${party.startTime}"></div>
         <div th:text="'End Time: ' + ${party.endTime}"></div>
         <div th:text="'Organizer: ' + ${party.owner.firstName + ' ' + party.owner.lastName}"></div>
-        <div th:text="'Location: ' + ${party.location.addressOne} + ', ' + ${party.location.city} + ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}"></div>
+        <div th:text="${party.location.addressOne} + ', ' + ${party.location.city} + ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}" id="fullAddress"></div>
         <!--TODO: Logic to show addressTwo if not null-->
+
+        <div id='map' style='width: 25%; height: 40vh'></div>
     </div>
 
     <!--Member RSVP Form-->
@@ -148,6 +155,30 @@
         </form>
     </div>
 
+    <script src="/keys.js"></script>
+    <script src="/js/jquery.js"></script>
+    <script src="/js/mapbox-geocoder-utils.js"></script>
+
+    <!--Start of JS-->
+    <script>
+        const address = $("#fullAddress").html();
+
+        geocode(address, mapboxApiKey).then(function (result) {
+            mapboxgl.accessToken = mapboxApiKey;
+
+            var map = new mapboxgl.Map({
+                container: 'map',
+                style: 'mapbox://styles/mapbox/streets-v9',
+                zoom: 15,
+                center: (result)
+            });
+
+            var marker = new mapboxgl.Marker({
+                draggable: true
+            }).setLngLat(result).addTo(map);
+
+        });
+    </script>
 </section>
 
 <footer><p layout:fragment="custom-footer">This is actually working</p></footer>

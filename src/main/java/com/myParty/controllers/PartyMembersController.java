@@ -79,6 +79,39 @@ public class PartyMembersController {
         return "partyMember/successRsvp";
     }
 
+    @GetMapping(path = "/rsvp/{urlKey}/member/{partyMemberKey}/view")
+    public String showPartyMemberRSVPInfo(@PathVariable String urlKey, @PathVariable String partyMemberKey, Model model){
+
+        Party party = partyDao.getByUrlKey(urlKey); //gets party
+        PartyMember partyMember = partyMemberDao.getByPartyMemberKey(partyMemberKey); //gets partyMember
+
+        //If Member is not logged in, redirect to login Page
+        if(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString().equals("anonymousUser")){
+            return "redirect:/login";
+        }
+
+        Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); //get member in session
+        Member actualMember = memberDao.getById(userInSession.getId()); //get member info associated with member in session
+        PartyMember checkMember = partyMemberDao.getByMember(actualMember); //gets partyMember associated with logged in member (can only be one)
+
+        //If logged in Member is not the member associated with the PartyMember, redirect to profile page
+        if(checkMember == null || partyMember.getId() != checkMember.getId()){
+            return "redirect:/profile";
+        }
+
+        List<PartyItem> partyItems = partyItemDao.getByParty(party); //gets partyItems associated with party
+        List<ItemBringer> itemBringers = itemBringerDao.getByPartyMember(partyMember); //gets & sets list of item bringers associated w/ guest
+        List<Long> quantities = guestController.calculateQuantity(partyItems); //gets dynamic quantities left of each party
+        HashMap<ItemBringer, List<Long>> itemBringerActual= guestController.getItemBringerActual(itemBringers, quantities); //hashmap to store party items & list of long quantity values
+
+        model.addAttribute("party", party); //get party info
+        model.addAttribute("partyMember", partyMember); //get guest info
+        model.addAttribute("itemBringers", itemBringerActual); //gets ItemBringer info associated with guestId
+        model.addAttribute("partyItems", partyItems); //gets & sets partyItems for party
+
+        return "partyMember/viewRsvp";
+    }
+
     //Shows PartyMember Info & Allows to Edit
     @GetMapping(path = "/rsvp/{urlKey}/member/{partyMemberKey}/edit")
     public String showEditRSVP(@PathVariable String urlKey, @PathVariable String partyMemberKey, Model model){
