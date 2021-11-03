@@ -8,64 +8,110 @@
 </head>
 <section layout:fragment="content">
   <a href="/profile" class="btn btn-primary">Return to Profile</a>
-  <div class="d-flex justify-content-center">
+  <div class="card text-center">
+    <div class="card-header">
+      Featured
+    </div>
+    <div class="card-body">
+      <h1 class="card-title" th:text="${party.title}"></h1>
+      <h3 class="card-text" th:text="${party.description}"></h3>
+    </div>
+  </div>
 
+  <div class="d-flex justify-content-center">
     <div class="d-flex flex-column bd-highlight mb-3">
-      <h1 th:text="${party.title}"></h1>
-      <h2 th:text="${party.description}"></h2>
-      <div th:text="'Start Time: ' + ${party.startTime}"></div>
-      <div th:text="'End Time: ' + ${party.endTime}"></div>
-      <div th:text="'Organizer: ' + ${party.owner.firstName + ' ' + party.owner.lastName}"></div>
-      <div th:text="'Location: ' + ${party.location.addressOne} + ', ' + ${party.location.city}+ ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}"></div>
+      <div class="p-2 bd-highlight" th:text="'Start Time: ' + ${party.startTime}"></div>
+      <div class="p-2 bd-highlight" th:text="'End Time: ' + ${party.endTime}"></div>
+      <div class="p-2 bd-highlight" th:text="'Location: ' + ${party.location.addressOne} + ', ' + ${party.location.city}+ ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}"></div>
       <!--TODO: Add logic for show addressTwo if not null-->
     </div>
+  </div>
+</div>
 
-    <br>
-
-    <div>
-      <h1>Party Item Information</h1>
-      <div th:each="partyItem: ${partyItems}">
-        <div th:text="'Item: ' + ${partyItem.key.item.id}"></div>
-        <div th:text="'Item: ' + ${partyItem.key.item.name}"></div>
-        <div th:text="'Quantity Required: ' + ${partyItem.key.quantityRequired}"></div>
-        <div th:text="'Quantity Remaining: ' + ${partyItem.value}"></div>
-        <br>
+    <div class="p-2 bd-highlight">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-10 mt-5 mb-5">
+            <table id="example" class="table table-bordered" style="width: 100%">
+              <h1>Party Item Information</h1>
+              <thead>
+              <tr>
+                <th>Item</th>
+                <th>Quantity Requested</th>
+                <th>Quantity Remaining</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="partyItem: ${partyItems}">
+                <td th:text= "${partyItem.key.item.name}" >Item</td>
+                <td th:text="${partyItem.key.quantityRequired}">Quantity Requested</td>
+                <td th:text="${partyItem.value}">Quantity Remaining</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
 
-    <br>
-
-    <div>
-      <h1>Guest Information</h1>
-      <div th:each="guest : ${guests}">
-        <div th:text="'Name: ' + ${guest.key.firstName} + ' ' + ${guest.key.lastName}"></div>
-        <div th:text="'Email: ' + ${guest.key.email}"></div>
-        <div th:text="'RSVP Status: ' + ${guest.key.rsvpStatus}"></div>
-        <div th:text="'Additional Guests Bringing: ' + ${guest.key.additionalGuests}"></div>
-
-        <div th:each="itemBringer : ${guest.value}">
-          <th:block th:if="${itemBringer.quantity != 0}">
-            <div th:text="'Item Bringing: ' + ${itemBringer.partyItem.item.name}"></div>
-            <div th:text="'Quantity Bringing: ' + ${itemBringer.quantity}"></div>
-          </th:block>
+  <div class="p-2 bd-highlight">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-10 mt-5 mb-5">
+         <table id="example2" class="table table-bordered" style="width: 100%">
+            <h1>Guest Information</h1>
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>RSVP Status</th>
+              <th>Guests Added</th>
+<!--              <th>Item Bringing</th>-->
+<!--              <th>Quantity Bringing</th>-->
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="guest : ${guests}">
+              <td th:text= "${guest.key.firstName} + ' ' + ${guest.key.lastName}">Name</td>
+              <td th:text= "${guest.key.email}">Email</td>
+              <td th:text= "${guest.key.rsvpStatus}">RSVP Status</td>
+              <td th:text= "${guest.key.additionalGuests}">Guests Added</td>
+<!--              <td th:block th:if="${itemBringer.quantity != 0}"-->
+<!--              th:text="'Item Bringing: ' + ${itemBringer.partyItem.item.name}"-->
+<!--              th:text="'Quantity Bringing: ' + ${itemBringer.quantity}"></td>-->
+            </tr>
+            </tbody>
+          </table>
         </div>
-        <br>
       </div>
+    </div>
+  </div>
+<!--    <div>-->
+<!--      <h1>Guest Information</h1>-->
+<!--      <div th:each="guest : ${guests}">-->
+<!--        <div th:text="'Name: ' + ${guest.key.firstName} + ' ' + ${guest.key.lastName}"></div>-->
+<!--        <div th:text="'Email: ' + ${guest.key.email}"></div>-->
+<!--        <div th:text="'RSVP Status: ' + ${guest.key.rsvpStatus}"></div>-->
+<!--        <div th:text="'Additional Guests Bringing: ' + ${guest.key.additionalGuests}"></div>-->
 
-      <div th:each="partyMember : ${partyMembers}">
-        <div th:text="'Name: ' + ${partyMember.key.member.firstName} + ' ' + ${partyMember.key.member.lastName}"></div>
-        <div th:text="'Email: ' + ${partyMember.key.member.email}"></div>
-        <div th:text="'RSVP Status: ' + ${partyMember.key.rsvpStatus}"></div>
-        <div th:text="'Additional Guests Bringing: ' + ${partyMember.key.additionalGuests}"></div>
+<!--        <div th:each="itemBringer : ${guest.value}">-->
+<!--          <th:block th:if="${itemBringer.quantity != 0}">-->
+<!--            <div th:text="'Item Bringing: ' + ${itemBringer.partyItem.item.name}"></div>-->
+<!--            <div th:text="'Quantity Bringing: ' + ${itemBringer.quantity}"></div>-->
+<!--          </th:block>-->
+<!--        </div>-->
+<!--        <br>-->
+<!--      </div>-->
 
-        <div th:each="itemBringer : ${partyMember.value}">
-          <th:block th:if="${itemBringer.quantity != 0}">
-            <div th:text="'Item Bringing: ' + ${itemBringer.partyItem.item.name}"></div>
-            <div th:text="'Quantity Bringing: ' + ${itemBringer.quantity}"></div>
-          </th:block>
-        </div>
-        <br>
-      </div>
+
+<!--        <div th:each="itemBringer : ${partyMember.value}">-->
+<!--          <th:block th:if="${itemBringer.quantity != 0}">-->
+<!--            <div th:text="'Item Bringing: ' + ${itemBringer.partyItem.item.name}"></div>-->
+<!--            <div th:text="'Quantity Bringing: ' + ${itemBringer.quantity}"></div>-->
+<!--          </th:block>-->
+<!--        </div>-->
+<!--        <br>-->
+<!--      </div>-->
 
       <div>
         <h2>Send Invites</h2>
@@ -105,11 +151,10 @@
         <a th:href="@{|/parties/edit/${party.id}|}" class="btn btn-primary">Edit Party</a>
         <a th:replace="partials/modalsUpdates :: modal"></a>
       </div>
-    </div>
+
 
     <div th:replace="partials/scripts :: scripts"></div>
 
-  </div>
   </div>
 </section>
 
