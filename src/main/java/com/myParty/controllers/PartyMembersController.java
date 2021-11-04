@@ -92,10 +92,10 @@ public class PartyMembersController {
 
         Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); //get member in session
         Member actualMember = memberDao.getById(userInSession.getId()); //get member info associated with member in session
-        PartyMember checkMember = partyMemberDao.getByMember(actualMember); //gets partyMember associated with logged in member (can only be one)
+        PartyMember checkMember = partyMemberDao.getByMemberAndParty(actualMember, party); //gets partyMember associated with logged in member & party (can only be one)
 
         //If logged in Member is not the member associated with the PartyMember, redirect to profile page
-        if(checkMember == null || partyMember.getId() != checkMember.getId()){
+        if(checkMember == null){
             return "redirect:/profile";
         }
 
@@ -126,7 +126,7 @@ public class PartyMembersController {
 
         Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); //get member in session
         Member actualMember = memberDao.getById(userInSession.getId()); //get member info associated with member in session
-        PartyMember checkMember = partyMemberDao.getByMember(actualMember); //gets partyMember associated with logged in member (can only be one)
+        PartyMember checkMember = partyMemberDao.getByMemberAndParty(actualMember, party); //gets partyMember associated with logged in member & party (can only be one)
 
         //If logged in Member is not the member associated with the PartyMember, redirect to profile page
         if(checkMember == null || partyMember.getId() != checkMember.getId()){

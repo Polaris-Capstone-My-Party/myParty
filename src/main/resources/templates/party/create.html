@@ -51,7 +51,11 @@
 
             <div class="form-group">
                 <label for="state">State:</label>
-                <input id="state" name="state" type="text"/>
+                <select id="state" name="state">
+                    <div th:each="state : ${states}">
+                        <option value="state" th:text="${state}"></option>
+                    </div>
+                </select>
             </div>
 
             <div class="form-group">
