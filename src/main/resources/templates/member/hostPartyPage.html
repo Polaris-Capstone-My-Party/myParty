@@ -5,34 +5,18 @@
 
 
 <head>
-
-    <meta charset="UTF-8">
-    <title layout:fragment="title">My Party | Host View</title>
     <!--  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>-->
-
   <meta charset="UTF-8">
   <title layout:fragment="title">My Party | Host View</title>
-
-
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet'/>
 </head>
 
 <section layout:fragment="content">
 
-    <a href="/profile" class="btn btn-primary">Return to Profile</a>
-    <div class="card text-center">
-        <div class="card-header">
-            Featured
-        </div>
-        <div class="card-body">
-            <h1 class="card-title" th:text="${party.title}"></h1>
-            <h3 class="card-text" th:text="${party.description}"></h3>
-        </div>
-
   <a href="/profile" class="btn btn-primary">Return to Profile</a>
 
-<!--  Show Party Info-->
+  <!--  Show Party Info-->
   <div class="card text-center">
     <div class="card-header">
       Featured
@@ -49,27 +33,13 @@
             <div class="p-2 bd-highlight" th:text="'Start Time: ' + ${party.startTime}"></div>
             <div class="p-2 bd-highlight" th:text="'End Time: ' + ${party.endTime}"></div>
             <div class="p-2 bd-highlight"
-                 th:text="${party.location.addressOne} + ', ' + ${party.location.city}+ ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}"
-                 id="fullAddress"></div>
+                 th:text="${party.location.addressOne} + ', ' + ${party.location.city}+ ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}" id="fullAddress"></div>
 
             <!--TODO: Add logic for show addressTwo if not null-->
             <div id='map' style='width: 100%; height: 40vh'></div>
         </div>
     </div>
-
-
-  <div class="d-flex justify-content-center">
-    <div class="d-flex flex-column bd-highlight mb-3">
-      <div class="p-2 bd-highlight" th:text="'Start Time: ' + ${party.startTime}"></div>
-      <div class="p-2 bd-highlight" th:text="'End Time: ' + ${party.endTime}"></div>
-      <div class="p-2 bd-highlight" th:text="'Location: ' + ${party.location.addressOne} + ', ' + ${party.location.city}+ ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}"></div>
-    </div>
   </div>
-      <!--TODO: Add logic for show addressTwo if not null-->
-  <div>
-  <div id='map' style='width: 100%; height: 40vh'></div>
-  </div>
-
 
     <div class="p-2 bd-highlight">
         <div class="container">
@@ -129,6 +99,7 @@
     <!--      </div>-->
     <!--    </div>-->
     <!--  </div>-->
+
     <div th:each="partyMember : ${partyMembers}">
         <div th:text="'Name: ' + ${partyMember.key.member.firstName} + ' ' + ${partyMember.key.member.lastName}"></div>
         <div th:text="'Email: ' + ${partyMember.key.member.email}"></div>
@@ -184,47 +155,16 @@
                     </form>
                     <input type="submit" class="btn btn-info" value="Send Invites!"></div>
 
-
             </div>
         </div>
-
-        <!--Generate Map Information -->
-        <script src="/keys.js"></script>
-        <script src="/js/jquery.js"></script>
-        <script src="/js/mapbox-geocoder-utils.js"></script>
-        <script>
-            const address = $("#fullAddress").html();
-            console.log(address);
-            geocode(address, mapboxApiKey).then(function (result) {
-                mapboxgl.accessToken = mapboxApiKey;
-
-                var map = new mapboxgl.Map({
-                    container: 'map',
-                    style: 'mapbox://styles/mapbox/streets-v9',
-                    zoom: 15,
-                    center: (result)
-                });
-
-                var marker = new mapboxgl.Marker({
-                    draggable: true
-                }).setLngLat(result).addTo(map);
-
-            });
-        </script>
 
         <div>
             <a th:href="@{|/parties/edit/${party.id}|}" class="btn btn-primary">Edit Party</a>
             <a th:replace="partials/modalsUpdates :: modal"></a>
         </div>
     </div>
-    <div th:replace="partials/scripts :: scripts"></div>
 
-          </form>
-          <input type="submit" class="btn btn-info" value="Send Invites!">
-        </div>
-      </div>
-    </div>
-  </div>
+    <div th:replace="partials/scripts :: scripts"></div>
 
   <!--Generate Map Information -->
   <script src="/keys.js"></script>
@@ -249,15 +189,6 @@
 
     });
   </script>
-
-    <div>
-      <a th:href="@{|/parties/edit/${party.id}|}" class="btn btn-primary">Edit Party</a>
-      <a th:replace="partials/modalsUpdates :: modal"></a>
-    </div>
-
-  <div th:replace="partials/scripts :: scripts"></div>
-
-
 
 </section>
 </html>

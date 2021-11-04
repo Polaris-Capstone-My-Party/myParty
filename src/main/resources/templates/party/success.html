@@ -1,22 +1,19 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html" layout:decorate="~{layout}">
 
 <head>
+    <meta charset="UTF-8">
     <link href="/success.css" rel="stylesheet"/>
+    <title layout:fragment="title">myParty | Party Created!</title>
 
     <script src="https://code.jquery.com/jquery-2.2.4.min.js"
             integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
 
-
 </head>
 
 <body id="success" style="height: 100vh; justify-content: center; justify-items: center; ">
-
-
-<title layout:fragment="title">myParty | Party Created!</title>
-
 
 <section layout:fragment="content">
 
