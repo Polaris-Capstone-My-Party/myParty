@@ -1,12 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/html"
-      xmlns="http://www.w3.org/1999/html"
-      layout:decorate="~{layout}">
+
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/html" layout:decorate="~{layout}">
+
+
 <head>
   <meta charset="UTF-8">
   <title layout:fragment="title">My Party | Host View</title>
   <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+  <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
 </head>
+
 <section layout:fragment="content">
   <a href="/profile" class="btn btn-primary">Return to Profile</a>
   <div class="card text-center">
@@ -24,7 +29,9 @@
       <div class="p-2 bd-highlight" th:text="'Start Time: ' + ${party.startTime}"></div>
       <div class="p-2 bd-highlight" th:text="'End Time: ' + ${party.endTime}"></div>
       <div class="p-2 bd-highlight" th:text="'Location: ' + ${party.location.addressOne} + ', ' + ${party.location.city}+ ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}"></div>
+
       <!--TODO: Add logic for show addressTwo if not null-->
+      <div id='map' style='width: 100%; height: 40vh'></div>
     </div>
   </div>
 </div>
@@ -103,64 +110,6 @@
   </div>
   </div>
 
-
-<!--        <div th:each="itemBringer : ${partyMember.value}">-->
-<!--          <th:block th:if="${itemBringer.quantity != 0}">-->
-<!--            <div th:text="'Item Bringing: ' + ${itemBringer.partyItem.item.name}"></div>-->
-<!--            <div th:text="'Quantity Bringing: ' + ${itemBringer.quantity}"></div>-->
-<!--          </th:block>-->
-<!--        </div>-->
-<!--        <br>-->
-<!--      </div>-->
-
-<!--      <div>-->
-<!--        <h2>Send Invites</h2>-->
-
-<!--        <form th:action="@{|/parties/${party.urlKey}|}" th:method="post">-->
-<!--          <div id="additionalEmails">-->
-<!--            <div class="form-group">-->
-<!--              <label for="email[]">Email Address:</label>-->
-<!--              <input type="email" name="email[]" id="email[]">-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <button id="addEmailButton">Add Another Email</button>-->
-<!--          <input type="submit" class="btn btn-info" value="Send Invites!">-->
-<!--        </form>-->
-
-<!--      <div>-->
-<!--        <h2>Send Invites</h2>-->
-
-<!--&lt;!&ndash;        <form th:action="@{|/parties/${party.urlKey}|}" th:method="post">&ndash;&gt;-->
-<!--&lt;!&ndash;          <div id="additionalEmails">&ndash;&gt;-->
-<!--&lt;!&ndash;            <div class="form-group">&ndash;&gt;-->
-<!--&lt;!&ndash;              <label for="email[]">Email Address:</label>&ndash;&gt;-->
-<!--&lt;!&ndash;              <input type="email" name="email[]" id="email[]">&ndash;&gt;-->
-<!--&lt;!&ndash;            </div>&ndash;&gt;-->
-<!--&lt;!&ndash;          </div>&ndash;&gt;-->
-<!--&lt;!&ndash;          <button id="addEmailButton">Add Another Email</button>&ndash;&gt;-->
-<!--&lt;!&ndash;          <input type="submit" class="btn btn-info" value="Send Invites!">&ndash;&gt;-->
-<!--&lt;!&ndash;        </form>&ndash;&gt;-->
-
-<!--        <script>-->
-<!--          window.onload = (function() {-->
-<!--            const additionalEmail = document.getElementById('addEmailButton');-->
-
-<!--            const emailForm = `<div class="form-group">-->
-<!--                  <label for="email[]">Email Address:</label>-->
-<!--                  <input type="email" name="email[]" id="email[]">-->
-<!--                </div>`-->
-
-<!--            additionalEmail.addEventListener('click', function(event) {-->
-<!--              event.preventDefault();-->
-
-<!--              const yeahBaby = document.getElementById('additionalEmails');-->
-<!--              let newEmail = document.createElement("div");-->
-<!--              newEmail.innerHTML = emailForm;-->
-<!--              yeahBaby.appendChild(newEmail);-->
-<!--            });-->
-<!--          })-->
-<!--        </script>-->
-
         <div>
           <a th:href="@{|/parties/edit/${party.id}|}" class="btn btn-primary">Edit Party</a>
           <a th:replace="partials/modalsUpdates :: modal"></a>
@@ -189,6 +138,7 @@
                   <input type="email" name="email[]" id="email[]">
                 </div>`
 
+
               additionalEmail.addEventListener('click', function(event) {
                 event.preventDefault();
 
@@ -202,19 +152,42 @@
 
           </form>
           <input type="submit" class="btn btn-info" value="Send Invites!">        </div>
+        
+      <div>
+        <a th:href="@{|/parties/edit/${party.id}|}" class="btn btn-primary">Edit Party</a>
+        <a th:replace="partials/modalsUpdates :: modal"></a>
       </div>
-    </div>
-    <div class="col-sm-6">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Special title treatment</h5>
-          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
-      </div>
-    </div>
-  <div th:replace="partials/scripts :: scripts"></div>
+       </div
 
-</div>
+
+    <div th:replace="partials/scripts :: scripts"></div>
+
+  </div>
+  </div>
+
+  <!--Generate Map Information -->
+  <script src="/keys.js"></script>
+  <script src="/js/jquery.js"></script>
+  <script src="/js/mapbox-geocoder-utils.js"></script>
+  <script>
+    const address = $("#fullAddress").html();
+
+    geocode(address, mapboxApiKey).then(function (result) {
+      mapboxgl.accessToken = mapboxApiKey;
+
+      var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v9',
+        zoom: 15,
+        center: (result)
+      });
+
+      var marker = new mapboxgl.Marker({
+        draggable: true
+      }).setLngLat(result).addTo(map);
+
+    });
+  </script>
+
 </section>
 </html>
