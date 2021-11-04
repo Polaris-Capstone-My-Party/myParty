@@ -77,7 +77,8 @@ public class PartyMembersController {
         System.out.println(partyItemsDetails);
 
         String rsvpDetails =
-                "<h2>You are RSVP'd to " + party.getTitle() + "!</h2>, " +
+                "<h2 style=\"color: red\">You are RSVP'd to " + party.getTitle() + "!</h2>, " +
+                        "<img src=\"https://mypartypolaris.xyz/img/MyParty.png\" >" +
                         "<br><i>Here are the details: </i><br>"
                         + "Description: " + party.getDescription() + "<br>"
                         + "Start Time: " + party.getStartTime() + "<br>"
