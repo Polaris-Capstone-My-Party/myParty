@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html">
 
+<head>
+    <link href="../static/success.css" th:href="@{/static/success.css}" rel="stylesheet"/>
+
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
+
+</head>
+
 <body id="success" style="height: 100vh; justify-content: center; justify-items: center; ">
 
-<script src="https://code.jquery.com/jquery-2.2.4.min.js"
-        integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
 
 <title layout:fragment="title">myParty | Party Created!</title>
 
@@ -15,7 +21,6 @@
 
     <a href="/profile">Back to Profile</a>
 
-    <div class="js-container"></div>
 
     <h1 id="partymessage">Let's Get This Party Started!!!</h1>
 
@@ -45,12 +50,12 @@
         <input type="submit" class="btn btn-info" value="Send Invites!">
     </form>
 
-    // Confetti Animation
+    <!--     Confetti Animation-->
     <script>
         party.confetti(document.getElementById("partymessage"))
     </script>
 
-    // Copy url button
+    <!--     Copy url button-->
     <script>
         function myFunction() {
             var copyText = document.getElementById("customUrl");
