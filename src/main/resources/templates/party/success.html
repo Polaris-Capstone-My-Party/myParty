@@ -2,12 +2,13 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html">
 
 <head>
-    <link  href="/success.css" rel="stylesheet"/>
+    <link href="/success.css" rel="stylesheet"/>
 
     <script src="https://code.jquery.com/jquery-2.2.4.min.js"
             integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
+
 
 </head>
 
@@ -23,32 +24,46 @@
 
 
     <h1 id="partymessage">Let's Get This Party Started!!!</h1>
+    <form>
 
-    <h2 th:text="${party.title} + ' has been successfully created!'"></h2>
+        <h2 th:text="${party.title} + ' has been successfully created!'"></h2>
 
-    <h3>Now let's invite people!</h3>
+        <h3>Now let's invite people!</h3>
+        </div>
+        <hr/>
+    </form>
+
 
     <!--TODO: Need to change the above back to POST method, send back to profile and add a controller
                 once email functionality is completed to send emails too-->
-
-    <label for="customUrl">Custom Party Url:</label>
-    <input type="text" id="customUrl" th:value="'http://localhost:8080/rsvp/' + ${party.urlKey}"/>
-    <button onclick="myFunction()">Copy url</button>
-
-
-    <!--        <label for="emailAddress">Email Addresses</label>-->
-    <form th:action="@{|/parties/${party.urlKey}|}" th:method="post">
-
-
-        <div id="additionalEmails">
-            <div class="form-group">
-                <label for="email[]">Email Address:</label>
-                <input type="email" name="email[]" id="email[]">
-            </div>
+    <form style="display: flex;
+    flex-direction: column;
+    width: 50%;
+    align-content: center;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin: auto;
+">
+        <label for="customUrl">Custom Party Url:</label>
+        <input type="text" id="customUrl" th:value="'http://localhost:8080/rsvp/' + ${party.urlKey}"/>
+        <button onclick="myFunction()">Copy url</button>
         </div>
-        <button id="addEmailButton">Add Another Email</button>
-        <input type="submit" class="btn btn-info" value="Send Invites!">
+        <!--        <label for="emailAddress">Email Addresses</label>-->
+        <form th:action="@{|/parties/${party.urlKey}|}" th:method="post">
+
+
+            <div id="additionalEmails">
+                <div class="form-group">
+                    <label for="email[]">Email Address:</label>
+                    <input type="email" name="email[]" id="email[]">
+                </div>
+            </div>
+            <button id="addEmailButton">Add Another Email</button>
+            <input type="submit" class="btn btn-info" value="Send Invites!">
+        </form>
     </form>
+
 
     <!--     Confetti Animation-->
     <script>
@@ -94,6 +109,7 @@
         })
     </script>
 </section>
+
 </body>
 <footer><p layout:fragment="custom-footer">This is actually working</p></footer>
 
