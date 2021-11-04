@@ -72,22 +72,22 @@ public class PartyMembersController {
             itemBringer.setPartyItem(partyItem); // sets partyItem object
             itemBringerDao.save(itemBringer); // saves item bringer
 
-            partyItemsDetails += "Item: " + partyItem.getItem().getName() + " Quantity: " + quantities[i] + "\n";
+            partyItemsDetails += "Item: " + partyItem.getItem().getName() + " Quantity: " + quantities[i] + "<br>";
         }
         System.out.println(partyItemsDetails);
 
         String rsvpDetails =
                 "<h2 style=\"color: red\">You are RSVP'd to " + party.getTitle() + "!</h2>, " +
-                        "<img src=\"https://mypartypolaris.xyz/img/MyParty.png\" >" +
-                        "<br><i>Here are the details: </i><br>"
+                        "<img src=\"http://localhost:8080/img/MyParty.png\" >" +
+                        "<br><br><i>Here are the details: </i><br>"
                         + "Description: " + party.getDescription() + "<br>"
                         + "Start Time: " + party.getStartTime() + "<br>"
                         + "End Time: " + party.getEndTime() + "<br>"
-                        + "Location: <br> " + party.getLocation().getAddressOne() + "\n"
-                        + party.getLocation().getAddressTwo() + "\n"
-                        + party.getLocation().getCity() + " " + party.getLocation().getState() + " " + party.getLocation().getZipcode() + "\n"
-                        + "\nYou have signed up to bring the following: \n" + partyItemsDetails + "\n"
-                        + "Additional Guests: " + partyMember.getAdditionalGuests() + "\n"
+                        + "Location: <br> " + party.getLocation().getAddressOne() + "<br>"
+                        + party.getLocation().getAddressTwo() + "<br>"
+                        + party.getLocation().getCity() + " " + party.getLocation().getState() + " " + party.getLocation().getZipcode() + "<br>"
+                        + "<br>You have signed up to bring the following: <br>" + partyItemsDetails + "<br>"
+                        + "Additional Guests: " + partyMember.getAdditionalGuests() + "<br>"
                 + "View or edit your RSVP: " + "<a href=\"http://localhost:8080/rsvp/" + party.getUrlKey() + "/" + partyMember1.getPartyMemberKey() + "/view" + "\">here</a>";
 
 

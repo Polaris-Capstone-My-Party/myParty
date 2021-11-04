@@ -71,13 +71,14 @@ public class PartyController {
         //TODO: fix location to show cleaner
         String partyDetails =
                 "<h2>Your party " + party.getTitle() + " has been created.</h2>" +
-                        " <br><i>Here are the details: </i><br>"
+                        "<img src=\"http://localhost:8080/img/MyParty.png\" >" +
+                        " <br><br><i>Here are the details: </i><br>"
                         + "Description: " + party.getDescription() + "<br>"
                         + "Start Time: " + party.getStartTime() + "<br>"
                         + "End Time: " + party.getEndTime() + "<br>"
-                        + "Location: <br>" + party.getLocation().getAddressOne() + "\n"
-                        + party.getLocation().getAddressTwo() + "\n"
-                        + party.getLocation().getCity() + " " +party.getLocation().getState() + " " + party.getLocation().getZipcode() + "\n"
+                        + "Location: <br>" + party.getLocation().getAddressOne() + "<br>"
+                        + party.getLocation().getAddressTwo() + "<br>"
+                        + party.getLocation().getCity() + " " +party.getLocation().getState() + " " + party.getLocation().getZipcode() + "<br>"
                 + "Here is your custom party URL: " + party.getUrlKey() ;
 
         emailService.partyCreatedConfirmation(newCreatedParty, newCreatedParty.getTitle() + " has been created", partyDetails);
