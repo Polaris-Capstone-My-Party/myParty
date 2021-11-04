@@ -33,7 +33,6 @@ public class PartyController {
     @GetMapping("/parties/create")
     public String showCreatePartyForm(Model model) {
         model.addAttribute("party", new Party());
-        model.addAttribute("states", generateStates());
         return "party/create";
     }
 
