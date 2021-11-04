@@ -69,9 +69,9 @@ public class GuestController {
             Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); //get member in session
             Member actualMember = memberDao.getById(userInSession.getId()); //get member info associated with member in session
 
-            PartyMember checkMember = partyMemberDao.getByMember(actualMember);
+            PartyMember checkMember = partyMemberDao.getByMemberAndParty(actualMember, party);
 
-            //check if member already has partyMember associated with account
+            //check if member already has partyMember associated with this party
             if(checkMember != null){
                 return "redirect:/rsvp/" + urlKey + "/member/" + checkMember.getPartyMemberKey() + "/view";
             }

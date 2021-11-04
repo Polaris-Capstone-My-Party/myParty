@@ -43,6 +43,10 @@ public class Member {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
     private List<Party> party;
 
+    @OneToMany(mappedBy="member",
+            cascade= {CascadeType.REMOVE})
+    @Getter @Setter private List<PartyMember> partyMembers;
+
     public Member(String username, String email, String password, List<Party> party) {
         this.username = username;
         this.email = email;
@@ -63,6 +67,5 @@ public class Member {
         username = copy.username;
         password = copy.password;
     }
-
 
 }
