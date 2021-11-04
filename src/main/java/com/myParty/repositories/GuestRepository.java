@@ -8,4 +8,5 @@ import java.util.List;
 public interface GuestRepository extends JpaRepository<Guest, Long> {
     Guest getByGuestKey(String guestKey);
     List<Guest> getByParty(Party party);
+
 }
