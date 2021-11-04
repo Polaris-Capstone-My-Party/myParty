@@ -28,7 +28,7 @@
     <div class="d-flex flex-column bd-highlight mb-3">
       <div class="p-2 bd-highlight" th:text="'Start Time: ' + ${party.startTime}"></div>
       <div class="p-2 bd-highlight" th:text="'End Time: ' + ${party.endTime}"></div>
-      <div class="p-2 bd-highlight" th:text="'Location: ' + ${party.location.addressOne} + ', ' + ${party.location.city}+ ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}"></div>
+      <div class="p-2 bd-highlight" th:text="${party.location.addressOne} + ', ' + ${party.location.city}+ ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}" id="fulladdress"></div>
 
       <!--TODO: Add logic for show addressTwo if not null-->
       <div id='map' style='width: 100%; height: 40vh'></div>
