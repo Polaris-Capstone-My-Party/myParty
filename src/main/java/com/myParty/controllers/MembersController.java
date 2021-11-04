@@ -68,7 +68,10 @@ public class MembersController {
     public String memberProfile(Model model) {
         Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member memberToDisplay = memberDao.getById(userInSession.getId());
+        List<PartyMember> partyMembers = memberToDisplay.getPartyMembers();
+
         model.addAttribute("owner", memberToDisplay);
+        model.addAttribute("partyMembers", partyMembers);
         return "member/personalProfile";
     }
 
