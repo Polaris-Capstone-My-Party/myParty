@@ -23,7 +23,6 @@
 
             <div th:replace="partials/scripts :: scripts"></div>
 
-
             <h5>Parties Created</h5>
             <!--Display Parties Created -->
             <div class="justify-content" th:each="party : ${owner.party}">
@@ -41,7 +40,6 @@
                 <div class="card text-center" style="width: 18rem;">
                     <div class="card-body">
                         <h5><a th:text="${partyMember.party.title}" class="card-title" th:href="@{|/rsvp/${partyMember.party.urlKey}/member/${partyMember.partyMemberKey}/view|}"></a></h5>
-                        <!--                        @{|/rsvp/${partyMember.party.urlKey}/member/${partyMember.partyMemberKey}/view|}-->
                         <p th:text="${partyMember.party.description}" class="card-text"></p>
                     </div>
                 </div>
