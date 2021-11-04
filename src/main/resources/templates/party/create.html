@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
+      layout:decorate="~{layout}">
 
 <title layout:fragment="title" >myParty | Create</title>
 
@@ -21,7 +22,7 @@
 
             <div class="form-group">
                 <label for="description">Description:</label>
-                <input id="description" th:field="*{description}"/>
+                <textarea id="description" th:field="*{description}" type="text"/></textarea>
             </div>
 
             <div class="form-group">
@@ -58,6 +59,7 @@
                 <label for="zipcode">Zipcode:</label>
                 <input id="zipcode" name="zipcode" type="number"/>
             </div>
+
             <div id="additionalItems">
                 <h1> Add Items</h1>
                 <div class="form-group">

@@ -160,8 +160,8 @@ public class MembersController {
 
     @GetMapping("/members/delete/{id}")
     public String deleteMember(@PathVariable("id") long id) {
-        memberDao.deleteById(id);
         logout();
+        memberDao.deleteById(id);
         return "redirect:/";
     }
 

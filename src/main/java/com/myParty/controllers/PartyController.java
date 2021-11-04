@@ -128,19 +128,11 @@ public class PartyController {
     @GetMapping("/parties/edit/{id}")
     public String showEditPartyForm(@PathVariable long id, String urlKey, Model model) {
         Party partyToEdit = partyDao.getById(id);
-        //TODO: Refactor later
-        model.addAttribute("id", partyToEdit.getId());
-        model.addAttribute("party", partyToEdit.getUrlKey());
-        model.addAttribute("title", partyToEdit.getTitle());
-        model.addAttribute("description", partyToEdit.getDescription());
-        model.addAttribute("startTime", partyToEdit.getStartTime().toLocalDateTime());
-        model.addAttribute("endTime", partyToEdit.getEndTime().toLocalDateTime());
-        model.addAttribute("addressOne", partyToEdit.getLocation().getAddressOne());
-        model.addAttribute("addressTwo", partyToEdit.getLocation().getAddressTwo());
-        model.addAttribute("city", partyToEdit.getLocation().getCity());
-        model.addAttribute("state", partyToEdit.getLocation().getState());
-        model.addAttribute("zipcode", partyToEdit.getLocation().getZipcode());
 
+        List<PartyItem> partyItems = partyItemDao.getByParty(partyToEdit); //get partyItems associated with party
+
+        model.addAttribute("partyItems", partyItems);
+        model.addAttribute("party", partyToEdit);
         return "party/edit";
     }
 
@@ -156,7 +148,7 @@ public class PartyController {
             @RequestParam(name = "addressTwo") String addressTwo,
             @RequestParam(name = "city") String city,
             @RequestParam(name = "state") String state,
-            @RequestParam(name = "zipcode") String zipcode) throws ParseException {
+            @RequestParam(name = "zipcode") String zipcode){
 
         //get party object
         Party partyToUpdate = partyDao.getById(id);

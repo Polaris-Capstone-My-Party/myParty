@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
+      layout:decorate="~{layout}">
 
 <title layout:fragment="title">myParty | Edit Party</title>
 
@@ -9,66 +10,110 @@
             <h1>Edit Party</h1>
         </div>
 
-        <form th:action="@{|/parties/edit/${id}|}" th:method="post">
+        <form th:action="@{|/parties/edit/${party.id}|}" th:method="post">
 
-            <div class="form-group">
-                <label for="title">Title:</label>
-                <input name="title" type="text" id="title" th:value="${title}"/>
-            </div>
+            <!--Edit Basic Party Information-->
+           <div>
+               <div class="form-group">
+                   <label for="title">Title:</label>
+                   <input name="title" id="title" th:value="${party.title}"/>
+               </div>
 
-            <div class="form-group">
-                <label for="description">Description:</label>
-                <input name="description" type="text" id="description" th:value="${description}"/>
-            </div>
+               <div class="form-group">
+                   <label for="description">Description:</label>
+                   <textarea name="description" type="text" id="description" th:value="${party.description}"/></textarea>
+               </div>
 
-            <div class="form-group">
-                <label for="startTime">Start Time:</label>
-                <input name="startTime" id="startTime" type="datetime-local" th:value="${startTime}"/>
-            </div>
+               <div class="form-group">
+                   <label for="startTime">Start Time:</label>
+                   <input name="startTime" id="startTime" type="datetime-local" th:value="${party.startTime.toLocalDateTime()}"/>
+               </div>
 
-            <div class="form-group">
-                <label for="endTime">End Time:</label>
-                <input name="endTime" id="endTime" type="datetime-local" th:value="${endTime}"/>
-            </div>
+               <div class="form-group">
+                   <label for="endTime">End Time:</label>
+                   <input name="endTime" id="endTime" type="datetime-local" th:value="${party.endTime.toLocalDateTime()}"/>
+               </div>
 
-            <div class="form-group">
-                <label for="addressOne">Street Address:</label>
-                <input name="addressOne" id="addressOne" type="text" th:value="${addressOne}"/>
-            </div>
+               <div class="form-group">
+                   <label for="addressOne">Street Address:</label>
+                   <input name="addressOne" id="addressOne" type="text" th:value="${party.location.addressOne}"/>
+               </div>
 
-            <div class="form-group">
-                <label for="addressTwo">Apt/Ste/Floor:</label>
-                <input name="addressTwo" id="addressTwo" type="text" th:value="${addressTwo}"/>
-            </div>
+               <div class="form-group">
+                   <label for="addressTwo">Apt/Ste/Floor:</label>
+                   <input name="addressTwo" id="addressTwo" type="text" th:value="${party.location.addressTwo}"/>
+               </div>
 
-            <div class="form-group">
-                <label for="city">City:</label>
-                <input name="city" id="city" type="text" th:value="${city}"/>
-            </div>
+               <div class="form-group">
+                   <label for="city">City:</label>
+                   <input name="city" id="city" type="text" th:value="${party.location.city}"/>
+               </div>
 
-            <div class="form-group">
-                <label for="state">State:</label>
-                <input name="state" id="state" type="text" th:value="${state}"/>
-            </div>
+               <div class="form-group">
+                   <label for="state">State:</label>
+                   <input name="state" id="state" type="text" th:value="${party.location.state}"/>
+               </div>
 
-            <div class="form-group">
-                <label for="zipcode">Zipcode:</label>
-                <input name="zipcode" id="zipcode" type="number" th:value="${zipcode}"/>
+               <div class="form-group">
+                   <label for="zipcode">Zipcode:</label>
+                   <input name="zipcode" id="zipcode" type="number" th:value="${party.location.zipcode}"/>
+               </div>
+           </div>
+
+
+            <!--Edit Party Item Information-->
+            <div id="addMoreItems">
+                <h3>Items Requested: </h3>
+                <div th:each="partyItem : ${partyItems}">
+                    <div th:text="${partyItem.item.name}"></div>
+                    <div th:text="${partyItem.quantityRequired}"></div>
+                    <input type="hidden" name="partyItem[]" th:value="${partyItem.id}">
+                    <input type="hidden" name="quantityRequired[]" th:value="${partyItem.quantityRequired}">
+                </div>
             </div>
+            <button id="addItemButton">Add Another Item</button>
 
             <input type="submit"/>
         </form>
     </div>
 
+    <script>
+        window.onload = (function() {
+            const additionalItem = document.getElementById('addItemButton');
+
+            const itemForm = `<div class="form-group">
+                  <label for="name[]">Item Name:</label>
+                  <input type="text" name="name[]" id="name[]">
+
+                  <label for="quantity[]">Quantity:</label>
+                  <input type="text" name="quantity[]" id="quantity[]">
+                </div>`
+
+            additionalItem.addEventListener('click', function(event) {
+                event.preventDefault();
+
+                const testyBoi = document.getElementById('addMoreItems');
+                let newItem = document.createElement("div");
+                newItem.innerHTML = itemForm;
+                testyBoi.appendChild(newItem);
+            });
+        })
+    </script>
+
+
+
+
+
 </section>
 
 <footer><p layout:fragment="custom-footer">This is actually working</p></footer>
-<script>(function () {
+<script>
+    (function () {
     var date = new Date().toISOString().substring(0, 10),
         field = document.querySelector('#startTime');
     field.value = date;
     console.log(field.value);
 
-})()
+    })()
 </script>
 </html>
