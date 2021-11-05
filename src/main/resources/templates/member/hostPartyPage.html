@@ -39,17 +39,14 @@
 ">
                     <label for="customUrl">Custom Party Url:</label>
                     <input type="text" id="customUrl" th:value="'http://localhost:8080/rsvp/' + ${party.urlKey}"/>
-                    <button onclick="myFunction()">Copy url</button>
+                    <button type="button" onclick="myFunction()">Copy url</button>
                 </form>
             </div>
             <!--     Copy url button-->
             <script>
                 function myFunction() {
-                    var copyText = document.getElementById("customUrl");
-                    copyText.select();
-                    copyText.setSelectionRange(0, 99999);
+                    var copyText = document.getElementById("customUrl").value;
                     navigator.clipboard.writeText(copyText.value);
-
                     var tooltip = document.getElementById("myTooltip");
                     tooltip.innerHTML = "Copied: " + copyText.value;
                 }
