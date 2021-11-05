@@ -68,20 +68,7 @@ public class PartyController {
         party.setLocation(locationInDb);
         Party newCreatedParty = partyDao.save(party);
 
-        //TODO: fix location to show cleaner
-        String partyDetails =
-                "<h2>Your party " + party.getTitle() + " has been created.</h2>" +
-                        "<img src=\"http://localhost:8080/img/MyParty.png\" >" +
-                        " <br><br><i>Here are the details: </i><br>"
-                        + "Description: " + party.getDescription() + "<br>"
-                        + "Start Time: " + party.getStartTime() + "<br>"
-                        + "End Time: " + party.getEndTime() + "<br>"
-                        + "Location: <br>" + party.getLocation().getAddressOne() + "<br>"
-                        + party.getLocation().getAddressTwo() + "<br>"
-                        + party.getLocation().getCity() + " " +party.getLocation().getState() + " " + party.getLocation().getZipcode() + "<br>"
-                + "Here is your custom party URL: " + party.getUrlKey() ;
-
-        emailService.partyCreatedConfirmation(newCreatedParty, newCreatedParty.getTitle() + " has been created", partyDetails);
+        emailService.partyCreatedConfirmation(party);
 
         //Creates and saves party Items
         for (int i = 0; i < names.length; i++) {
@@ -114,26 +101,8 @@ public class PartyController {
     public String successParty(@PathVariable String urlKey, @RequestParam(name = "email[]") String[] emailAddresses) throws MessagingException {
         Party party = partyDao.getByUrlKey(urlKey);
 
-        //TODO: fix location to be cleaner
-        String partyDetails =
-                "<h2>You're Invited to " + party.getTitle() + " by " + party.getOwner().getFirstName() + "</h2> " +
-                        "<br><i>Here are the details: </i><br>"
-                        + "Description: " + party.getDescription() + "<br>"
-                        + "Start Time: " + party.getStartTime() + "<br>"
-                        + "End Time: " + party.getEndTime() + "<br>"
-                        + "Location: " + party.getLocation().getAddressOne() + "<br>"
-                        + party.getLocation().getAddressTwo() + "<br>"
-                        + party.getLocation().getCity() + " " + party.getLocation().getState() + " " + party.getLocation().getZipcode() + "<br>"
-                        + "RSVP " + "<a href=\"http://localhost:8080/rsvp/" + party.getUrlKey() + "\">here</a>";
+            emailService.sendInvites(party, emailAddresses);
 
-        //TODO: fix link for party URL to make dynamic with new domain name
-
-        for (int i = 0; i < emailAddresses.length; i++) {
-            System.out.println(emailAddresses[i]);
-
-            emailService.sendInvites(party.getTitle(), emailAddresses[i], partyDetails);
-
-        }
         return "redirect:/profile";
     }
 

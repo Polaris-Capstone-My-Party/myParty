@@ -51,13 +51,11 @@ public class ResetPasswordController {
     @PostMapping("/member/resetpassword")
     public String resetPasswordEmail(@RequestParam(name = "email") String memberEmail) throws MessagingException {
         Member member = memberDao.getByEmail(memberEmail);
-
         String token = UUID.randomUUID().toString();
         member.setResetToken(token);
         memberDao.save(member);
-        String resetDetails = "Click to reset your password" + "<a href=\"http://localhost:8080/member/resetpassword/" + token + "\">HERE</a>";
-//TODO: add domain + the token in an anchor tag
-        emailService.sendResetPassword(member, resetDetails);
+
+        emailService.sendResetPassword(member, token);
 
         return "redirect:/login";
     }
