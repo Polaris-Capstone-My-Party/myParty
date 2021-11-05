@@ -117,7 +117,6 @@ public class PartyController {
 
         for (int i = 0; i < emailAddresses.length; i++) {
             System.out.println(emailAddresses[i]);
-
             emailService.sendInvites(party.getTitle(), emailAddresses[i], partyDetails);
 
         }
@@ -148,7 +147,9 @@ public class PartyController {
             @RequestParam(name = "addressTwo") String addressTwo,
             @RequestParam(name = "city") String city,
             @RequestParam(name = "state") String state,
-            @RequestParam(name = "zipcode") String zipcode){
+            @RequestParam(name = "zipcode") String zipcode,
+            @RequestParam(name = "name[]") String[] names,
+            @RequestParam(name = "quantity[]") String[] quantities){
 
         //get party object
         Party partyToUpdate = partyDao.getById(id);
@@ -164,7 +165,22 @@ public class PartyController {
         partyToUpdate.setStartTime(partyToUpdate.makeTimestampFromString(startTime));
         partyToUpdate.setEndTime(partyToUpdate.makeTimestampFromString(endTime));
         partyToUpdate.setLocation(locationInDb);
-        partyDao.save(partyToUpdate);
+        Party partyUpdated = partyDao.save(partyToUpdate);
+
+        //Creates and saves new partyItems
+        for (int i = 0; i < names.length; i++) {
+            //TODO: If item is null don't add - Error Message
+            Item item = new Item(); //create new item instance //TODO: check if item already exists
+            item.setName(names[i]); //set item name from name[]
+            itemDao.save(item); //save item instance
+
+            //creates & Saves party item
+            PartyItem partyItem = new PartyItem();
+            partyItem.setItem(item);
+            partyItem.setQuantityRequired(Long.valueOf(quantities[i]));
+            partyItem.setParty(partyUpdated);
+            partyItemDao.save(partyItem);
+        }
 
         return "redirect:/profile";
     }
