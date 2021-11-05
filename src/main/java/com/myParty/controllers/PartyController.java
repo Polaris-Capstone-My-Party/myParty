@@ -8,11 +8,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
-import java.text.ParseException;
 import java.util.*;
 
 @Controller
@@ -31,7 +29,6 @@ public class PartyController {
         this.partyItemDao = partyItemDao;
         this.emailService = emailService;
     }
-
 
     //show form for creating a party
     @GetMapping("/parties/create")
@@ -87,20 +84,8 @@ public class PartyController {
 
         emailService.partyCreatedConfirmation(newCreatedParty, newCreatedParty.getTitle() + " has been created", partyDetails);
 
-        //Creates and saves party Items
-        for (int i = 0; i < names.length; i++) {
-            //TODO: If item is null don't add - Error Message
-            Item item = new Item(); //create new item instance //TODO: check if item already exists
-            item.setName(names[i]); //set item name from name[]
-            itemDao.save(item); //save item instance
-
-            //creates & Saves party item
-            PartyItem partyItem = new PartyItem();
-            partyItem.setItem(item);
-            partyItem.setQuantityRequired(Long.valueOf(quantities[i]));
-            partyItem.setParty(newCreatedParty);
-            partyItemDao.save(partyItem);
-        }
+        //Calls method to create & save new items
+        createItems(names, quantities, newCreatedParty);
 
         return "redirect:/parties/success/" + uuid;
     }
@@ -135,11 +120,10 @@ public class PartyController {
                         + "RSVP " + "<a href=\"http://localhost:8080/rsvp/" + party.getUrlKey() + "\">here</a>";
 
         //TODO: fix link for party URL to make dynamic with new domain name
-
+        //TODO: Make for : each loop
         for (int i = 0; i < emailAddresses.length; i++) {
             System.out.println(emailAddresses[i]);
             emailService.sendInvites(party.getTitle(), emailAddresses[i], partyDetails);
-
         }
         return "redirect:/profile";
     }
@@ -200,7 +184,21 @@ public class PartyController {
         partyToUpdate.setLocation(locationInDb);
         Party partyUpdated = partyDao.save(partyToUpdate);
 
-        //Creates and saves new partyItems
+        //Calls method to create & save new items
+        createItems(names, quantities, partyUpdated);
+
+        return "redirect:/member/" + partyUpdated.getUrlKey() + "/view";
+    }
+
+    //deletes party
+    @GetMapping("/parties/delete/{id}")
+    public String deleteParty(@PathVariable("id") long id) {
+        partyDao.deleteById(id);
+        return "redirect:/profile";
+    }
+
+    //Creates & saves new Items
+    public void createItems(String[] names, String[] quantities, Party party){
         for (int i = 0; i < names.length; i++) {
             //TODO: If item is null don't add - Error Message
             Item item = new Item(); //create new item instance //TODO: check if item already exists
@@ -211,20 +209,10 @@ public class PartyController {
             PartyItem partyItem = new PartyItem();
             partyItem.setItem(item);
             partyItem.setQuantityRequired(Long.valueOf(quantities[i]));
-            partyItem.setParty(partyUpdated);
+            partyItem.setParty(party);
             partyItemDao.save(partyItem);
         }
-
-        return "redirect:/profile";
     }
-
-    //deletes party
-    @GetMapping("/parties/delete/{id}")
-    public String deleteParty(@PathVariable("id") long id) {
-        partyDao.deleteById(id);
-        return "redirect:/profile";
-    }
-
 
     public List<String> generateStates(){
         List <String> states = new ArrayList<>();
