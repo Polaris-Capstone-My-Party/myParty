@@ -38,7 +38,7 @@
     margin: auto;
 ">
                     <label for="customUrl">Custom Party Url:</label>
-                    <input type="text" id="customUrl" th:value="'http://localhost:8080/rsvp/' + ${party.urlKey}"/>
+                    <input type="text" id="customUrl" th:value="${url}"/>
                     <button type="button" onclick="myFunction()">Copy url</button>
                 </form>
             </div>
@@ -46,7 +46,7 @@
             <script>
                 function myFunction() {
                     var copyText = document.getElementById("customUrl").value;
-                    navigator.clipboard.writeText(copyText.value);
+                    navigator.clipboard.writeText(copyText);
                     var tooltip = document.getElementById("myTooltip");
                     tooltip.innerHTML = "Copied: " + copyText.value;
                 }
