@@ -27,7 +27,6 @@
         <hr/>
     </form>
 
-
     <!--TODO: Need to change the above back to POST method, send back to profile and add a controller
                 once email functionality is completed to send emails too-->
     <form style="display: flex;
@@ -64,18 +63,13 @@
     <!--     Copy url button-->
     <script>
         function myFunction() {
-            var copyText = document.getElementById("customUrl").innerHTML;
-
-            copyText.select();
-            copyText.setSelectionRange(0, 99999);
+            var copyText = document.getElementById("customUrl").value;
             navigator.clipboard.writeText(copyText);
-
             var tooltip = document.getElementById("myTooltip");
             tooltip.innerHTML = "Copied: " + copyText;
         }
 
         function outFunc() {
-
             var tooltip = document.getElementById("myTooltip");
             tooltip.innerHTML = "Copy to clipboard";
         }
