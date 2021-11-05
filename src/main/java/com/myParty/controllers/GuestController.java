@@ -1,11 +1,16 @@
 package com.myParty.controllers;
 
+import com.myParty.BaseURL;
 import com.myParty.models.*;
 import com.myParty.repositories.*;
+import com.myParty.services.EmailService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Controller
@@ -17,14 +22,16 @@ public class GuestController {
     private final ItemBringerRepository itemBringerDAO;
     private final MemberRepository memberDao;
     private final PartyMemberRepository partyMemberDao;
+    private final EmailService emailService;
 
-    public GuestController(PartyRepository partyDAO, GuestRepository guestDAO, PartyItemRepository partyItemDAO, ItemBringerRepository itemBringerDAO, MemberRepository memberDao, PartyMemberRepository partyMemberDao){
+    public GuestController(PartyRepository partyDAO, GuestRepository guestDAO, PartyItemRepository partyItemDAO, ItemBringerRepository itemBringerDAO, MemberRepository memberDao, PartyMemberRepository partyMemberDao, EmailService emailService){
         this.partyDAO = partyDAO;
         this.guestDAO = guestDAO;
         this.partyItemDAO = partyItemDAO;
         this.itemBringerDAO = itemBringerDAO;
         this.memberDao = memberDao;
         this.partyMemberDao = partyMemberDao;
+        this.emailService = emailService;
     }
 
     //show RSVP form with corresponding Party & Party Item Information
@@ -64,9 +71,9 @@ public class GuestController {
             Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); //get member in session
             Member actualMember = memberDao.getById(userInSession.getId()); //get member info associated with member in session
 
-            PartyMember checkMember = partyMemberDao.getByMember(actualMember);
+            PartyMember checkMember = partyMemberDao.getByMemberAndParty(actualMember, party);
 
-            //check if member already has partyMember associated with account
+            //check if member already has partyMember associated with this party
             if(checkMember != null){
                 return "redirect:/rsvp/" + urlKey + "/member/" + checkMember.getPartyMemberKey() + "/view";
             }
@@ -85,7 +92,7 @@ public class GuestController {
     //saves Guest & ItemBringer information
     @PostMapping(path = "/rsvp/{urlKey}")
     public String createGuest(@PathVariable String urlKey, @ModelAttribute Guest guest, @RequestParam String rsvp,
-                              @RequestParam(name="partyItem[]") String[] myPartyItems, @RequestParam(name="quantity[]") String[] quantities){
+                              @RequestParam(name="partyItem[]") String[] myPartyItems, @RequestParam(name="quantity[]") String[] quantities) throws MessagingException {
 
         Party party = partyDAO.getByUrlKey(urlKey); //gets party
 
@@ -109,6 +116,7 @@ public class GuestController {
         guest.setParty(party); //sets Party linked to guest
         guest.setGuestKey(uuid.toString()); //https://www.baeldung.com/java-uui
         Guest guest1 =  guestDAO.save(guest); //save guest information & creates item to reference
+        String partyItemsDetails = "";
 
         for(int i = 0; i < myPartyItems.length; i++){ //goes through partyItems guest submitted
             ItemBringer itemBringer = new ItemBringer(); //new instance of Item Bringer
@@ -118,15 +126,34 @@ public class GuestController {
             itemBringer.setGuest(guest1); //sets guest object
             itemBringer.setPartyItem(partyItem); // sets partyItem object
             itemBringerDAO.save(itemBringer); // saves item bringer
+
+            partyItemsDetails += "\"Item: " + partyItem.getItem().getName() + "      Quantity: " + quantities[i] + "<br>";
         }
+        String rsvpDetails =
+                "<h2 style=\"color: red\">You are RSVP'd to " + party.getTitle() + "!</h2>, " +
+                        "<img src=\"http://localhost:8080/img/MyParty.png\" >" +
+                        "<br><br><i>Here are the details: </i><br>"
+                        + "Description: " + party.getDescription() + "<br>"
+                        + "Start Time: " + party.getStartTime() + "<br>"
+                        + "End Time: " + party.getEndTime() + "<br>"
+                        + "Location:<br>" + party.getLocation().getAddressOne() + "<br>"
+                        + party.getLocation().getAddressTwo() + "<br>"
+                        + party.getLocation().getCity() + " " + party.getLocation().getState() + " " + party.getLocation().getZipcode() + "<br>"
+                        + "<br>You have signed up to bring the following: <br>" + partyItemsDetails + "<br>"
+                        + "Additional Guests: " + guest.getAdditionalGuests() + "<br>"
+                        + "View or edit your RSVP: " + "<a href=\"http://localhost:8080/rsvp/" + party.getUrlKey() + "/" + guest1.getGuestKey() + "/view" + "\">here</a>";
+
+        emailService.sendRSVPConfirmGuest(guest, "Your RSVP to " + party.getTitle(), rsvpDetails);
+
         return  "redirect:/guests/successRsvp/" + urlKey + "/" + uuid;
     }
 
     //shows RSVPSuccess page
     @GetMapping(path = "/guests/successRsvp/{urlKey}/{guestKey}")
-    public String showRSVPSuccess(Model model, @PathVariable String guestKey, @PathVariable String urlKey){
-        model.addAttribute("urlKey", urlKey);
-        model.addAttribute("guestKey", guestKey);
+    public String showRSVPSuccess(Model model, @PathVariable String guestKey, @PathVariable String urlKey, HttpServletRequest request){
+
+        String url = BaseURL.getBaseURL(request) + "/rsvp/" + urlKey + "/" + guestKey + "/view";
+        model.addAttribute("url", url);
         return "guests/successRsvp";
     }
 

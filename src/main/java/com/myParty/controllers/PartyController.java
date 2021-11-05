@@ -1,5 +1,6 @@
 package com.myParty.controllers;
 
+import com.myParty.BaseURL;
 import com.myParty.models.*;
 import com.myParty.repositories.*;
 import com.myParty.services.EmailService;
@@ -7,8 +8,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.*;
 
@@ -28,6 +31,7 @@ public class PartyController {
         this.partyItemDao = partyItemDao;
         this.emailService = emailService;
     }
+
 
     //show form for creating a party
     @GetMapping("/parties/create")
@@ -70,11 +74,18 @@ public class PartyController {
 
         //TODO: fix location to show cleaner
         String partyDetails =
-                "<h2>Your party " + party.getTitle() + " has been created.</h2>, <br><i>Here are the details: </i><br>" + "Description: " + party.getDescription() + "<br>"
-                + "Start Time: " + party.getStartTime() + "<br>" + "End Time: " + party.getEndTime() + "<br>" + "Location: " + party.getLocation() + "<br>"
+                "<h2>Your party " + party.getTitle() + " has been created.</h2>" +
+                        "<img src=\"http://localhost:8080/img/MyParty.png\" >" +
+                        " <br><br><i>Here are the details: </i><br>"
+                        + "Description: " + party.getDescription() + "<br>"
+                        + "Start Time: " + party.getStartTime() + "<br>"
+                        + "End Time: " + party.getEndTime() + "<br>"
+                        + "Location: <br>" + party.getLocation().getAddressOne() + "<br>"
+                        + party.getLocation().getAddressTwo() + "<br>"
+                        + party.getLocation().getCity() + " " +party.getLocation().getState() + " " + party.getLocation().getZipcode() + "<br>"
                 + "Here is your custom party URL: " + party.getUrlKey() ;
 
-        emailService.prepareAndSend(newCreatedParty, newCreatedParty.getTitle() + " has been created", partyDetails);
+        emailService.partyCreatedConfirmation(newCreatedParty, newCreatedParty.getTitle() + " has been created", partyDetails);
 
         //Creates and saves party Items
         for (int i = 0; i < names.length; i++) {
@@ -96,9 +107,13 @@ public class PartyController {
 
     //show page when party successfully created
     @GetMapping("/parties/success/{urlKey}")
-    public String showSuccessPartyForm(@PathVariable String urlKey, Model model) {
+    public String showSuccessPartyForm(@PathVariable String urlKey, Model model, HttpServletRequest request) {
+
         Party party = partyDao.getByUrlKey(urlKey);
+        String url = BaseURL.getBaseURL(request) + "/rsvp/" + party.getUrlKey();
+
         model.addAttribute("party", party);
+        model.addAttribute("url", url);
         return "party/success";
     }
 
@@ -109,9 +124,15 @@ public class PartyController {
 
         //TODO: fix location to be cleaner
         String partyDetails =
-                "<h2>You're Invited to " + party.getTitle() + " by " + party.getOwner().getFirstName() + "</h2>, <br><i>Here are the details: </i><br>" + "Description: " + party.getDescription() + "<br>"
-                        + "Start Time: " + party.getStartTime() + "<br>" + "End Time: " + party.getEndTime() + "<br>" + "Location: " + party.getLocation() + "<br>"
-                        + "RSVP  " + "<a href=\"http://localhost:8080/rsvp/" + party.getUrlKey() + "\">here</a>";
+                "<h2>You're Invited to " + party.getTitle() + " by " + party.getOwner().getFirstName() + "</h2> " +
+                        "<br><i>Here are the details: </i><br>"
+                        + "Description: " + party.getDescription() + "<br>"
+                        + "Start Time: " + party.getStartTime() + "<br>"
+                        + "End Time: " + party.getEndTime() + "<br>"
+                        + "Location: " + party.getLocation().getAddressOne() + "<br>"
+                        + party.getLocation().getAddressTwo() + "<br>"
+                        + party.getLocation().getCity() + " " + party.getLocation().getState() + " " + party.getLocation().getZipcode() + "<br>"
+                        + "RSVP " + "<a href=\"http://localhost:8080/rsvp/" + party.getUrlKey() + "\">here</a>";
 
         //TODO: fix link for party URL to make dynamic with new domain name
 
@@ -127,7 +148,19 @@ public class PartyController {
     @GetMapping("/parties/edit/{id}")
     public String showEditPartyForm(@PathVariable long id, String urlKey, Model model) {
         Party partyToEdit = partyDao.getById(id);
-
+        //TODO: Refactor later
+        model.addAttribute("id", partyToEdit.getId());
+        model.addAttribute("party", partyToEdit.getUrlKey());
+        model.addAttribute("title", partyToEdit.getTitle());
+        model.addAttribute("description", partyToEdit.getDescription());
+        model.addAttribute("startTime", partyToEdit.getStartTime().toLocalDateTime());
+        model.addAttribute("endTime", partyToEdit.getEndTime().toLocalDateTime());
+        model.addAttribute("addressOne", partyToEdit.getLocation().getAddressOne());
+        model.addAttribute("addressTwo", partyToEdit.getLocation().getAddressTwo());
+        model.addAttribute("city", partyToEdit.getLocation().getCity());
+        model.addAttribute("state", partyToEdit.getLocation().getState());
+        model.addAttribute("zipcode", partyToEdit.getLocation().getZipcode());
+        model.addAttribute("stateOptions", generateStates());
         List<PartyItem> partyItems = partyItemDao.getByParty(partyToEdit); //get partyItems associated with party
 
         model.addAttribute("partyItems", partyItems);
@@ -190,5 +223,63 @@ public class PartyController {
     public String deleteParty(@PathVariable("id") long id) {
         partyDao.deleteById(id);
         return "redirect:/profile";
+    }
+
+
+    public List<String> generateStates(){
+        List <String> states = new ArrayList<>();
+
+        states.add("AL");
+        states.add("AK");
+        states.add("AZ");
+        states.add("AR");
+        states.add("CA");
+        states.add("CO");
+        states.add("CT");
+        states.add("DE");
+        states.add("FL");
+        states.add("GA");
+        states.add("HI");
+        states.add("ID");
+        states.add("IL");
+        states.add("IN");
+        states.add("IA");
+        states.add("KS");
+        states.add("KY");
+        states.add("LA");
+        states.add("ME");
+        states.add("MD");
+        states.add("MA");
+        states.add("MI");
+        states.add("MN");
+        states.add("MS");
+        states.add("MO");
+        states.add("MT");
+        states.add("NE");
+        states.add("NV");
+        states.add("NH");
+        states.add("NJ");
+        states.add("NM");
+        states.add("NY");
+        states.add("NC");
+        states.add("ND");
+        states.add("OH");
+        states.add("OK");
+        states.add("OR");
+        states.add("PA");
+        states.add("RI");
+        states.add("SC");
+        states.add("SD");
+        states.add("TN");
+        states.add("TX");
+        states.add("UT");
+        states.add("VT");
+        states.add("VA");
+        states.add("WA");
+        states.add("WV");
+        states.add("WI");
+        states.add("WY");
+
+        return states;
     }
 }

@@ -1,68 +1,81 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html" layout:decorate="~{layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="/success.css" rel="stylesheet"/>
+    <title layout:fragment="title">myParty | Party Created!</title>
+
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
+
+</head>
 
 <body id="success" style="height: 100vh; justify-content: center; justify-items: center; ">
-
-<script src="https://code.jquery.com/jquery-2.2.4.min.js"
-        integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
-
-<title layout:fragment="title">myParty | Party Created!</title>
-
 
 <section layout:fragment="content">
 
     <a href="/profile">Back to Profile</a>
 
-    <div class="js-container"></div>
-
     <h1 id="partymessage">Let's Get This Party Started!!!</h1>
+    <form>
+        <h2 th:text="${party.title} + ' has been successfully created!'"></h2>
+        <h3>Now let's invite people!</h3>
+        </div>
+        <hr/>
+    </form>
 
-    <h2 th:text="${party.title} + ' has been successfully created!'"></h2>
-
-    <h3>Now let's invite people!</h3>
 
     <!--TODO: Need to change the above back to POST method, send back to profile and add a controller
                 once email functionality is completed to send emails too-->
+    <form style="display: flex;
+    flex-direction: column;
+    width: 50%;
+    align-content: center;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin: auto;
+">
+        <label for="customUrl">Custom Party Url:</label>
+        <input class="container-fluid" type="text" id="customUrl" th:value="${url}"/>
+        <button type="button" onclick="myFunction()">Copy url</button>
 
-    <label for="customUrl">Custom Party Url:</label>
-    <input type="text" id="customUrl" th:value="'http://localhost:8080/rsvp/' + ${party.urlKey}"/>
-    <button onclick="myFunction()">Copy url</button>
-
-
-    <!--        <label for="emailAddress">Email Addresses</label>-->
-    <form th:action="@{|/parties/${party.urlKey}|}" th:method="post">
-
-
-        <div id="additionalEmails">
-            <div class="form-group">
-                <label for="email[]">Email Address:</label>
-                <input type="email" name="email[]" id="email[]">
+        <form th:action="@{|/parties/${party.urlKey}|}" th:method="post">
+            <div id="additionalEmails">
+                <div class="form-group">
+                    <label for="email[]">Email Address:</label>
+                    <input type="email" name="email[]" id="email[]">
+                </div>
             </div>
-        </div>
-        <button id="addEmailButton">Add Another Email</button>
-        <input type="submit" class="btn btn-info" value="Send Invites!">
+            <button id="addEmailButton">Add Another Email</button>
+            <input type="submit" class="btn btn-info" value="Send Invites!">
+        </form>
     </form>
 
-    // Confetti Animation
+
+    <!--     Confetti Animation-->
     <script>
         party.confetti(document.getElementById("partymessage"))
     </script>
 
-    // Copy url button
+    <!--     Copy url button-->
     <script>
         function myFunction() {
-            var copyText = document.getElementById("customUrl");
+            var copyText = document.getElementById("customUrl").innerHTML;
+
             copyText.select();
             copyText.setSelectionRange(0, 99999);
-            navigator.clipboard.writeText(copyText.value);
+            navigator.clipboard.writeText(copyText);
 
             var tooltip = document.getElementById("myTooltip");
-            tooltip.innerHTML = "Copied: " + copyText.value;
+            tooltip.innerHTML = "Copied: " + copyText;
         }
 
         function outFunc() {
+
             var tooltip = document.getElementById("myTooltip");
             tooltip.innerHTML = "Copy to clipboard";
         }
@@ -89,6 +102,7 @@
         })
     </script>
 </section>
+
 </body>
 <footer><p layout:fragment="custom-footer">This is actually working</p></footer>
 

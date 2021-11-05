@@ -15,7 +15,7 @@
                 <div th:text="${owner.email}"></div>
                 </p>
                 <p>
-                    <a th:href="@{|/members/editProfile/${owner.id}|}" class="btn btn-primary">Edit Profile</a>
+                    <a th:href="@{|/members/editProfile/${owner.id}|}" class="btn btn-dark">Edit Profile</a>
                     <a th:replace="partials/deleteProfileModal :: modal"></a>
 
                 </p>
@@ -23,14 +23,35 @@
 
             <div th:replace="partials/scripts :: scripts"></div>
 
-            <div class="justify-content" th:each="party : ${owner.party}">
-                <div class="card text-center" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5><a th:text="${party.title}" class="card-title" th:href="@{|/member/${party.urlKey}/view|}"></a></h5>
-                        <p th:text="${party.description}" class="card-text"></p>
+            <div class="row justify-content-evenly">
+                <div class="col-4">
+                    <h5>Parties Created</h5>
+                    <!--Display Parties Created -->
+                    <div class="justify-content" th:each="party : ${owner.party}">
+                        <div class="card text-center" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5><a th:text="${party.title}" class="card-title" th:href="@{|/member/${party.urlKey}/view|}"></a></h5>
+                                <p th:text="${party.description}" class="card-text"></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                <div class="col-4">
+                    <h5>Parties Attending</h5>
+                    <!--Display Parties Attending-->
+                    <div class="justify-content" th:each="partyMember : ${partyMembers}">
+                        <div class="card text-center" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5><a th:text="${partyMember.party.title}" class="card-title" th:href="@{|/rsvp/${partyMember.party.urlKey}/member/${partyMember.partyMemberKey}/view|}"></a></h5>
+                                <p th:text="${partyMember.party.description}" class="card-text"></p>
+                            </div>
+                        </div>
+                    </div>                </div>
             </div>
+
+
+
         </div>
     </div>
 </section>

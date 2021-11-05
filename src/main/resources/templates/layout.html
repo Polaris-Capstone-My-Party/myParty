@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-
-<head>
+<link th:href="@{http://fonts.googleapis.com/css?family=Sora}"
+      rel='stylesheet' type='text/css' />
     <title layout:fragment="title">
         Default
     </title>
@@ -18,14 +18,54 @@
     <nav th:replace="partials/guestNavbar :: navbar"></nav>
 </div>
 
+   <style>
+    body {
+        font-family: "Sora",sans-serif;
+        text-align: center;
+        background-color: #22262b;
+    }
+
+    h1   {
+        color: #0e0d0d;
+        font-family: "Sora",sans-serif;
+    }
+
+    p    {
+        font-family: "Sora",sans-serif;
+    }
+
+    footer {
+        height: 15em;
+    }
+
+
+    section {
+        font-family: "Sora",sans-serif;
+        padding-top: 2em;
+        align-content: center;
+        background-color: #6bdada;
+        padding-bottom: 2em;
+
+    }
+
+    button {
+        background-color: #ee6eb6;
+    }
+
+
+
+    </style>
+
 
 <section layout:fragment="content">
     <p>Page content goes here, you should not see this. ADD THIS TO THE TEMPLATES</p>
 </section>
 
-<footer th:replace="partials/footer :: footer">
-    <p>My footer</p>
-    <p layout:fragment="custom-footer">Custom footer here</p>
-</footer>
 </body>
+<!--<div class="fixed-bottom">-->
+<!--    <footer th:replace="partials/footer :: footer">-->
+<!--        <p>My footer</p>-->
+<!--        <p layout:fragment="custom-footer">Custom footer here</p>-->
+<!--    </footer>-->
+<!--</div>-->
 </html>

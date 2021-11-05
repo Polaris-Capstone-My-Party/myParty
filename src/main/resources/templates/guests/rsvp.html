@@ -9,21 +9,29 @@
 
 <section layout:fragment="content">
 
-    <h1>Complete Your RSVP</h1>
+    <div class="card text-center">
+        <div class="card-header">
+            Complete Your RSVP
+        </div>
 
-    <!--Show The Party Info-->
-    <div>
-        <div th:text="${party.title}"></div>
-        <div th:text="${party.description}"></div>
-        <div th:text="'Start Time: ' + ${party.startTime}"></div>
-        <div th:text="'End Time: ' + ${party.endTime}"></div>
-        <div th:text="'Organizer: ' + ${party.owner.firstName + ' ' + party.owner.lastName}"></div>
-        <div th:text="${party.location.addressOne} + ', ' + ${party.location.city} + ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}" id="fullAddress"></div>
-        <!--TODO: Logic to show addressTwo if not null-->
+        <!--Show The Party Info-->
 
-        <div id='map' style='width: 25%; height: 40vh'></div>
+        <div class="card-body">
+            <h1 class="card-title" th:text="${party.title}"></h1>
+            <h3 class="card-text" th:text="${party.description}"></h3>
+            <h6 class="card-text" th:text="'Start Time: ' + ${party.startTime}"></h6>
+            <h6 class="card-text" th:text="'Organizer: ' + ${party.owner.firstName + ' ' + party.owner.lastName}"></h6>
+            <h6 class="card-text" th:text="${party.location.addressOne} + ', ' + ${party.location.city} + ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}" id="fullAddress"></h6>
+            <!--TODO: Logic to show addressTwo if not null-->
+        </div>
+
     </div>
 
+    <div class="card-group">
+
+    <div id='map' style='width: 25%; height: 40vh'></div>
+
+    <div class="card text-center">
     <!--Member RSVP Form-->
     <div sec:authorize="isAuthenticated()">
         <h1>Member form works!</h1>

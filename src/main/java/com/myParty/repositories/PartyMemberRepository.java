@@ -11,4 +11,7 @@ public interface PartyMemberRepository extends JpaRepository<PartyMember, Long> 
     PartyMember getByPartyMemberKey(String partyMemberKey);
     List<PartyMember> getByParty(Party party);
     PartyMember getByMember(Member member);
+
+    PartyMember getByMemberAndParty  (Member member, Party party);
+
 }
