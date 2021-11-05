@@ -59,7 +59,7 @@ public class EmailService {
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom(from);
         helper.setTo(email);
-        helper.setSubject("You're Invited to" + party.getTitle() + "!");
+        helper.setSubject("You're Invited to " + party.getTitle() + "!");
         boolean html = true;
 
         String partyDetails =
@@ -102,8 +102,8 @@ public class EmailService {
 
         //TODO: add domain to replace localhost
         String resetDetails =
-                "<img src=\"http://localhost:8080/img/MyParty.png\">"
-                        + member.getUsername() + ",<br>"
+                "<img src=\"http://localhost:8080/img/MyParty.png\"><br>"
+                        + "<h2>" +  member.getUsername() + ",</h2><br>"
                         + "Click to reset your password " + "<a href=\"http://localhost:8080/member/resetpassword/" + token + "\">HERE</a>";
 
         helper.setText(resetDetails, html);
