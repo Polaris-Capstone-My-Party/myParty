@@ -1,5 +1,6 @@
 package com.myParty.controllers;
 
+import com.myParty.BaseURL;
 import com.myParty.models.*;
 import com.myParty.repositories.*;
 import com.myParty.services.EmailService;
@@ -7,8 +8,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.*;
 
@@ -28,6 +31,7 @@ public class PartyController {
         this.partyItemDao = partyItemDao;
         this.emailService = emailService;
     }
+
 
     //show form for creating a party
     @GetMapping("/parties/create")
@@ -90,9 +94,13 @@ public class PartyController {
 
     //show page when party successfully created
     @GetMapping("/parties/success/{urlKey}")
-    public String showSuccessPartyForm(@PathVariable String urlKey, Model model) {
+    public String showSuccessPartyForm(@PathVariable String urlKey, Model model, HttpServletRequest request) {
+
         Party party = partyDao.getByUrlKey(urlKey);
+        String url = BaseURL.getBaseURL(request) + "/rsvp/" + party.getUrlKey();
+
         model.addAttribute("party", party);
+        model.addAttribute("url", url);
         return "party/success";
     }
 
@@ -166,6 +174,7 @@ public class PartyController {
         partyDao.deleteById(id);
         return "redirect:/profile";
     }
+
 
     public List<String> generateStates(){
         List <String> states = new ArrayList<>();

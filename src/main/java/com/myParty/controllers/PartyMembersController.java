@@ -1,5 +1,6 @@
 package com.myParty.controllers;
 
+import com.myParty.BaseURL;
 import com.myParty.models.*;
 import com.myParty.repositories.*;
 import com.myParty.services.EmailService;
@@ -9,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Controller
@@ -83,10 +85,9 @@ public class PartyMembersController {
 
     //shows RSVPSuccess page to PartyMembers
     @GetMapping(path = "/member/successRsvp/{urlKey}/{partyMemberKey}")
-    public String showRSVPSuccess(Model model, @PathVariable String partyMemberKey, @PathVariable String urlKey) {
-        model.addAttribute("urlKey", urlKey);
-        model.addAttribute("partyMemberKey", partyMemberKey);
-
+    public String showRSVPSuccess(Model model, @PathVariable String partyMemberKey, @PathVariable String urlKey, HttpServletRequest request) {
+        String url = BaseURL.getBaseURL(request) + "/rsvp/" + urlKey + "/member/" + partyMemberKey + "/view";
+        model.addAttribute("url", url);
         return "partyMember/successRsvp";
     }
 

@@ -9,8 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.mail.MessagingException;
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.*;
 
 
@@ -81,6 +80,7 @@ public class MembersController {
 
         Party party = partyDao.getByUrlKey(urlKey); //gets party by urlKey
 
+        //Display Party Items Logic
         List<PartyItem> partyItems = partyItemDao.getByParty(party); //gets partyItems associated w/ party
         List<Long> quantityRemaining = guestControllerDao.calculateQuantity(partyItems);//gets list of quantity remaining
         HashMap<PartyItem, Long> completedPartyItems = new HashMap<>(); //Creates Hashmap that stores PartyItem objects & quantitiesRemaining
@@ -90,6 +90,7 @@ public class MembersController {
             completedPartyItems.put(partyItems.get(i), quantityRemaining.get(i)); //sets quantityRemaining Long & PartyItem object for HashMap
         }
 
+        //Display Guest logic
         List<Guest> guests = guestDao.getByParty(party); //gets guests associated w/ party
         HashMap<Guest, List<ItemBringer>> completedGuests = new HashMap<>(); //Creates Hashmap that stores Guest objects & list of ItemBringers (assoc. w/ guest)
 
@@ -98,6 +99,7 @@ public class MembersController {
             completedGuests.put(guest, itemBringers); //adds guest object & ItemBringer List to HashMap
         }
 
+        //Display Party Members Logic
         List<PartyMember> partyMembers = partyMemberDao.getByParty(party); //gets partyMembers associated with party
         HashMap<PartyMember, List<ItemBringer>> completedPartyMembers = new HashMap<>(); //Creates Hashmap that stores PartyMember objects & list of ItemBringers (assoc. w/ partyMember)
 
@@ -162,9 +164,10 @@ public class MembersController {
     }
 
     @GetMapping("/members/delete/{id}")
-    public String deleteMember(@PathVariable("id") long id) {
+    public String deleteMember(@PathVariable("id") long id, HttpSession httpSession) {
+        httpSession.invalidate();
         memberDao.deleteById(id);
-        logout();
+        //before redirects, invalidate session??
         return "redirect:/";
     }
 
