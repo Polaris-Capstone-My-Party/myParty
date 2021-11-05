@@ -19,12 +19,9 @@
 
     <a href="/profile">Back to Profile</a>
 
-
     <h1 id="partymessage">Let's Get This Party Started!!!</h1>
     <form>
-
         <h2 th:text="${party.title} + ' has been successfully created!'"></h2>
-
         <h3>Now let's invite people!</h3>
         </div>
         <hr/>
@@ -43,13 +40,10 @@
     margin: auto;
 ">
         <label for="customUrl">Custom Party Url:</label>
-        <input class="container-fluid" type="text" id="customUrl" th:value="'http://localhost:8080/rsvp/' + ${party.urlKey}"/>
-        <button onclick="myFunction()">Copy url</button>
-        </div>
-        <!--        <label for="emailAddress">Email Addresses</label>-->
+        <input class="container-fluid" type="text" id="customUrl" th:value="${url}"/>
+        <button type="button" onclick="myFunction()">Copy url</button>
+
         <form th:action="@{|/parties/${party.urlKey}|}" th:method="post">
-
-
             <div id="additionalEmails">
                 <div class="form-group">
                     <label for="email[]">Email Address:</label>
@@ -70,16 +64,18 @@
     <!--     Copy url button-->
     <script>
         function myFunction() {
-            var copyText = document.getElementById("customUrl");
+            var copyText = document.getElementById("customUrl").innerHTML;
+
             copyText.select();
             copyText.setSelectionRange(0, 99999);
-            navigator.clipboard.writeText(copyText.value);
+            navigator.clipboard.writeText(copyText);
 
             var tooltip = document.getElementById("myTooltip");
-            tooltip.innerHTML = "Copied: " + copyText.value;
+            tooltip.innerHTML = "Copied: " + copyText;
         }
 
         function outFunc() {
+
             var tooltip = document.getElementById("myTooltip");
             tooltip.innerHTML = "Copy to clipboard";
         }
