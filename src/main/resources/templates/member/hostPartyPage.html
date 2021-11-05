@@ -11,7 +11,7 @@
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet'/>
 </head>
-
+<div class="container-fluid">
 <section layout:fragment="content">
 
   <a href="/profile" class="btn btn-primary">Return to Profile</a>
@@ -67,38 +67,38 @@
         </div>
     </div>
 
-    <!--  <div class="p-2 bd-highlight">-->
-    <!--    <div class="container">-->
-    <!--      <div class="row">-->
-    <!--        <div class="col-lg-10 mt-5 mb-5">-->
-    <!--         <table id="example2" class="table table-bordered" style="width: 100%">-->
-    <!--            <h1>Guest Information</h1>-->
-    <!--            <thead>-->
-    <!--            <tr>-->
-    <!--              <th>Name</th>-->
-    <!--              <th>Email</th>-->
-    <!--              <th>RSVP Status</th>-->
-    <!--              <th>Guests Added</th>-->
-    <!--&lt;!&ndash;              <th>Item Bringing</th>&ndash;&gt;-->
-    <!--&lt;!&ndash;              <th>Quantity Bringing</th>&ndash;&gt;-->
-    <!--            </tr>-->
-    <!--            </thead>-->
-    <!--            <tbody>-->
-    <!--            <tr th:each="guest : ${guests}">-->
-    <!--              <td th:text= "${guest.key.firstName} + ' ' + ${guest.key.lastName}">Name</td>-->
-    <!--              <td th:text= "${guest.key.email}">Email</td>-->
-    <!--              <td th:text= "${guest.key.rsvpStatus}">RSVP Status</td>-->
-    <!--              <td th:text= "${guest.key.additionalGuests}">Guests Added</td>-->
-    <!--&lt;!&ndash;              <td th:block th:if="${itemBringer.quantity != 0}"&ndash;&gt;-->
-    <!--&lt;!&ndash;              th:text="'Item Bringing: ' + ${itemBringer.partyItem.item.name}"&ndash;&gt;-->
-    <!--&lt;!&ndash;              th:text="'Quantity Bringing: ' + ${itemBringer.quantity}"></td>&ndash;&gt;-->
-    <!--            </tr>-->
-    <!--            </tbody>-->
-    <!--          </table>-->
-    <!--        </div>-->
-    <!--      </div>-->
-    <!--    </div>-->
-    <!--  </div>-->
+      <div class="p-2 bd-highlight">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-10 mt-5 mb-5">
+             <table id="example2" class="table table-bordered" style="width: 100%">
+                <h1>Guest Information</h1>
+                <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>RSVP Status</th>
+                  <th>Guests Added</th>
+    <!--              <th>Item Bringing</th>-->
+    <!--              <th>Quantity Bringing</th>-->
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="guest : ${guests}">
+                  <td th:text= "${guest.key.firstName} + ' ' + ${guest.key.lastName}">Name</td>
+                  <td th:text= "${guest.key.email}">Email</td>
+                  <td th:text= "${guest.key.rsvpStatus}">RSVP Status</td>
+                  <td th:text= "${guest.key.additionalGuests}">Guests Added</td>
+    <!--              <td th:block th:if="${itemBringer.quantity != 0}"-->
+    <!--              th:text="'Item Bringing: ' + ${itemBringer.partyItem.item.name}"-->
+    <!--              th:text="'Quantity Bringing: ' + ${itemBringer.quantity}"></td>-->
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
 
     <div th:each="partyMember : ${partyMembers}">
         <div th:text="'Name: ' + ${partyMember.key.member.firstName} + ' ' + ${partyMember.key.member.lastName}"></div>
@@ -115,21 +115,22 @@
         <br>
     </div>
 
-
+<div class="container-fluid flex-box">
     <div class="row">
         <div class="col-sm-6">
-            <div class="card">
+            <div class="card content-align">
                 <div class="card-body">
                     <h5 class="card-title">Send Invites</h5>
                     <p class="card-text">
-                    <form th:action="@{|/parties/${party.urlKey}|}" th:method="post">
+                    <form class="form-inline" th:action="@{|/parties/${party.urlKey}|}" th:method="post">
                         <div id="additionalEmails">
-                            <div class="form-group">
-                                <label for="email[]">Email Address:</label>
+                            <div class="form-group mb-2">
+                                <label for="email[]" class="sr-only">Email Address:</label>
                                 <input type="email" name="email[]" id="email[]">
                             </div>
                         </div>
-                        <button id="addEmailButton">Add Another Email</button>
+                    <div class="form-group mx-sm-3 mb-2">
+                    <button id="addEmailButton">Add Another Email</button>
                         <script>
                             window.onload = (function () {
                                 const additionalEmail = document.getElementById('addEmailButton');
@@ -157,9 +158,9 @@
 
             </div>
         </div>
-
+    </div>
         <div>
-            <a th:href="@{|/parties/edit/${party.id}|}" class="btn btn-primary">Edit Party</a>
+            <a th:href="@{|/parties/edit/${party.id}|}" class="btn btn-light">Edit Party</a>
             <a th:replace="partials/modalsUpdates :: modal"></a>
         </div>
     </div>
@@ -189,6 +190,6 @@
 
     });
   </script>
-
 </section>
+</div>
 </html>
