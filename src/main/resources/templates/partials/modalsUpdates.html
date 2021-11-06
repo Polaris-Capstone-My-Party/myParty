@@ -8,7 +8,7 @@
 <body>
 <div th:fragment="modal">
   <!-- Button trigger modal -->
-  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#staticBackdrop">
+  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#staticBackdrop">
     Delete
   </button>
 
@@ -27,7 +27,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <a th:href="@{|/parties/delete/${party.id}|}" class="btn btn-danger">delete</a>
+          <a th:href="@{|/parties/delete/${party.id}|}" class="btn btn-dark">delete</a>
         </div>
       </div>
     </div>

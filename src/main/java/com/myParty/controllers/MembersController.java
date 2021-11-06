@@ -1,5 +1,6 @@
 package com.myParty.controllers;
 
+import com.myParty.BaseURL;
 import com.myParty.models.*;
 import com.myParty.repositories.*;
 import com.myParty.services.EmailService;
@@ -9,8 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.*;
 
 
@@ -77,10 +78,11 @@ public class MembersController {
 
     //show host party page to member
     @GetMapping("/member/{urlKey}/view")
-    public String showHostPartyPage(Model model, @PathVariable String urlKey) {
+    public String showHostPartyPage(Model model, @PathVariable String urlKey, HttpServletRequest request) {
 
         Party party = partyDao.getByUrlKey(urlKey); //gets party by urlKey
 
+        //Display Party Items Logic
         List<PartyItem> partyItems = partyItemDao.getByParty(party); //gets partyItems associated w/ party
         List<Long> quantityRemaining = guestControllerDao.calculateQuantity(partyItems);//gets list of quantity remaining
         HashMap<PartyItem, Long> completedPartyItems = new HashMap<>(); //Creates Hashmap that stores PartyItem objects & quantitiesRemaining
@@ -90,6 +92,7 @@ public class MembersController {
             completedPartyItems.put(partyItems.get(i), quantityRemaining.get(i)); //sets quantityRemaining Long & PartyItem object for HashMap
         }
 
+        //Display Guest logic
         List<Guest> guests = guestDao.getByParty(party); //gets guests associated w/ party
         HashMap<Guest, List<ItemBringer>> completedGuests = new HashMap<>(); //Creates Hashmap that stores Guest objects & list of ItemBringers (assoc. w/ guest)
 
@@ -98,6 +101,7 @@ public class MembersController {
             completedGuests.put(guest, itemBringers); //adds guest object & ItemBringer List to HashMap
         }
 
+        //Display Party Members Logic
         List<PartyMember> partyMembers = partyMemberDao.getByParty(party); //gets partyMembers associated with party
         HashMap<PartyMember, List<ItemBringer>> completedPartyMembers = new HashMap<>(); //Creates Hashmap that stores PartyMember objects & list of ItemBringers (assoc. w/ partyMember)
 
@@ -105,11 +109,13 @@ public class MembersController {
             List<ItemBringer> itemBringers = itemBringerDao.getByPartyMember(partyMember); //get List of itemBringer objects associated w/ guest
             completedPartyMembers.put(partyMember, itemBringers); //adds guest object & ItemBringer List to HashMap
         }
+        String url = BaseURL.getBaseURL(request) + "/rsvp/" + party.getUrlKey();
 
         model.addAttribute("party", party); //sets party information
         model.addAttribute("guests", completedGuests); //sets guest information
         model.addAttribute("partyMembers", completedPartyMembers); //sets partyMember information
         model.addAttribute("partyItems", completedPartyItems); //sets partyItem information
+        model.addAttribute("url", url);
 
         return "member/hostPartyPage";
     }
@@ -162,9 +168,10 @@ public class MembersController {
     }
 
     @GetMapping("/members/delete/{id}")
-    public String deleteMember(@PathVariable("id") long id) {
+    public String deleteMember(@PathVariable("id") long id, HttpSession httpSession) {
+        httpSession.invalidate();
         memberDao.deleteById(id);
-        logout();
+        //before redirects, invalidate session??
         return "redirect:/";
     }
 
