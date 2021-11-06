@@ -51,7 +51,16 @@
 
                <div class="form-group">
                    <label for="state">State:</label>
-                   <input name="state" id="state" type="text" th:value="${party.location.state}"/>
+                   <select id="state" name="state">
+                       <th:block th:each="stateOption: ${stateOptions}">
+                           <th:block th:if="${party.location.state.equals(stateOption)}">
+                               <option th:value="${stateOption}" th:text="${stateOption}" selected></option>
+                           </th:block>
+                           <th:block th:if="${!party.location.state.equals(stateOption)}">
+                               <option th:value="${stateOption}" th:text="${stateOption}"></option>
+                           </th:block>
+                       </th:block>
+                   </select>
                </div>
 
                <div class="form-group">

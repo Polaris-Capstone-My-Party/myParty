@@ -33,6 +33,7 @@ public class PartyController {
     //show form for creating a party
     @GetMapping("/parties/create")
     public String showCreatePartyForm(Model model) {
+        model.addAttribute("states", generateStates());
         model.addAttribute("party", new Party());
         return "party/create";
     }
@@ -85,7 +86,9 @@ public class PartyController {
         emailService.partyCreatedConfirmation(newCreatedParty, newCreatedParty.getTitle() + " has been created", partyDetails);
 
         //Calls method to create & save new items
-        createItems(names, quantities, newCreatedParty);
+        if(names != null){
+            createItems(names, quantities, newCreatedParty);
+        }
 
         return "redirect:/parties/success/" + uuid;
     }
@@ -185,7 +188,9 @@ public class PartyController {
         Party partyUpdated = partyDao.save(partyToUpdate);
 
         //Calls method to create & save new items
-        createItems(names, quantities, partyUpdated);
+        if(names != null){
+            createItems(names, quantities, partyUpdated);
+        }
 
         return "redirect:/member/" + partyUpdated.getUrlKey() + "/view";
     }
