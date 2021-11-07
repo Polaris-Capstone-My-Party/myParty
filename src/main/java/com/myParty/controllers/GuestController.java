@@ -235,6 +235,11 @@ public class GuestController {
         return "redirect:/guests/successRsvp/" + urlKey + "/" + guestKey;
     }
 
+    @GetMapping(path = "/rsvp/{urlKey}/login")
+    public String redirectRSVP(@PathVariable String urlKey){
+        return "redirect:/rsvp/" + urlKey;
+    }
+
 
     //calculates actual quantity remaining
     public List<Long> calculateQuantity(List<PartyItem> partyItems){ //takes in List of partyItems
