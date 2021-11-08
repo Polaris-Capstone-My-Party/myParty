@@ -8,11 +8,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
-import java.text.ParseException;
 import java.util.*;
 
 @Controller
@@ -32,10 +30,10 @@ public class PartyController {
         this.emailService = emailService;
     }
 
-
     //show form for creating a party
     @GetMapping("/parties/create")
     public String showCreatePartyForm(Model model) {
+        model.addAttribute("states", generateStates());
         model.addAttribute("party", new Party());
         return "party/create";
     }
@@ -52,7 +50,7 @@ public class PartyController {
             @RequestParam String state,
             @RequestParam String zipcode,
             @RequestParam(name = "name[]") String[] names,
-            @RequestParam(name = "quantity[]") String[] quantities) throws MessagingException {
+            @RequestParam(name = "quantity[]") String[] quantities, HttpServletRequest request) throws MessagingException {
 
         //Creates & Saves Location
         Location locationToAdd = new Location(0, addressOne, addressTwo, city, state, zipcode);
@@ -72,34 +70,11 @@ public class PartyController {
         party.setLocation(locationInDb);
         Party newCreatedParty = partyDao.save(party);
 
-        //TODO: fix location to show cleaner
-        String partyDetails =
-                "<h2>Your party " + party.getTitle() + " has been created.</h2>" +
-                        "<img src=\"http://localhost:8080/img/MyParty.png\" >" +
-                        " <br><br><i>Here are the details: </i><br>"
-                        + "Description: " + party.getDescription() + "<br>"
-                        + "Start Time: " + party.getStartTime() + "<br>"
-                        + "End Time: " + party.getEndTime() + "<br>"
-                        + "Location: <br>" + party.getLocation().getAddressOne() + "<br>"
-                        + party.getLocation().getAddressTwo() + "<br>"
-                        + party.getLocation().getCity() + " " +party.getLocation().getState() + " " + party.getLocation().getZipcode() + "<br>"
-                + "Here is your custom party URL: " + party.getUrlKey() ;
+        emailService.partyCreatedConfirmation(party, request);
 
-        emailService.partyCreatedConfirmation(newCreatedParty, newCreatedParty.getTitle() + " has been created", partyDetails);
-
-        //Creates and saves party Items
-        for (int i = 0; i < names.length; i++) {
-            //TODO: If item is null don't add - Error Message
-            Item item = new Item(); //create new item instance //TODO: check if item already exists
-            item.setName(names[i]); //set item name from name[]
-            itemDao.save(item); //save item instance
-
-            //creates & Saves party item
-            PartyItem partyItem = new PartyItem();
-            partyItem.setItem(item);
-            partyItem.setQuantityRequired(Long.valueOf(quantities[i]));
-            partyItem.setParty(newCreatedParty);
-            partyItemDao.save(partyItem);
+        //Calls method to create & save new items
+        if(names != null){
+            createItems(names, quantities, newCreatedParty);
         }
 
         return "redirect:/parties/success/" + uuid;
@@ -119,29 +94,9 @@ public class PartyController {
 
     //redirects to profile when submit button pushed
     @PostMapping("/parties/{urlKey}")
-    public String successParty(@PathVariable String urlKey, @RequestParam(name = "email[]") String[] emailAddresses) throws MessagingException {
+    public String successParty(@PathVariable String urlKey, @RequestParam(name = "email[]") String[] emailAddresses, HttpServletRequest request) throws MessagingException {
         Party party = partyDao.getByUrlKey(urlKey);
-
-        //TODO: fix location to be cleaner
-        String partyDetails =
-                "<h2>You're Invited to " + party.getTitle() + " by " + party.getOwner().getFirstName() + "</h2> " +
-                        "<br><i>Here are the details: </i><br>"
-                        + "Description: " + party.getDescription() + "<br>"
-                        + "Start Time: " + party.getStartTime() + "<br>"
-                        + "End Time: " + party.getEndTime() + "<br>"
-                        + "Location: " + party.getLocation().getAddressOne() + "<br>"
-                        + party.getLocation().getAddressTwo() + "<br>"
-                        + party.getLocation().getCity() + " " + party.getLocation().getState() + " " + party.getLocation().getZipcode() + "<br>"
-                        + "RSVP " + "<a href=\"http://localhost:8080/rsvp/" + party.getUrlKey() + "\">here</a>";
-
-        //TODO: fix link for party URL to make dynamic with new domain name
-
-        for (int i = 0; i < emailAddresses.length; i++) {
-            System.out.println(emailAddresses[i]);
-
-            emailService.sendInvites(party.getTitle(), emailAddresses[i], partyDetails);
-
-        }
+        emailService.sendInvites(party, emailAddresses, request);
         return "redirect:/profile";
     }
 
@@ -162,7 +117,10 @@ public class PartyController {
         model.addAttribute("state", partyToEdit.getLocation().getState());
         model.addAttribute("zipcode", partyToEdit.getLocation().getZipcode());
         model.addAttribute("stateOptions", generateStates());
+        List<PartyItem> partyItems = partyItemDao.getByParty(partyToEdit); //get partyItems associated with party
 
+        model.addAttribute("partyItems", partyItems);
+        model.addAttribute("party", partyToEdit);
         return "party/edit";
     }
 
@@ -178,7 +136,9 @@ public class PartyController {
             @RequestParam(name = "addressTwo") String addressTwo,
             @RequestParam(name = "city") String city,
             @RequestParam(name = "state") String state,
-            @RequestParam(name = "zipcode") String zipcode) throws ParseException {
+            @RequestParam(name = "zipcode") String zipcode,
+            @RequestParam(name = "name[]",  required = false) String[] names,
+            @RequestParam(name = "quantity[]",  required = false) String[] quantities){
 
         //get party object
         Party partyToUpdate = partyDao.getById(id);
@@ -194,9 +154,14 @@ public class PartyController {
         partyToUpdate.setStartTime(partyToUpdate.makeTimestampFromString(startTime));
         partyToUpdate.setEndTime(partyToUpdate.makeTimestampFromString(endTime));
         partyToUpdate.setLocation(locationInDb);
-        partyDao.save(partyToUpdate);
+        Party partyUpdated = partyDao.save(partyToUpdate);
 
-        return "redirect:/profile";
+        //Calls method to create & save new items
+        if(names != null){
+            createItems(names, quantities, partyUpdated);
+        }
+
+        return "redirect:/member/" + partyUpdated.getUrlKey() + "/view";
     }
 
     //deletes party
@@ -206,6 +171,22 @@ public class PartyController {
         return "redirect:/profile";
     }
 
+    //Creates & saves new Items
+    public void createItems(String[] names, String[] quantities, Party party){
+        for (int i = 0; i < names.length; i++) {
+            //TODO: If item is null don't add - Error Message
+            Item item = new Item(); //create new item instance //TODO: check if item already exists
+            item.setName(names[i]); //set item name from name[]
+            itemDao.save(item); //save item instance
+
+            //creates & Saves party item
+            PartyItem partyItem = new PartyItem();
+            partyItem.setItem(item);
+            partyItem.setQuantityRequired(Long.valueOf(quantities[i]));
+            partyItem.setParty(party);
+            partyItemDao.save(partyItem);
+        }
+    }
 
     public List<String> generateStates(){
         List <String> states = new ArrayList<>();
@@ -263,5 +244,4 @@ public class PartyController {
 
         return states;
     }
-
 }

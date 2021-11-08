@@ -35,6 +35,7 @@
             <div class="card-body">
                 <h1 class="card-title" th:text="${party.title}"></h1>
                 <h3 class="card-text" th:text="${party.description}"></h3>
+
 <!--                <form style="display: flex;-->
 <!--                             flex-direction: column;-->
 <!--                             width: 50%;-->
@@ -161,33 +162,15 @@
                                     </div>
                                     <div class="form-group mx-sm-3 mb-2">
                                         <button id="addEmailButton">Add Another Email</button>
-                                        <script>
-                                            window.onload = (function () {
-                                                const additionalEmail = document.getElementById('addEmailButton');
-
-                                                const emailForm = `<div class="form-group">
-                  <label for="email[]">Email Address:</label>
-                  <input type="email" name="email[]" id="email[]">
-                </div>`
-
-
-                                                additionalEmail.addEventListener('click', function (event) {
-                                                    event.preventDefault();
-
-                                                    const yeahBaby = document.getElementById('additionalEmails');
-                                                    let newEmail = document.createElement("div");
-                                                    newEmail.innerHTML = emailForm;
-                                                    yeahBaby.appendChild(newEmail);
-                                                });
-                                            })
-                                        </script>
+                                        <input type="submit" class="btn btn-info" value="Send Invites!">
                                     </div>
                                 </form>
-                                <input type="submit" class="btn btn-info" value="Send Invites!"></div>
+                                </div>
                         </div>
                     </div>
                 </div>
             </div>
+          
             <div class="d-flex justify-content-center">
             <a th:href="@{|/parties/edit/${party.id}|}" class="btn btn-dark">Edit Party</a>
                 <a th:replace="partials/modalsUpdates :: modal"></a>
@@ -218,6 +201,28 @@
 
 
                 });
+            </script>
+
+<!--            SEND ADDITIONAL EMAILS SCRIPT-->
+            <script>
+                window.onload = (function () {
+                    const additionalEmail = document.getElementById('addEmailButton');
+
+                    const emailForm = `<div class="form-group">
+                  <label for="email[]">Email Address:</label>
+                  <input type="email" name="email[]" id="email[]">
+                </div>`
+
+
+                    additionalEmail.addEventListener('click', function (event) {
+                        event.preventDefault();
+
+                        const yeahBaby = document.getElementById('additionalEmails');
+                        let newEmail = document.createElement("div");
+                        newEmail.innerHTML = emailForm;
+                        yeahBaby.appendChild(newEmail);
+                    });
+                })
             </script>
         </div>
     </section>

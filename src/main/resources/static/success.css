@@ -28,3 +28,14 @@ h3, h2 {
     margin-inline-end: 0px;
     font-weight: bold;
 }
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    align-content: center;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin: auto;
+}

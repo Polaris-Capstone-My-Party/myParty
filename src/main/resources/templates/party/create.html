@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html" layout:decorate="~{layout}">
 
-<title layout:fragment="title" >myParty | Create</title>
-
-<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<head>
+    <title layout:fragment="title" >myParty | Create a Party</title>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <style>
+        .close:hover {background: darkred;}
+    </style>
+</head>
 
 <section layout:fragment="content">
 
@@ -27,7 +31,7 @@
 
             <div class="form-group">
                 <label for="description">Description:</label>
-                <input id="description" th:field="*{description}"/>
+                <textarea id="description" th:field="*{description}" type="text"/></textarea>
             </div>
 
             <div class="form-group">
@@ -57,13 +61,18 @@
 
             <div class="form-group">
                 <label for="state">State:</label>
-                <input id="state" name="state" type="text"/>
+                <select id="state" name="state">
+                    <div th:each="state: ${states}">
+                        <option th:value="${state}" th:text="${state}"></option>
+                    </div>
+                </select>
             </div>
 
             <div class="form-group">
                 <label for="zipcode">Zipcode:</label>
                 <input id="zipcode" name="zipcode" type="number"/>
             </div>
+
             <div id="additionalItems">
                 <h1> Add Items</h1>
                 <div class="form-group">
@@ -72,6 +81,7 @@
 
                     <label for="quantity[]">Quantity:</label>
                     <input type="text" name="quantity[]" id="quantity[]">
+                    <span class="close">x</span>
                 </div>
             </div>
             <button id="addItemButton">Add Another Item</button>
@@ -89,11 +99,11 @@
 
                   <label for="quantity[]">Quantity:</label>
                   <input type="text" name="quantity[]" id="quantity[]">
+                  <span class="close">x</span>
                 </div>`
 
             additionalItem.addEventListener('click', function(event) {
                 event.preventDefault();
-
 
                 const testyBoi = document.getElementById('additionalItems');
                 let newItem = document.createElement("div");

@@ -191,11 +191,8 @@ public class MembersController {
     public String deleteMember(@PathVariable("id") long id, HttpSession httpSession) {
         httpSession.invalidate();
         memberDao.deleteById(id);
-        //before redirects, invalidate session??
         return "redirect:/";
     }
-
-
 }
 
 

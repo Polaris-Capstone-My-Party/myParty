@@ -55,8 +55,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .authorizeRequests()
                     .antMatchers(
                             //TODO put the link for rsvp stuff?
-                        "/party/edit/{id}", // only authenticated users can create ads
-                        "/party/delete/{id}","/party/create", // only authenticated users can edit ads
+                        "/party/edit/{id}", // only authenticated users can create parties
+                        "/party/delete/{id}","/party/create", // only authenticated users can edit parties
                             "/profile", "/rsvp/{urlKey}/login"
                 )
                     .authenticated()
