@@ -109,7 +109,7 @@ public class EmailService {
         String resetDetails =
                 "<img src=\"" + resetURL + "/img/MyParty.png\"><br>"
                         + "<h2>" +  member.getUsername() + ",</h2><br>"
-                        + "Click to reset your password " + "<a href=" + resetURL + "/member/resetpassword/" + token + "\">HERE</a>";
+                        + "Click to reset your password " + "<a href=" + resetURL + "/member/resetpassword/" + token + ">HERE</a>";
 
         helper.setText(resetDetails, html);
 
