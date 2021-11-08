@@ -57,7 +57,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                             //TODO put the link for rsvp stuff?
                         "/party/edit/{id}", // only authenticated users can create ads
                         "/party/delete/{id}","/party/create", // only authenticated users can edit ads
-                            "/profile"
+                            "/profile", "/rsvp/{urlKey}/login"
                 )
                     .authenticated()
         ;

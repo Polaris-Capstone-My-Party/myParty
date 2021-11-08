@@ -1,5 +1,6 @@
 package com.myParty.controllers;
 
+import com.myParty.BaseURL;
 import com.myParty.models.*;
 import com.myParty.repositories.*;
 import com.myParty.services.EmailService;
@@ -9,8 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.sql.Timestamp;
 import java.util.*;
 
 
@@ -68,19 +70,39 @@ public class MembersController {
     public String memberProfile(Model model) {
         Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member memberToDisplay = memberDao.getById(userInSession.getId());
+
         List<PartyMember> partyMembers = memberToDisplay.getPartyMembers();
+        List<PartyMember> upcomingParties = new ArrayList<>();
+        List<PartyMember> pastParties = new ArrayList<>();
+
+        //checks & orders parties if they are upcoming or past parties
+        Date date = new Date();
+        Timestamp currentTime = new Timestamp(date.getTime());
+        for (PartyMember partyMember: partyMembers) {
+            Timestamp partyTime = partyMember.getParty().getStartTime();  //gets partyTime
+
+            //if partyTime is before currentTime --> party is in the past
+            if(partyTime.before(currentTime)){
+                pastParties.add(partyMember);
+            }
+            else{ //if partyTime is after currentTime --> party is upcoming
+                upcomingParties.add(partyMember);
+            }
+        }
 
         model.addAttribute("owner", memberToDisplay);
-        model.addAttribute("partyMembers", partyMembers);
+        model.addAttribute("upcomingParties", upcomingParties);
+        model.addAttribute("pastParties", pastParties); //TODO: Add logic to HTML form 
         return "member/personalProfile";
     }
 
     //show host party page to member
     @GetMapping("/member/{urlKey}/view")
-    public String showHostPartyPage(Model model, @PathVariable String urlKey) {
+    public String showHostPartyPage(Model model, @PathVariable String urlKey, HttpServletRequest request) {
 
         Party party = partyDao.getByUrlKey(urlKey); //gets party by urlKey
 
+        //Display Party Items Logic
         List<PartyItem> partyItems = partyItemDao.getByParty(party); //gets partyItems associated w/ party
         List<Long> quantityRemaining = guestControllerDao.calculateQuantity(partyItems);//gets list of quantity remaining
         HashMap<PartyItem, Long> completedPartyItems = new HashMap<>(); //Creates Hashmap that stores PartyItem objects & quantitiesRemaining
@@ -90,6 +112,7 @@ public class MembersController {
             completedPartyItems.put(partyItems.get(i), quantityRemaining.get(i)); //sets quantityRemaining Long & PartyItem object for HashMap
         }
 
+        //Display Guest logic
         List<Guest> guests = guestDao.getByParty(party); //gets guests associated w/ party
         HashMap<Guest, List<ItemBringer>> completedGuests = new HashMap<>(); //Creates Hashmap that stores Guest objects & list of ItemBringers (assoc. w/ guest)
 
@@ -98,6 +121,7 @@ public class MembersController {
             completedGuests.put(guest, itemBringers); //adds guest object & ItemBringer List to HashMap
         }
 
+        //Display Party Members Logic
         List<PartyMember> partyMembers = partyMemberDao.getByParty(party); //gets partyMembers associated with party
         HashMap<PartyMember, List<ItemBringer>> completedPartyMembers = new HashMap<>(); //Creates Hashmap that stores PartyMember objects & list of ItemBringers (assoc. w/ partyMember)
 
@@ -105,11 +129,13 @@ public class MembersController {
             List<ItemBringer> itemBringers = itemBringerDao.getByPartyMember(partyMember); //get List of itemBringer objects associated w/ guest
             completedPartyMembers.put(partyMember, itemBringers); //adds guest object & ItemBringer List to HashMap
         }
+        String url = BaseURL.getBaseURL(request) + "/rsvp/" + party.getUrlKey();
 
         model.addAttribute("party", party); //sets party information
         model.addAttribute("guests", completedGuests); //sets guest information
         model.addAttribute("partyMembers", completedPartyMembers); //sets partyMember information
         model.addAttribute("partyItems", completedPartyItems); //sets partyItem information
+        model.addAttribute("url", url);
 
         return "member/hostPartyPage";
     }
@@ -162,9 +188,10 @@ public class MembersController {
     }
 
     @GetMapping("/members/delete/{id}")
-    public String deleteMember(@PathVariable("id") long id) {
+    public String deleteMember(@PathVariable("id") long id, HttpSession httpSession) {
+        httpSession.invalidate();
         memberDao.deleteById(id);
-        logout();
+        //before redirects, invalidate session??
         return "redirect:/";
     }
 
