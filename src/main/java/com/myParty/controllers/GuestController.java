@@ -93,7 +93,7 @@ public class GuestController {
     @PostMapping(path = "/rsvp/{urlKey}")
     public String createGuest(@PathVariable String urlKey, @ModelAttribute Guest guest, @RequestParam String rsvp,
                               @RequestParam(name="partyItem[]", required = false) String[] myPartyItems,
-                              @RequestParam(name="quantity[]",  required = false) String[] quantities) throws MessagingException {
+                              @RequestParam(name="quantity[]",  required = false) String[] quantities, HttpServletRequest request) throws MessagingException {
 
         Party party = partyDAO.getByUrlKey(urlKey); //gets party
 
@@ -136,21 +136,7 @@ public class GuestController {
             }
         }
 
-        String rsvpDetails =
-                "<h2 style=\"color: red\">You are RSVP'd to " + party.getTitle() + "!</h2>, " +
-                        "<img src=\"http://localhost:8080/img/MyParty.png\" >" +
-                        "<br><br><i>Here are the details: </i><br>"
-                        + "Description: " + party.getDescription() + "<br>"
-                        + "Start Time: " + party.getStartTime() + "<br>"
-                        + "End Time: " + party.getEndTime() + "<br>"
-                        + "Location:<br>" + party.getLocation().getAddressOne() + "<br>"
-                        + party.getLocation().getAddressTwo() + "<br>"
-                        + party.getLocation().getCity() + " " + party.getLocation().getState() + " " + party.getLocation().getZipcode() + "<br>"
-                        + "<br>You have signed up to bring the following: <br>" + partyItemsDetails + "<br>"
-                        + "Additional Guests: " + guest.getAdditionalGuests() + "<br>"
-                        + "View or edit your RSVP: " + "<a href=\"http://localhost:8080/rsvp/" + party.getUrlKey() + "/" + guest1.getGuestKey() + "/view" + "\">here</a>";
-
-        emailService.sendRSVPConfirmGuest(guest, "Your RSVP to " + party.getTitle(), rsvpDetails);
+        emailService.sendRSVPConfirmGuest(guest, party, partyItemsDetails, request);
 
         return  "redirect:/guests/successRsvp/" + urlKey + "/" + uuid;
     }

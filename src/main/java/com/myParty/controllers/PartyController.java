@@ -50,7 +50,7 @@ public class PartyController {
             @RequestParam String state,
             @RequestParam String zipcode,
             @RequestParam(name = "name[]") String[] names,
-            @RequestParam(name = "quantity[]") String[] quantities) throws MessagingException {
+            @RequestParam(name = "quantity[]") String[] quantities, HttpServletRequest request) throws MessagingException {
 
         //Creates & Saves Location
         Location locationToAdd = new Location(0, addressOne, addressTwo, city, state, zipcode);
@@ -70,20 +70,7 @@ public class PartyController {
         party.setLocation(locationInDb);
         Party newCreatedParty = partyDao.save(party);
 
-        //TODO: fix location to show cleaner
-        String partyDetails =
-                "<h2>Your party " + party.getTitle() + " has been created.</h2>" +
-                        "<img src=\"http://localhost:8080/img/MyParty.png\" >" +
-                        " <br><br><i>Here are the details: </i><br>"
-                        + "Description: " + party.getDescription() + "<br>"
-                        + "Start Time: " + party.getStartTime() + "<br>"
-                        + "End Time: " + party.getEndTime() + "<br>"
-                        + "Location: <br>" + party.getLocation().getAddressOne() + "<br>"
-                        + party.getLocation().getAddressTwo() + "<br>"
-                        + party.getLocation().getCity() + " " +party.getLocation().getState() + " " + party.getLocation().getZipcode() + "<br>"
-                + "Here is your custom party URL: " + party.getUrlKey() ;
-
-        emailService.partyCreatedConfirmation(newCreatedParty, newCreatedParty.getTitle() + " has been created", partyDetails);
+        emailService.partyCreatedConfirmation(party, request);
 
         //Calls method to create & save new items
         if(names != null){
@@ -107,27 +94,9 @@ public class PartyController {
 
     //redirects to profile when submit button pushed
     @PostMapping("/parties/{urlKey}")
-    public String successParty(@PathVariable String urlKey, @RequestParam(name = "email[]") String[] emailAddresses) throws MessagingException {
+    public String successParty(@PathVariable String urlKey, @RequestParam(name = "email[]") String[] emailAddresses, HttpServletRequest request) throws MessagingException {
         Party party = partyDao.getByUrlKey(urlKey);
-
-        //TODO: fix location to be cleaner
-        String partyDetails =
-                "<h2>You're Invited to " + party.getTitle() + " by " + party.getOwner().getFirstName() + "</h2> " +
-                        "<br><i>Here are the details: </i><br>"
-                        + "Description: " + party.getDescription() + "<br>"
-                        + "Start Time: " + party.getStartTime() + "<br>"
-                        + "End Time: " + party.getEndTime() + "<br>"
-                        + "Location: " + party.getLocation().getAddressOne() + "<br>"
-                        + party.getLocation().getAddressTwo() + "<br>"
-                        + party.getLocation().getCity() + " " + party.getLocation().getState() + " " + party.getLocation().getZipcode() + "<br>"
-                        + "RSVP " + "<a href=\"http://localhost:8080/rsvp/" + party.getUrlKey() + "\">here</a>";
-
-        //TODO: fix link for party URL to make dynamic with new domain name
-        //TODO: Make for : each loop
-        for (int i = 0; i < emailAddresses.length; i++) {
-            System.out.println(emailAddresses[i]);
-            emailService.sendInvites(party.getTitle(), emailAddresses[i], partyDetails);
-        }
+        emailService.sendInvites(party, emailAddresses, request);
         return "redirect:/profile";
     }
 

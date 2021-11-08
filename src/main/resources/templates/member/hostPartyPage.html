@@ -31,14 +31,14 @@
                 <form style="display: flex;
     flex-direction: column;
     width: 50%;
-    align-content: center;
-    align-items: flex-start;
-    justify-content: flex-start;
+    align-content: flex-end;
+    align-items: center;
+    justify-content: flex-end;
     flex-wrap: wrap;
     margin: auto;
 ">
-                    <label for="customUrl">Custom Party Url:</label>
-                    <input type="text" id="customUrl" th:value="${url}"/>
+                    <label for="customUrl">Custom Party Url</label>
+                    <input class="container-fluid" type="text" id="customUrl" th:value="${url}"/>
                     <button type="button" onclick="myFunction()">Copy url</button>
                 </form>
             </div>
@@ -160,32 +160,14 @@
                                     </div>
                                     <div class="form-group mx-sm-3 mb-2">
                                         <button id="addEmailButton">Add Another Email</button>
-                                        <script>
-                                            window.onload = (function () {
-                                                const additionalEmail = document.getElementById('addEmailButton');
-
-                                                const emailForm = `<div class="form-group">
-                  <label for="email[]">Email Address:</label>
-                  <input type="email" name="email[]" id="email[]">
-                </div>`
-
-
-                                                additionalEmail.addEventListener('click', function (event) {
-                                                    event.preventDefault();
-
-                                                    const yeahBaby = document.getElementById('additionalEmails');
-                                                    let newEmail = document.createElement("div");
-                                                    newEmail.innerHTML = emailForm;
-                                                    yeahBaby.appendChild(newEmail);
-                                                });
-                                            })
-                                        </script>
+                                        <input type="submit" class="btn btn-info" value="Send Invites!">
                                     </div>
                                 </form>
-                                <input type="submit" class="btn btn-info" value="Send Invites!"></div>
+                                </div>
                         </div>
                     </div>
                 </div>
+
                 <div>
                     <a th:href="@{|/parties/edit/${party.id}|}" class="btn btn-light">Edit Party</a>
                     <a th:replace="partials/modalsUpdates :: modal"></a>
@@ -216,6 +198,28 @@
                     }).setLngLat(result).addTo(map);
 
                 });
+            </script>
+
+<!--            SEND ADDITIONAL EMAILS SCRIPT-->
+            <script>
+                window.onload = (function () {
+                    const additionalEmail = document.getElementById('addEmailButton');
+
+                    const emailForm = `<div class="form-group">
+                  <label for="email[]">Email Address:</label>
+                  <input type="email" name="email[]" id="email[]">
+                </div>`
+
+
+                    additionalEmail.addEventListener('click', function (event) {
+                        event.preventDefault();
+
+                        const yeahBaby = document.getElementById('additionalEmails');
+                        let newEmail = document.createElement("div");
+                        newEmail.innerHTML = emailForm;
+                        yeahBaby.appendChild(newEmail);
+                    });
+                })
             </script>
         </div>
     </section>
