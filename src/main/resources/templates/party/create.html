@@ -5,7 +5,7 @@
     <title layout:fragment="title" >myParty | Create a Party</title>
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
     <style>
-        .close:hover {background: darkred;}
+        .remove:hover {background: darkred;}
     </style>
 </head>
 
@@ -81,10 +81,12 @@
 
                     <label for="quantity[]">Quantity:</label>
                     <input type="text" name="quantity[]" id="quantity[]">
-                    <span class="close">x</span>
+                    <span class="remove">x</span>
                 </div>
             </div>
             <button id="addItemButton">Add Another Item</button>
+
+            <!--  unique id -->
 
             <input value="Create Party!" type="submit"/>
         </form>
@@ -99,7 +101,7 @@
 
                   <label for="quantity[]">Quantity:</label>
                   <input type="text" name="quantity[]" id="quantity[]">
-                  <span class="close">x</span>
+                  <span class="remove">x</span>
                 </div>`
 
             additionalItem.addEventListener('click', function(event) {
@@ -109,6 +111,17 @@
                 let newItem = document.createElement("div");
                 newItem.innerHTML = itemForm;
                 testyBoi.appendChild(newItem);
+
+                $('.remove').on('click', function() {
+                    console.log("clicked");
+                    $(this).parent().remove();
+                });
+
+            });
+
+            $('.remove').on('click', function() {
+                console.log("clicked");
+                $(this).parent().remove();
             });
         })
     </script>
