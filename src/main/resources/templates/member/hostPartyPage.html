@@ -6,10 +6,16 @@
     row {
         align-content: center;
     }
+
+    #map {
+        position: relative;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+    }
 </style>
 
 <head>
-    <!--  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>-->
     <meta charset="UTF-8">
     <title layout:fragment="title">My Party | Host View</title>
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
@@ -18,30 +24,31 @@
 <div class="container-fluid">
     <section layout:fragment="content">
 
-        <a href="/profile" class="btn btn-primary">Return to Profile</a>
+        <a href="/profile" class="btn btn-dark">Return to Profile</a>
 
         <!--  Show Party Info-->
         <div class="card align-center">
             <div class="card-header">
-                Featured
+                You are viewing this party page as the host.
             </div>
+
             <div class="card-body">
                 <h1 class="card-title" th:text="${party.title}"></h1>
                 <h3 class="card-text" th:text="${party.description}"></h3>
-                <form style="display: flex;
-    flex-direction: column;
-    width: 50%;
-    align-content: center;
-    align-items: flex-start;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    margin: auto;
-">
+<!--                <form style="display: flex;-->
+<!--                             flex-direction: column;-->
+<!--                             width: 50%;-->
+<!--                             align-content: center;-->
+<!--                             align-items: flex-start;-->
+<!--                             justify-content: flex-start;-->
+<!--                             flex-wrap: wrap;-->
+<!--                             margin: auto;">-->
+
                     <label for="customUrl">Custom Party Url:</label>
                     <input type="text" id="customUrl" th:value="${url}"/>
                     <button type="button" onclick="myFunction()">Copy url</button>
-                </form>
             </div>
+
             <!--     Copy url button-->
             <script>
                 function myFunction() {
@@ -65,16 +72,16 @@
                          th:text="${party.location.addressOne} + ', ' + ${party.location.city}+ ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}"
                          id="fullAddress"></div>
 
+                    <!--Show Location on Map-->
                     <!--TODO: Add logic for show addressTwo if not null-->
                     <div id='map' style='width: 100%; height: 40vh'></div>
                 </div>
             </div>
-
             <div class="p-2 bd-highlight">
                 <div class="container">
                     <div class="row justify-content-center">
-                        <div class="col-lg-10 mt-5 mb-5">
-                            <table id="example" class="table table-bordered" style="width: 100%">
+                        <div class="table-responsive">
+                            <table id="example" class="table table-bordered">
                                 <h1>Party Item Information</h1>
                                 <thead>
                                 <tr>
@@ -99,15 +106,15 @@
             <div class="p-2 bd-highlight">
                 <div class="container">
                     <div class="row justify-content-center">
-                        <div class="col-lg-10 mt-5 mb-5">
-                            <table id="example2" class="table table-bordered" style="width: 100%">
+                        <div class="table-responsive">
+                            <table id="example2" class="table table-bordered">
                                 <h1>Guest Information</h1>
                                 <thead>
                                 <tr>
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>RSVP Status</th>
-                                    <th>Guests Added</th>
+                                    <th>Additional Guests</th>
                                     <!--              <th>Item Bringing</th>-->
                                     <!--              <th>Quantity Bringing</th>-->
                                 </tr>
@@ -117,7 +124,16 @@
                                     <td th:text="${guest.key.firstName} + ' ' + ${guest.key.lastName}">Name</td>
                                     <td th:text="${guest.key.email}">Email</td>
                                     <td th:text="${guest.key.rsvpStatus}">RSVP Status</td>
-                                    <td th:text="${guest.key.additionalGuests}">Guests Added</td>
+                                    <td th:text="${guest.key.additionalGuests}">Additional Guests</td>
+                                    <!--              <td th:block th:if="${itemBringer.quantity != 0}"-->
+                                    <!--              th:text="'Item Bringing: ' + ${itemBringer.partyItem.item.name}"-->
+                                    <!--              th:text="'Quantity Bringing: ' + ${itemBringer.quantity}"></td>-->
+                                </tr>
+                                <tr th:each="partyMember : ${partyMembers}">
+                                    <td th:text="${partyMember.key.member.firstName} + ' ' + ${partyMember.key.member.lastName}">Name</td>
+                                    <td th:text="${partyMember.key.member.email}">Email</td>
+                                    <td th:text="${partyMember.key.rsvpStatus}">RSVP Status</td>
+                                    <td th:text="${partyMember.key.additionalGuests}">Additional Guests</td>
                                     <!--              <td th:block th:if="${itemBringer.quantity != 0}"-->
                                     <!--              th:text="'Item Bringing: ' + ${itemBringer.partyItem.item.name}"-->
                                     <!--              th:text="'Quantity Bringing: ' + ${itemBringer.quantity}"></td>-->
@@ -127,21 +143,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div th:each="partyMember : ${partyMembers}">
-                <div th:text="'Name: ' + ${partyMember.key.member.firstName} + ' ' + ${partyMember.key.member.lastName}"></div>
-                <div th:text="'Email: ' + ${partyMember.key.member.email}"></div>
-                <div th:text="'RSVP Status: ' + ${partyMember.key.rsvpStatus}"></div>
-                <div th:text="'Additional Guests Bringing: ' + ${partyMember.key.additionalGuests}"></div>
-
-                <div th:each="itemBringer : ${partyMember.value}">
-                    <th:block th:if="${itemBringer.quantity != 0}">
-                        <div th:text="'Item Bringing: ' + ${itemBringer.partyItem.item.name}"></div>
-                        <div th:text="'Quantity Bringing: ' + ${itemBringer.quantity}"></div>
-                    </th:block>
-                </div>
-                <br>
             </div>
 
             <div class="container align-center">
@@ -186,10 +187,10 @@
                         </div>
                     </div>
                 </div>
-                <div>
-                    <a th:href="@{|/parties/edit/${party.id}|}" class="btn btn-light">Edit Party</a>
-                    <a th:replace="partials/modalsUpdates :: modal"></a>
-                </div>
+            </div>
+            <div class="d-flex justify-content-center">
+            <a th:href="@{|/parties/edit/${party.id}|}" class="btn btn-dark">Edit Party</a>
+                <a th:replace="partials/modalsUpdates :: modal"></a>
             </div>
 
             <div th:replace="partials/scripts :: scripts"></div>
@@ -214,6 +215,7 @@
                     var marker = new mapboxgl.Marker({
                         draggable: true
                     }).setLngLat(result).addTo(map);
+
 
                 });
             </script>

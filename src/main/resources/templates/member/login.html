@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}">
 <meta charset="UTF-8"/>
 <title layout:fragment="title">myParty | Login</title>
 
@@ -17,23 +18,23 @@
 
             <div class="p-2 bd-highlight">
 
-                <form th:action="@{/login}" method="post">
+                <form th:action="@{/login}" method="post" class="form-signin">
 
-                    <div class="p-2 bd-highlight"><label for="username">Username</label></div>
-                        <input id="username" name="username" type="text"/>
+                    <div class="p-2 bd-highlight"><label for="username" autofocus="true">Username</label></div>
+                    <input id="username" name="username" type="text"/>
                     <div class="p-2 bd-highlight"><label for="password">Password</label></div>
-                            <input id="password" name="password" type="password"/>
+                    <input id="password" name="password" type="password"/>
                     <div class="p-2 bd-highlight"><input type="submit" value="Log In"/></div>
                 </form>
                 <a th:href="@{/member/forgotpassword}">Forgot Password?</a>
 
             </div>
-                <div class="p-2 bd-highlight"><a href="/sign-up">Don't have an account? Sign up here</a>
+            <div class="p-2 bd-highlight"><a href="/sign-up">Don't have an account? Sign up here</a>
 
 
-                </div>
             </div>
         </div>
+    </div>
     </div>
 </section>
 <footer><p layout:fragment="custom-footer">This is actually working</p></footer>
