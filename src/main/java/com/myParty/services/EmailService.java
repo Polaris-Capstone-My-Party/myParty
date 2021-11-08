@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
-import java.net.http.HttpRequest;
+
 
 
 @Service("mailService")
@@ -107,9 +107,9 @@ public class EmailService {
         String resetURL = BaseURL.getBaseURL(request);
         //TODO: add domain to replace localhost
         String resetDetails =
-                "<img src=" + resetURL + "/img/MyParty.png\"><br>"
+                "<img src=\"" + resetURL + "/img/MyParty.png\"><br>"
                         + "<h2>" +  member.getUsername() + ",</h2><br>"
-                        + "Click to reset your password " + "<a href=" + resetURL + "/member/resetpassword/" + token + "\">HERE</a>";
+                        + "Click to reset your password " + "<a href=" + resetURL + "/member/resetpassword/" + token + ">HERE</a>";
 
         helper.setText(resetDetails, html);
 
@@ -132,7 +132,7 @@ public class EmailService {
 
         String rsvpURL = BaseURL.getBaseURL(request);
         String rsvpDetails =
-                "<img src=" + rsvpURL + "/img/MyParty.png\">"
+                "<img src=\"" + rsvpURL + "/img/MyParty.png\">"
                         + "<h2 style=\"color: red\">You are RSVP'd to " + party.getTitle() + "!</h2> "
                         + "<br><br><i>Here are the details: </i><br>"
                         + "<br>"
@@ -168,7 +168,7 @@ public class EmailService {
         String rsvpGuestURL = BaseURL.getBaseURL(request);
 
         String rsvpDetails =
-                "<img src=" + rsvpGuestURL + "/img/MyParty.png\">"
+                "<img src=\"" + rsvpGuestURL + "/img/MyParty.png\">"
                         + "<h2 style=\"color: red\">You are RSVP'd to " + party.getTitle() + "!</h2> "
                         + "<br><br><i>Here are the details: </i><br>"
                         + "<br>"

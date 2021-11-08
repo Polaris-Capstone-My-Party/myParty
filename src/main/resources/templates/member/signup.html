@@ -11,7 +11,7 @@
 
             <div class="p-2 bd-highlight"><h1>Create an account</h1></div>
 
-            <form th:action="@{/sign-up}" method="POST" th:object="${member}">
+            <form id="form-to-check" th:action="@{/sign-up}" method="POST" th:object="${member}">
 
                 <div class="form-group">
                     <label for="username">Username</label>
@@ -31,19 +31,122 @@
                 </div>
                 <div class="form-group">
                     <label for="phone">Phone Number</label>
-                    <input id="phone" type="number" th:field="*{phone}">
+                    <input id="phone" type="number" th:field="*{phone}"/>
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input id="password" type="password" th:field="*{password}">
+                    <label for="psw">Password</label>
+                    <input id="psw" type="password" th:field="*{password}"
+                           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}"
+                           title="Must contain at least one number and one uppercase and lowercase letter, and at least 5 or more characters"
+                           required/>
                 </div>
 
+
                 <input value="Let's Party!" type="submit"/>
-    </form>
-    <a href="/login">Already have an account? Log in here</a>
+            </form>
+            <br>
+            <a href="/login">Already have an account? Log in here</a>
+            <div id="message">
+                <h4>Password must contain the following:</h4>
+                <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
+                <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
+                <p id="number" class="invalid">A <b>number</b></p>
+                <p id="length" class="invalid">Minimum <b>5 characters</b></p>
+            </div>
+        </div>
+    </div>
+
+<!--    <script>-->
+<!--        // Example starter JavaScript for disabling form submissions if there are invalid fields-->
+<!--        (function () {-->
+<!--            'use strict';-->
+<!--            window.addEventListener('load', function () {-->
+<!--                // Fetch all the forms we want to apply custom Bootstrap validation styles to-->
+<!--                var forms = document.getElementById('form-to-check');-->
+<!--                console.log(forms);-->
+<!--                // Loop over them and prevent submission-->
+<!--                // var validation = Array.prototype.filter.call(forms, function(form) {-->
+<!--                forms.addEventListener('submit', function (event) {-->
+<!--                    console.log("something");-->
+<!--                    var isValid = true;-->
+<!--                    const passwordValue = document.getElementById('password').value;-->
+<!--                    console.log(passwordValue);-->
+
+<!--                    if (passwordValue === 'password') {-->
+<!--                        isValid = false;-->
+<!--                    }-->
+<!--                    if (isValid === false) {-->
+<!--                        event.preventDefault();-->
+<!--                        event.stopPropagation();-->
+<!--                    }-->
+<!--                    form.classList.add('was-validated');-->
+<!--                });-->
+<!--                // });-->
+<!--            }, false);-->
+<!--        })();-->
+<!--    </script>-->
+
+    <script>
+    var myInput = document.getElementById("psw");
+    var letter = document.getElementById("letter");
+    var capital = document.getElementById("capital");
+    var number = document.getElementById("number");
+    var length = document.getElementById("length");
+
+    // When the user clicks on the password field, show the message box
+    myInput.onfocus = function() {
+    document.getElementById("message").style.display = "block";
+    }
+
+    // When the user clicks outside of the password field, hide the message box
+    myInput.onblur = function() {
+    document.getElementById("message").style.display = "none";
+    }
+
+    // When the user starts to type something inside the password field
+    myInput.onkeyup = function() {
+    // Validate lowercase letters
+    var lowerCaseLetters = /[a-z]/g;
+    if(myInput.value.match(lowerCaseLetters)) {
+    letter.classList.remove("invalid");
+    letter.classList.add("valid");
+    } else {
+    letter.classList.remove("valid");
+    letter.classList.add("invalid");
+    }
+
+    // Validate capital letters
+    var upperCaseLetters = /[A-Z]/g;
+    if(myInput.value.match(upperCaseLetters)) {
+    capital.classList.remove("invalid");
+    capital.classList.add("valid");
+    } else {
+    capital.classList.remove("valid");
+    capital.classList.add("invalid");
+    }
+
+    // Validate numbers
+    var numbers = /[0-9]/g;
+    if(myInput.value.match(numbers)) {
+    number.classList.remove("invalid");
+    number.classList.add("valid");
+    } else {
+    number.classList.remove("valid");
+    number.classList.add("invalid");
+    }
+
+    // Validate length
+    if(myInput.value.length >= 5) {
+    length.classList.remove("invalid");
+    length.classList.add("valid");
+    } else {
+    length.classList.remove("valid");
+    length.classList.add("invalid");
+    }
+    }
+    </script>
+
 </section>
-</div>
-</div>
 <footer><p layout:fragment="custom-footer">This is actually working</p></footer>
 
 </html>
