@@ -13,7 +13,13 @@
             <h1>Create Party</h1>
         </div>
 
-        <form th:action="@{/parties/create}" th:method="post" th:object="${party}">
+        <form th:action="@{/parties/create}" th:method="post" th:object="${party}" style="display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: space-between;
+    align-items: flex-end;
+}">
             <div class="form-group">
                 <label for="title">Title:</label>
                 <input id="title" th:field="*{title}"/>
@@ -25,12 +31,12 @@
             </div>
 
             <div class="form-group">
-                <label for="start_time">Start Time:</label>
+                <label for="start_time">Start:</label>
                 <input id="start_time"  name="start_time" type="datetime-local"/>
             </div>
 
             <div class="form-group">
-                <label for="end_time">End Time:</label>
+                <label for="end_time">End:</label>
                 <input id="end_time"  name="end_time" type="datetime-local"/>
             </div>
 
