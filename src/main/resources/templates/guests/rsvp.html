@@ -34,7 +34,6 @@
     <div class="card text-center">
     <!--Member RSVP Form-->
     <div sec:authorize="isAuthenticated()">
-        <h1>Member form works!</h1>
         <form th:action="@{|/rsvp/${party.urlKey}/${member.id}|}" th:method="post" th:object="${partyMember}">
 
             <!--Prefilled Member Information-->
@@ -93,7 +92,7 @@
     <div sec:authorize="isAnonymous()">
         <form th:action="@{|/rsvp/${party.urlKey}|}" th:method="post" th:object="${guest}" >
 
-            <a href="/login">Have an account? Log in here</a>
+            <a th:href="@{|/rsvp/${party.urlKey}/login|}">Have an account? Log in here</a>
 
             <!--Enter First Name-->
             <div class="form-group">

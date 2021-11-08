@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.sql.Timestamp;
 import java.util.*;
 
 
@@ -69,10 +70,29 @@ public class MembersController {
     public String memberProfile(Model model) {
         Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member memberToDisplay = memberDao.getById(userInSession.getId());
+
         List<PartyMember> partyMembers = memberToDisplay.getPartyMembers();
+        List<PartyMember> upcomingParties = new ArrayList<>();
+        List<PartyMember> pastParties = new ArrayList<>();
+
+        //checks & orders parties if they are upcoming or past parties
+        Date date = new Date();
+        Timestamp currentTime = new Timestamp(date.getTime());
+        for (PartyMember partyMember: partyMembers) {
+            Timestamp partyTime = partyMember.getParty().getStartTime();  //gets partyTime
+
+            //if partyTime is before currentTime --> party is in the past
+            if(partyTime.before(currentTime)){
+                pastParties.add(partyMember);
+            }
+            else{ //if partyTime is after currentTime --> party is upcoming
+                upcomingParties.add(partyMember);
+            }
+        }
 
         model.addAttribute("owner", memberToDisplay);
-        model.addAttribute("partyMembers", partyMembers);
+        model.addAttribute("upcomingParties", upcomingParties);
+        model.addAttribute("pastParties", pastParties); //TODO: Add logic to HTML form 
         return "member/personalProfile";
     }
 

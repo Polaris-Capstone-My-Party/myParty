@@ -5,7 +5,7 @@
 <title layout:fragment="title" >myParty | Profile</title>
 
 <section layout:fragment="content">
-    <div class="container">
+    <div class="container-fluid">
         <div class="hero-unit">
             <h1>My Party Profile</h1>
 
@@ -17,7 +17,6 @@
                 <p>
                     <a th:href="@{|/members/editProfile/${owner.id}|}" class="btn btn-dark">Edit Profile</a>
                     <a th:replace="partials/deleteProfileModal :: modal"></a>
-
                 </p>
             </div>
 
@@ -38,16 +37,31 @@
                 </div>
 
                 <div class="col-4">
-                    <h5>Parties Attending</h5>
-                    <!--Display Parties Attending-->
-                    <div class="justify-content" th:each="partyMember : ${partyMembers}">
+                    <h5>Upcoming Parties</h5>
+                    <!--Display Upcoming Parties Attending-->
+                    <div class="justify-content" th:each="partyMember : ${upcomingParties}">
                         <div class="card text-center" style="width: 18rem;">
                             <div class="card-body">
                                 <h5><a th:text="${partyMember.party.title}" class="card-title" th:href="@{|/rsvp/${partyMember.party.urlKey}/member/${partyMember.partyMemberKey}/view|}"></a></h5>
                                 <p th:text="${partyMember.party.description}" class="card-text"></p>
                             </div>
                         </div>
-                    </div>                </div>
+                    </div>
+
+                    <br>
+
+                    <!--Display Past Parties Attending-->
+                    <h5>Past Parties</h5>
+                    <div class="justify-content" th:each="partyMember : ${pastParties}">
+                        <div class="card text-center" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5><a th:text="${partyMember.party.title}" class="card-title" th:href="@{|/rsvp/${partyMember.party.urlKey}/member/${partyMember.partyMemberKey}/view|}"></a></h5>
+                                <p th:text="${partyMember.party.description}" class="card-text"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
 
