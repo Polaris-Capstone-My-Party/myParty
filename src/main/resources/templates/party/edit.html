@@ -94,6 +94,7 @@
 
                   <label for="quantity[]">Quantity:</label>
                   <input type="text" name="quantity[]" id="quantity[]">
+                  <span class="remove">x</span>
                 </div>`
 
             additionalItem.addEventListener('click', function(event) {
@@ -103,6 +104,11 @@
                 let newItem = document.createElement("div");
                 newItem.innerHTML = itemForm;
                 testyBoi.appendChild(newItem);
+
+                $('.remove').on('click', function() {
+                    console.log("clicked");
+                    $(this).parent().remove();
+                });
             });
         })
     </script>
