@@ -92,7 +92,7 @@ public class GuestController {
     //saves Guest & ItemBringer information
     @PostMapping(path = "/rsvp/{urlKey}")
     public String createGuest(@PathVariable String urlKey, @ModelAttribute Guest guest, @RequestParam String rsvp,
-                              @RequestParam(name="partyItem[]") String[] myPartyItems, @RequestParam(name="quantity[]") String[] quantities) throws MessagingException {
+                              @RequestParam(name="partyItem[]") String[] myPartyItems, @RequestParam(name="quantity[]") String[] quantities, HttpServletRequest request) throws MessagingException {
 
         Party party = partyDAO.getByUrlKey(urlKey); //gets party
 
@@ -129,7 +129,7 @@ public class GuestController {
 
             partyItemsDetails += "Item: " + partyItem.getItem().getName() + "      Quantity: " + quantities[i] + "<br>";
         }
-            emailService.sendRSVPConfirmGuest(guest, party, partyItemsDetails);
+            emailService.sendRSVPConfirmGuest(guest, party, partyItemsDetails, request);
 
 
         return  "redirect:/guests/successRsvp/" + urlKey + "/" + uuid;

@@ -106,10 +106,11 @@ public class PartyController {
 
     //redirects to profile when submit button pushed
     @PostMapping("/parties/{urlKey}")
-    public String successParty(@PathVariable String urlKey, @RequestParam(name = "email[]") String[] emailAddresses) throws MessagingException {
+    public String successParty(@PathVariable String urlKey, @RequestParam(name = "email[]") String[] emailAddresses, HttpServletRequest request) throws MessagingException {
+        System.out.println("Hello, world!");
         Party party = partyDao.getByUrlKey(urlKey);
 
-            emailService.sendInvites(party, emailAddresses);
+            emailService.sendInvites(party, emailAddresses, request);
 
         return "redirect:/profile";
     }

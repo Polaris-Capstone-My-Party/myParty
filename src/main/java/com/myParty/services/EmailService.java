@@ -1,5 +1,6 @@
 package com.myParty.services;
 
+import com.myParty.BaseURL;
 import com.myParty.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
+import java.net.http.HttpRequest;
 
 
 @Service("mailService")
@@ -54,25 +57,25 @@ public class EmailService {
 
 
     //Method for singular invite to be included in the larger sendInvites method
-    public void sendInvite(Party party, String email) throws MessagingException {
+    public void sendInvite(Party party, String email, HttpServletRequest request) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom(from);
         helper.setTo(email);
         helper.setSubject("You're Invited to " + party.getTitle() + "!");
         boolean html = true;
-
+        String inviteURL = BaseURL.getBaseURL(request);
         String partyDetails =
-                "<img src=\"http://localhost:8080/img/MyParty.png\" >" +
+                "<img src=\"" + inviteURL + "/img/MyParty.png\" >" +
                         "<h2>You're Invited to " + party.getTitle() + " by " + party.getOwner().getUsername() + "</h2> "
                         + "<br><i>Here are the details: </i><br>"
-                        + "Description: " + party.getDescription() + "<br>"
+                        + "<br>Description: " + party.getDescription() + "<br>"
                         + "Start Time: " + party.getStartTime() + "<br>"
                         + "End Time: " + party.getEndTime() + "<br>"
                         + "Location: " + party.getLocation().getAddressOne() + "<br>"
                         + party.getLocation().getAddressTwo() + "<br>"
                         + party.getLocation().getCity() + " " + party.getLocation().getState() + " " + party.getLocation().getZipcode() + "<br>"
-                        + "RSVP " + "<a href=\"http://localhost:8080/rsvp/" + party.getUrlKey() + "\">here</a>";
+                        + "RSVP " + "<a href=\"" + inviteURL + "/rsvp/" + party.getUrlKey() + "/" + "\">here</a>";
 
         helper.setText(partyDetails, html);
 
@@ -85,26 +88,27 @@ public class EmailService {
     }
 
     //Send inviteS
-    public void sendInvites(Party party, String[] emailAddresses) throws MessagingException {
+    public void sendInvites(Party party, String[] emailAddresses, HttpServletRequest request) throws MessagingException {
+
         for (int i = 0; i < emailAddresses.length; i++) {
-            sendInvite(party, emailAddresses[i]);
+            sendInvite(party, emailAddresses[i], request);
         }
     }
 
     //Reset password for MEMBERS
-    public void sendResetPassword(Member member, String token) throws MessagingException {
+    public void sendResetPassword(Member member, String token, HttpServletRequest request) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom(from);
         helper.setTo(member.getEmail());
         helper.setSubject("Reset Your myParty Password");
         boolean html = true;
-
+        String resetURL = BaseURL.getBaseURL(request);
         //TODO: add domain to replace localhost
         String resetDetails =
-                "<img src=\"http://localhost:8080/img/MyParty.png\"><br>"
+                "<img src=" + resetURL + "/img/MyParty.png\"><br>"
                         + "<h2>" +  member.getUsername() + ",</h2><br>"
-                        + "Click to reset your password " + "<a href=\"http://localhost:8080/member/resetpassword/" + token + "\">HERE</a>";
+                        + "Click to reset your password " + "<a href=" + resetURL + "/member/resetpassword/" + token + "\">HERE</a>";
 
         helper.setText(resetDetails, html);
 
@@ -117,7 +121,7 @@ public class EmailService {
     }
 
 
-    public void sendRSVPConfirmMember(Member member, PartyMember partyMember, Party party, String partyItemsDetails) throws MessagingException {
+    public void sendRSVPConfirmMember(Member member, PartyMember partyMember, Party party, String partyItemsDetails, HttpServletRequest request) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom(from);
@@ -125,8 +129,9 @@ public class EmailService {
         helper.setSubject("Your RSVP to " + party.getTitle());
         boolean html = true;
 
+        String rsvpURL = BaseURL.getBaseURL(request);
         String rsvpDetails =
-                "<img src=\"http://localhost:8080/img/MyParty.png\">"
+                "<img src=" + rsvpURL + "/img/MyParty.png\">"
                         + "<h2 style=\"color: red\">You are RSVP'd to " + party.getTitle() + "!</h2> "
                         + "<br><br><i>Here are the details: </i><br>"
                         + "<br>"
@@ -138,7 +143,7 @@ public class EmailService {
                         + party.getLocation().getCity() + " " + party.getLocation().getState() + " " + party.getLocation().getZipcode() + "<br>"
                         + "<br>You have signed up to bring the following: <br>" + partyItemsDetails + "<br>"
                         + "Additional Guests: " + partyMember.getAdditionalGuests() + "<br>"
-                        + "View or edit your RSVP: " + "<a href=\"http://localhost:8080/rsvp/" + party.getUrlKey() + "/" + partyMember.getPartyMemberKey() + "/view" + "\">here</a>";
+                        + "View or edit your RSVP: " + "<a href=" + rsvpURL + "/rsvp/" + party.getUrlKey() + "/" + partyMember.getPartyMemberKey() + "/view" + "\">here</a>";
 
         helper.setText(rsvpDetails, html);
 
@@ -152,16 +157,17 @@ public class EmailService {
     }
 
 
-    public void sendRSVPConfirmGuest(Guest guest, Party party, String partyItemsDetails) throws MessagingException {
+    public void sendRSVPConfirmGuest(Guest guest, Party party, String partyItemsDetails, HttpServletRequest request) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom(from);
         helper.setTo(guest.getEmail());
         helper.setSubject("Your RSVP to " + party.getTitle());
         boolean html = true;
+        String rsvpGuestURL = BaseURL.getBaseURL(request);
 
         String rsvpDetails =
-                "<img src=\"http://localhost:8080/img/MyParty.png\">"
+                "<img src=" + rsvpGuestURL + "/img/MyParty.png\">"
                         + "<h2 style=\"color: red\">You are RSVP'd to " + party.getTitle() + "!</h2> "
                         + "<br><br><i>Here are the details: </i><br>"
                         + "<br>"
@@ -173,7 +179,7 @@ public class EmailService {
                         + party.getLocation().getCity() + " " + party.getLocation().getState() + " " + party.getLocation().getZipcode() + "<br>"
                         + "<br>You have signed up to bring the following: <br>" + partyItemsDetails + "<br>"
                         + "Additional Guests: " + guest.getAdditionalGuests() + "<br>"
-                        + "View or edit your RSVP: " + "<a href=\"http://localhost:8080/rsvp/" + party.getUrlKey() + "/" + guest.getGuestKey() + "/view" + "\">here</a>";
+                        + "View or edit your RSVP: " + "<a href=" + rsvpGuestURL + "/" + party.getUrlKey() + "/" + guest.getGuestKey() + "/view" + "\">here</a>";
 
         helper.setText(rsvpDetails, html);
         try {

@@ -36,7 +36,7 @@ public class PartyMembersController {
 
     //saves PartyMember & ItemBringer information
     @PostMapping(path = "/rsvp/{urlKey}/{memberId}")
-    public String createPartyMember(@PathVariable String urlKey, @PathVariable String memberId, @ModelAttribute PartyMember partyMember, @RequestParam String rsvp, @RequestParam(name = "partyItem[]") String[] myPartyItems, @RequestParam(name = "quantity[]") String[] quantities) throws MessagingException {
+    public String createPartyMember(@PathVariable String urlKey, @PathVariable String memberId, @ModelAttribute PartyMember partyMember, @RequestParam String rsvp, @RequestParam(name = "partyItem[]") String[] myPartyItems, @RequestParam(name = "quantity[]") String[] quantities, HttpServletRequest request) throws MessagingException {
 
         Member member = memberDao.getById(Long.valueOf(memberId));
         Party party = partyDao.getByUrlKey(urlKey);
@@ -78,7 +78,7 @@ public class PartyMembersController {
         }
         System.out.println(partyItemsDetails);
 
-        emailService.sendRSVPConfirmMember(member, partyMember, party, partyItemsDetails);
+        emailService.sendRSVPConfirmMember(member, partyMember, party, partyItemsDetails, request);
 
         return "redirect:/member/successRsvp/" + urlKey + "/" + uuid;
     }

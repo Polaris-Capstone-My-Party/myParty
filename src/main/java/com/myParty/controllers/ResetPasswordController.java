@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
 
 @Controller
@@ -49,13 +50,13 @@ public class ResetPasswordController {
     }
 
     @PostMapping("/member/resetpassword")
-    public String resetPasswordEmail(@RequestParam(name = "email") String memberEmail) throws MessagingException {
+    public String resetPasswordEmail(@RequestParam(name = "email") String memberEmail, HttpServletRequest request) throws MessagingException {
         Member member = memberDao.getByEmail(memberEmail);
         String token = UUID.randomUUID().toString();
         member.setResetToken(token);
         memberDao.save(member);
 
-        emailService.sendResetPassword(member, token);
+        emailService.sendResetPassword(member, token, request);
 
         return "redirect:/login";
     }
