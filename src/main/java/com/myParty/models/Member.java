@@ -1,5 +1,6 @@
 package com.myParty.models;
 
+import com.myParty.services.ValidPassword;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,6 +25,7 @@ public class Member {
     @Column(nullable = false)
     @Getter @Setter private String email;
 
+    @ValidPassword
     @Column(nullable = false)
     @Getter @Setter private String password;
 
