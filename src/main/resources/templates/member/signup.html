@@ -36,8 +36,8 @@
                 <div class="form-group">
                     <label for="psw">Password</label>
                     <input id="psw" type="password" th:field="*{password}"
-                           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                           title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}"
+                           title="Must contain at least one number and one uppercase and lowercase letter, and at least 5 or more characters"
                            required/>
                 </div>
 
@@ -51,7 +51,7 @@
                 <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
                 <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
                 <p id="number" class="invalid">A <b>number</b></p>
-                <p id="length" class="invalid">Minimum <b>8 characters</b></p>
+                <p id="length" class="invalid">Minimum <b>5 characters</b></p>
             </div>
         </div>
     </div>
