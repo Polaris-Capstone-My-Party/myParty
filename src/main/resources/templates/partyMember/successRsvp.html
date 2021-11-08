@@ -5,6 +5,15 @@
 <title layout:fragment="title">myParty | RSVP Success</title>
 
 <section layout:fragment="content">
+  <div class="card bg-dark text-white">
+    <img class="card-img" src="/static/img/partay2.png" alt="Card image">
+    <div class="card-img-overlay">
+      <h5 class="card-title">Card title</h5>
+      <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+      <p class="card-text">Last updated 3 mins ago</p>
+    </div>
+  </div>
+
   <h1>You Registered for this Party!</h1>
   <label for="editUrl">View/Edit Your RSVP With This Link:</label>
   <div id="editUrl" th:text="'http://localhost:8080/rsvp/' + ${urlKey} + '/member/' + ${partyMemberKey} + '/view'"/></div>
