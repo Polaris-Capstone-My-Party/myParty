@@ -36,7 +36,7 @@ public class PartyMembersController {
 
     //saves PartyMember & ItemBringer information
     @PostMapping(path = "/rsvp/{urlKey}/{memberId}")
-    public String createPartyMember(@PathVariable String urlKey, @PathVariable String memberId, @ModelAttribute PartyMember partyMember, @RequestParam String rsvp, @RequestParam(name = "partyItem[]") String[] myPartyItems, @RequestParam(name = "quantity[]") String[] quantities) throws MessagingException {
+    public String createPartyMember(@PathVariable String urlKey, @PathVariable String memberId, @ModelAttribute PartyMember partyMember, @RequestParam String rsvp, @RequestParam(name = "partyItem[]") String[] myPartyItems, @RequestParam(name = "quantity[]") String[] quantities, HttpServletRequest request) throws MessagingException {
 
         Member member = memberDao.getById(Long.valueOf(memberId));
         Party party = partyDao.getByUrlKey(urlKey);
@@ -78,22 +78,7 @@ public class PartyMembersController {
         }
         System.out.println(partyItemsDetails);
 
-        String rsvpDetails =
-                "<h2 style=\"color: red\">You are RSVP'd to " + party.getTitle() + "!</h2>, " +
-                        "<img src=\"http://localhost:8080/img/MyParty.png\" >" +
-                        "<br><br><i>Here are the details: </i><br>"
-                        + "Description: " + party.getDescription() + "<br>"
-                        + "Start Time: " + party.getStartTime() + "<br>"
-                        + "End Time: " + party.getEndTime() + "<br>"
-                        + "Location: <br> " + party.getLocation().getAddressOne() + "<br>"
-                        + party.getLocation().getAddressTwo() + "<br>"
-                        + party.getLocation().getCity() + " " + party.getLocation().getState() + " " + party.getLocation().getZipcode() + "<br>"
-                        + "<br>You have signed up to bring the following: <br>" + partyItemsDetails + "<br>"
-                        + "Additional Guests: " + partyMember.getAdditionalGuests() + "<br>"
-                + "View or edit your RSVP: " + "<a href=\"http://localhost:8080/rsvp/" + party.getUrlKey() + "/" + partyMember1.getPartyMemberKey() + "/view" + "\">here</a>";
-
-
-        emailService.sendRSVPConfirmMember(member, "Your RSVP to " + party.getTitle(), rsvpDetails);
+        emailService.sendRSVPConfirmMember(member, partyMember, party, partyItemsDetails, request);
 
         return "redirect:/member/successRsvp/" + urlKey + "/" + uuid;
     }
