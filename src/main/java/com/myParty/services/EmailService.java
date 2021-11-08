@@ -25,7 +25,7 @@ public class EmailService {
     private String from;
 
     //email confirmation of party created for host
-    public void partyCreatedConfirmation(Party party) throws MessagingException {
+    public void partyCreatedConfirmation(Party party, HttpServletRequest request) throws MessagingException {
 
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -33,8 +33,9 @@ public class EmailService {
         helper.setTo(party.getOwner().getEmail());
         helper.setSubject("Your party " + party.getTitle() + " has been created!");
         boolean html = true;
+        String successURL = BaseURL.getBaseURL(request);
         String partyDetails =
-                "<img src=\"http://localhost:8080/img/MyParty.png\" >" +
+                "<img src=\"" + successURL + "/img/MyParty.png\" >" +
                         "<h2>Your party " + party.getTitle() + " has been created.</h2>" +
                         " <br><br><i>Here are the details: </i><br>"
                         + "Description: " + party.getDescription() + "<br>"
@@ -43,7 +44,7 @@ public class EmailService {
                         + "Location: " + party.getLocation().getAddressOne() + "<br>"
                         + party.getLocation().getAddressTwo() + "<br>"
                         + party.getLocation().getCity() + " " + party.getLocation().getState() + " " + party.getLocation().getZipcode() + "<br>"
-                        + "Here is your custom party URL: " + party.getUrlKey();
+                        + "Here is your custom party URL: " + successURL + "/" + party.getUrlKey();
 
         helper.setText(partyDetails, html);
 
@@ -179,7 +180,7 @@ public class EmailService {
                         + party.getLocation().getCity() + " " + party.getLocation().getState() + " " + party.getLocation().getZipcode() + "<br>"
                         + "<br>You have signed up to bring the following: <br>" + partyItemsDetails + "<br>"
                         + "Additional Guests: " + guest.getAdditionalGuests() + "<br>"
-                        + "View or edit your RSVP: " + "<a href=" + rsvpGuestURL + "/" + party.getUrlKey() + "/" + guest.getGuestKey() + "/view" + "\">here</a>";
+                        + "View or edit your RSVP: " + "<a href=" + rsvpGuestURL + "/rsvp/" + party.getUrlKey() + "/" + guest.getGuestKey() + "/view" + "\">here</a>";
 
         helper.setText(rsvpDetails, html);
         try {

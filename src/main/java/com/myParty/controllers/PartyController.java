@@ -52,7 +52,7 @@ public class PartyController {
             @RequestParam String state,
             @RequestParam String zipcode,
             @RequestParam(name = "name[]") String[] names,
-            @RequestParam(name = "quantity[]") String[] quantities) throws MessagingException {
+            @RequestParam(name = "quantity[]") String[] quantities, HttpServletRequest request) throws MessagingException {
 
         //Creates & Saves Location
         Location locationToAdd = new Location(0, addressOne, addressTwo, city, state, zipcode);
@@ -72,7 +72,7 @@ public class PartyController {
         party.setLocation(locationInDb);
         Party newCreatedParty = partyDao.save(party);
 
-        emailService.partyCreatedConfirmation(party);
+        emailService.partyCreatedConfirmation(party, request);
 
         //Creates and saves party Items
         for (int i = 0; i < names.length; i++) {
