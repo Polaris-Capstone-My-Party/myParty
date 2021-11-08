@@ -31,14 +31,14 @@
                 <form style="display: flex;
     flex-direction: column;
     width: 50%;
-    align-content: center;
-    align-items: flex-start;
-    justify-content: flex-start;
+    align-content: flex-end;
+    align-items: center;
+    justify-content: flex-end;
     flex-wrap: wrap;
     margin: auto;
 ">
-                    <label for="customUrl">Custom Party Url:</label>
-                    <input type="text" id="customUrl" th:value="${url}"/>
+                    <label for="customUrl">Custom Party Url</label>
+                    <input class="container-fluid" type="text" id="customUrl" th:value="${url}"/>
                     <button type="button" onclick="myFunction()">Copy url</button>
                 </form>
             </div>
