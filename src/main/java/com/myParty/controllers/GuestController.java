@@ -92,7 +92,8 @@ public class GuestController {
     //saves Guest & ItemBringer information
     @PostMapping(path = "/rsvp/{urlKey}")
     public String createGuest(@PathVariable String urlKey, @ModelAttribute Guest guest, @RequestParam String rsvp,
-                              @RequestParam(name="partyItem[]") String[] myPartyItems, @RequestParam(name="quantity[]") String[] quantities) throws MessagingException {
+                              @RequestParam(name="partyItem[]", required = false) String[] myPartyItems,
+                              @RequestParam(name="quantity[]",  required = false) String[] quantities) throws MessagingException {
 
         Party party = partyDAO.getByUrlKey(urlKey); //gets party
 
@@ -100,13 +101,15 @@ public class GuestController {
         List<Long> updatedQuantities = calculateQuantity(dbPartyItems); //gets list of updated quantity remaining for dbPartyItems
 
         //checks guest is still able to sign up for that quantity
-        for(int i = 0; i < quantities.length; i++){
-            Long quantity = Long.valueOf(quantities[i]);
+        if (quantities != null){
+            for(int i = 0; i < quantities.length; i++){
+                Long quantity = Long.valueOf(quantities[i]);
 
-            //if quantity signing up for is greater than what is available in the db, reload page with updated info
-            if(quantity > updatedQuantities.get(i)){
-                System.out.println("Error: quantity signing up for is greater than available in the database");
-                return "redirect:/rsvp/" + urlKey;
+                //if quantity signing up for is greater than what is available in the db, reload page with updated info
+                if(quantity > updatedQuantities.get(i)){
+                    System.out.println("Error: quantity signing up for is greater than available in the database");
+                    return "redirect:/rsvp/" + urlKey;
+                }
             }
         }
 
@@ -118,17 +121,21 @@ public class GuestController {
         Guest guest1 =  guestDAO.save(guest); //save guest information & creates item to reference
         String partyItemsDetails = "";
 
-        for(int i = 0; i < myPartyItems.length; i++){ //goes through partyItems guest submitted
-            ItemBringer itemBringer = new ItemBringer(); //new instance of Item Bringer
-            PartyItem partyItem = partyItemDAO.getById(Long.valueOf(myPartyItems[i])); //get partyItem object by id
 
-            itemBringer.setQuantity(Long.valueOf(quantities[i])); //sets quantity
-            itemBringer.setGuest(guest1); //sets guest object
-            itemBringer.setPartyItem(partyItem); // sets partyItem object
-            itemBringerDAO.save(itemBringer); // saves item bringer
+        if(quantities != null){
+            for(int i = 0; i < myPartyItems.length; i++){ //goes through partyItems guest submitted
+                ItemBringer itemBringer = new ItemBringer(); //new instance of Item Bringer
+                PartyItem partyItem = partyItemDAO.getById(Long.valueOf(myPartyItems[i])); //get partyItem object by id
 
-            partyItemsDetails += "\"Item: " + partyItem.getItem().getName() + "      Quantity: " + quantities[i] + "<br>";
+                itemBringer.setQuantity(Long.valueOf(quantities[i])); //sets quantity
+                itemBringer.setGuest(guest1); //sets guest object
+                itemBringer.setPartyItem(partyItem); // sets partyItem object
+                itemBringerDAO.save(itemBringer); // saves item bringer
+
+                partyItemsDetails += "\"Item: " + partyItem.getItem().getName() + "      Quantity: " + quantities[i] + "<br>";
+            }
         }
+
         String rsvpDetails =
                 "<h2 style=\"color: red\">You are RSVP'd to " + party.getTitle() + "!</h2>, " +
                         "<img src=\"http://localhost:8080/img/MyParty.png\" >" +
@@ -201,8 +208,8 @@ public class GuestController {
 
     //saves Guest edited information
     @PostMapping(path = "/rsvp/{urlKey}/{guestKey}/edit")
-    public String saveEditRSVP(@ModelAttribute Guest guest, @RequestParam String rsvp, @RequestParam(name="itemBringer[]") String[] itemBringer,
-                               @RequestParam(name="quantity[]") String[] quantities, @RequestParam(name="partyItem[]") String[] partyItem,
+    public String saveEditRSVP(@ModelAttribute Guest guest, @RequestParam String rsvp, @RequestParam(name="itemBringer[]", required = false) String[] itemBringer,
+                               @RequestParam(name="quantity[]", required = false) String[] quantities, @RequestParam(name="partyItem[]", required = false) String[] partyItem,
                                @PathVariable String urlKey, @PathVariable String guestKey){
 
         Party party = partyDAO.getByUrlKey(urlKey);
@@ -210,14 +217,16 @@ public class GuestController {
         List<PartyItem> dbPartyItems = partyItemDAO.getByParty(party); //gets most current/up-to-date partyItems associated w/ party from db
         List<Long> updatedQuantities = calculateQuantity(dbPartyItems); //gets list of updated quantity remaining for dbPartyItems
 
-        //checks guest can still sign up for items
-        for(int i = 0; i < quantities.length; i++) { //updates itemBringer quantity
-            Long quantity = Long.valueOf(quantities[i]);
+        if(quantities != null){
+            //checks guest can still sign up for items
+            for(int i = 0; i < quantities.length; i++) { //updates itemBringer quantity
+                Long quantity = Long.valueOf(quantities[i]);
 
-            //if quantity signing up for is greater than what is available in the db, reload page with updated info
-            if (quantity > updatedQuantities.get(i)) {
-                System.out.println("Error: quantity signing up for is greater than available in the database");
-                return "redirect:/rsvp/" + urlKey + "/" + guestKey + "/edit";
+                //if quantity signing up for is greater than what is available in the db, reload page with updated info
+                if (quantity > updatedQuantities.get(i)) {
+                    System.out.println("Error: quantity signing up for is greater than available in the database");
+                    return "redirect:/rsvp/" + urlKey + "/" + guestKey + "/edit";
+                }
             }
         }
 
@@ -226,10 +235,12 @@ public class GuestController {
         guest.setParty(party);
         guestDAO.save(guest);
 
-        for(int i = 0; i < itemBringer.length; i++){ //updates itemBringer quantity
-            ItemBringer updatedItemBringer = itemBringerDAO.getById(Long.valueOf(itemBringer[i])); //get itemBringer object associated w/ itemBringerID
-            updatedItemBringer.setQuantity(Long.valueOf(quantities[i])); //sets updated quantity
-            itemBringerDAO.save(updatedItemBringer); //saves & updates quantity for ItemBringer
+        if(itemBringer != null){
+            for(int i = 0; i < itemBringer.length; i++){ //updates itemBringer quantity
+                ItemBringer updatedItemBringer = itemBringerDAO.getById(Long.valueOf(itemBringer[i])); //get itemBringer object associated w/ itemBringerID
+                updatedItemBringer.setQuantity(Long.valueOf(quantities[i])); //sets updated quantity
+                itemBringerDAO.save(updatedItemBringer); //saves & updates quantity for ItemBringer
+            }
         }
 
         return "redirect:/guests/successRsvp/" + urlKey + "/" + guestKey;

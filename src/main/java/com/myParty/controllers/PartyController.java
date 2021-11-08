@@ -168,8 +168,8 @@ public class PartyController {
             @RequestParam(name = "city") String city,
             @RequestParam(name = "state") String state,
             @RequestParam(name = "zipcode") String zipcode,
-            @RequestParam(name = "name[]") String[] names,
-            @RequestParam(name = "quantity[]") String[] quantities){
+            @RequestParam(name = "name[]",  required = false) String[] names,
+            @RequestParam(name = "quantity[]",  required = false) String[] quantities){
 
         //get party object
         Party partyToUpdate = partyDao.getById(id);
