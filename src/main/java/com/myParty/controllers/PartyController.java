@@ -8,11 +8,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
-import java.text.ParseException;
 import java.util.*;
 
 @Controller
@@ -32,10 +30,10 @@ public class PartyController {
         this.emailService = emailService;
     }
 
-
     //show form for creating a party
     @GetMapping("/parties/create")
     public String showCreatePartyForm(Model model) {
+        model.addAttribute("states", generateStates());
         model.addAttribute("party", new Party());
         return "party/create";
     }
@@ -74,19 +72,9 @@ public class PartyController {
 
         emailService.partyCreatedConfirmation(party, request);
 
-        //Creates and saves party Items
-        for (int i = 0; i < names.length; i++) {
-            //TODO: If item is null don't add - Error Message
-            Item item = new Item(); //create new item instance //TODO: check if item already exists
-            item.setName(names[i]); //set item name from name[]
-            itemDao.save(item); //save item instance
-
-            //creates & Saves party item
-            PartyItem partyItem = new PartyItem();
-            partyItem.setItem(item);
-            partyItem.setQuantityRequired(Long.valueOf(quantities[i]));
-            partyItem.setParty(newCreatedParty);
-            partyItemDao.save(partyItem);
+        //Calls method to create & save new items
+        if(names != null){
+            createItems(names, quantities, newCreatedParty);
         }
 
         return "redirect:/parties/success/" + uuid;
@@ -107,11 +95,8 @@ public class PartyController {
     //redirects to profile when submit button pushed
     @PostMapping("/parties/{urlKey}")
     public String successParty(@PathVariable String urlKey, @RequestParam(name = "email[]") String[] emailAddresses, HttpServletRequest request) throws MessagingException {
-        System.out.println("Hello, world!");
         Party party = partyDao.getByUrlKey(urlKey);
-
-            emailService.sendInvites(party, emailAddresses, request);
-
+        emailService.sendInvites(party, emailAddresses, request);
         return "redirect:/profile";
     }
 
@@ -132,7 +117,10 @@ public class PartyController {
         model.addAttribute("state", partyToEdit.getLocation().getState());
         model.addAttribute("zipcode", partyToEdit.getLocation().getZipcode());
         model.addAttribute("stateOptions", generateStates());
+        List<PartyItem> partyItems = partyItemDao.getByParty(partyToEdit); //get partyItems associated with party
 
+        model.addAttribute("partyItems", partyItems);
+        model.addAttribute("party", partyToEdit);
         return "party/edit";
     }
 
@@ -148,7 +136,9 @@ public class PartyController {
             @RequestParam(name = "addressTwo") String addressTwo,
             @RequestParam(name = "city") String city,
             @RequestParam(name = "state") String state,
-            @RequestParam(name = "zipcode") String zipcode) throws ParseException {
+            @RequestParam(name = "zipcode") String zipcode,
+            @RequestParam(name = "name[]",  required = false) String[] names,
+            @RequestParam(name = "quantity[]",  required = false) String[] quantities){
 
         //get party object
         Party partyToUpdate = partyDao.getById(id);
@@ -164,9 +154,14 @@ public class PartyController {
         partyToUpdate.setStartTime(partyToUpdate.makeTimestampFromString(startTime));
         partyToUpdate.setEndTime(partyToUpdate.makeTimestampFromString(endTime));
         partyToUpdate.setLocation(locationInDb);
-        partyDao.save(partyToUpdate);
+        Party partyUpdated = partyDao.save(partyToUpdate);
 
-        return "redirect:/profile";
+        //Calls method to create & save new items
+        if(names != null){
+            createItems(names, quantities, partyUpdated);
+        }
+
+        return "redirect:/member/" + partyUpdated.getUrlKey() + "/view";
     }
 
     //deletes party
@@ -176,6 +171,22 @@ public class PartyController {
         return "redirect:/profile";
     }
 
+    //Creates & saves new Items
+    public void createItems(String[] names, String[] quantities, Party party){
+        for (int i = 0; i < names.length; i++) {
+            //TODO: If item is null don't add - Error Message
+            Item item = new Item(); //create new item instance //TODO: check if item already exists
+            item.setName(names[i]); //set item name from name[]
+            itemDao.save(item); //save item instance
+
+            //creates & Saves party item
+            PartyItem partyItem = new PartyItem();
+            partyItem.setItem(item);
+            partyItem.setQuantityRequired(Long.valueOf(quantities[i]));
+            partyItem.setParty(party);
+            partyItemDao.save(partyItem);
+        }
+    }
 
     public List<String> generateStates(){
         List <String> states = new ArrayList<>();
@@ -233,5 +244,4 @@ public class PartyController {
 
         return states;
     }
-
 }
