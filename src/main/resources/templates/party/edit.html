@@ -1,8 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
-      layout:decorate="~{layout}">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html" layout:decorate="~{layout}">
 
-<title layout:fragment="title">myParty | Edit Party</title>
+<head>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <style>
+        .remove:hover {background: darkred;}
+    </style>
+
+    <title layout:fragment="title">myParty | Edit Party</title>
+</head>
 
 <section layout:fragment="content">
     <div class="container">
@@ -105,10 +111,16 @@
                 newItem.innerHTML = itemForm;
                 testyBoi.appendChild(newItem);
 
+                //Removes item html when click X
                 $('.remove').on('click', function() {
                     console.log("clicked");
                     $(this).parent().remove();
                 });
+            });
+
+            $('.remove').on('click', function() {
+                console.log("clicked");
+                $(this).parent().remove();
             });
         })
     </script>
