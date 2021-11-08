@@ -2,12 +2,18 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
       layout:decorate="~{layout}">
 
+<head>
 <title layout:fragment="title">myParty | RSVP Success</title>
-
+<script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
+</head>
 
 <section layout:fragment="content">
-    <h1>You Registered for this Party!</h1>
+    <h1 id="partyon">You Registered for this Party!</h1>
     <label for="editUrl">View/Edit Your RSVP With This Link:</label>
+    <!--     Confetti Animation-->
+    <script>
+        party.confetti(document.getElementById("partyon"))
+    </script>
     <div id="editUrl" th:text="${url}"/></div>
 </section>
 

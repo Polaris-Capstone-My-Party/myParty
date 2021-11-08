@@ -1,5 +1,6 @@
 package com.myParty.controllers;
 
+import com.myParty.BaseURL;
 import com.myParty.models.*;
 import com.myParty.repositories.*;
 import com.myParty.services.EmailService;
@@ -9,7 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.sql.Timestamp;
 import java.util.*;
 
 
@@ -67,16 +70,35 @@ public class MembersController {
     public String memberProfile(Model model) {
         Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member memberToDisplay = memberDao.getById(userInSession.getId());
+
         List<PartyMember> partyMembers = memberToDisplay.getPartyMembers();
+        List<PartyMember> upcomingParties = new ArrayList<>();
+        List<PartyMember> pastParties = new ArrayList<>();
+
+        //checks & orders parties if they are upcoming or past parties
+        Date date = new Date();
+        Timestamp currentTime = new Timestamp(date.getTime());
+        for (PartyMember partyMember: partyMembers) {
+            Timestamp partyTime = partyMember.getParty().getStartTime();  //gets partyTime
+
+            //if partyTime is before currentTime --> party is in the past
+            if(partyTime.before(currentTime)){
+                pastParties.add(partyMember);
+            }
+            else{ //if partyTime is after currentTime --> party is upcoming
+                upcomingParties.add(partyMember);
+            }
+        }
 
         model.addAttribute("owner", memberToDisplay);
-        model.addAttribute("partyMembers", partyMembers);
+        model.addAttribute("upcomingParties", upcomingParties);
+        model.addAttribute("pastParties", pastParties); //TODO: Add logic to HTML form 
         return "member/personalProfile";
     }
 
     //show host party page to member
     @GetMapping("/member/{urlKey}/view")
-    public String showHostPartyPage(Model model, @PathVariable String urlKey) {
+    public String showHostPartyPage(Model model, @PathVariable String urlKey, HttpServletRequest request) {
 
         Party party = partyDao.getByUrlKey(urlKey); //gets party by urlKey
 
@@ -107,11 +129,13 @@ public class MembersController {
             List<ItemBringer> itemBringers = itemBringerDao.getByPartyMember(partyMember); //get List of itemBringer objects associated w/ guest
             completedPartyMembers.put(partyMember, itemBringers); //adds guest object & ItemBringer List to HashMap
         }
+        String url = BaseURL.getBaseURL(request) + "/rsvp/" + party.getUrlKey();
 
         model.addAttribute("party", party); //sets party information
         model.addAttribute("guests", completedGuests); //sets guest information
         model.addAttribute("partyMembers", completedPartyMembers); //sets partyMember information
         model.addAttribute("partyItems", completedPartyItems); //sets partyItem information
+        model.addAttribute("url", url);
 
         return "member/hostPartyPage";
     }
