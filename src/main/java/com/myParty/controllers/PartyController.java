@@ -138,7 +138,8 @@ public class PartyController {
             @RequestParam(name = "state") String state,
             @RequestParam(name = "zipcode") String zipcode,
             @RequestParam(name = "name[]",  required = false) String[] names,
-            @RequestParam(name = "quantity[]",  required = false) String[] quantities){
+            @RequestParam(name = "quantity[]",  required = false) String[] quantities,
+            @RequestParam(name = "delete[]",  required = false) String[] deletes){
 
         //get party object
         Party partyToUpdate = partyDao.getById(id);
@@ -159,6 +160,14 @@ public class PartyController {
         //Calls method to create & save new items
         if(names != null){
             createItems(names, quantities, partyUpdated);
+        }
+
+        //deletes items that are marked to be deleted
+        if(deletes != null){
+            for (String delete: deletes) {
+                PartyItem partyItem = partyItemDao.getById(Long.valueOf(delete)); //gets partyItem to be deleted
+                partyItemDao.delete(partyItem); //deletes PartyItem
+            }
         }
 
         return "redirect:/member/" + partyUpdated.getUrlKey() + "/view";
