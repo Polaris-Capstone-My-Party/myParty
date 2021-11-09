@@ -9,7 +9,12 @@
       <h1>Edit Profile</h1>
     </div>
 
-    <form th:action="@{|/members/editProfile/${id}|}" th:method="post">
+    <form th:action="@{|/members/editProfile/${id}|}" th:method="post" style="display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    align-content: space-around;
+    justify-content: space-around;">
 
       <div class="form-group">
         <label for="email">Email:</label>
