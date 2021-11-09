@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
-
+<head>
 <title layout:fragment="title">MyParty | Edit Profile</title>
+<link href="/success.css" rel="stylesheet"/>
+</head>
 
 <section layout:fragment="content">
   <div class="container">
@@ -9,7 +11,12 @@
       <h1>Edit Profile</h1>
     </div>
 
-    <form th:action="@{|/members/editProfile/${id}|}" th:method="post">
+    <form th:action="@{|/members/editProfile/${id}|}" th:method="post" style="display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    align-content: space-around;
+    justify-content: space-around;">
 
       <div class="form-group">
         <label for="email">Email:</label>

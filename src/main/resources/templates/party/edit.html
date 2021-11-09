@@ -7,6 +7,9 @@
         .remove:hover {background: darkred;}
     </style>
 
+    <link href="/success.css" rel="stylesheet"/>
+
+
     <title layout:fragment="title">myParty | Edit Party</title>
 </head>
 
@@ -19,7 +22,12 @@
         <form th:action="@{|/parties/edit/${party.id}|}" th:method="post">
 
             <!--Edit Basic Party Information-->
-           <div>
+           <div style="display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: space-around;
+    justify-content: flex-end;
+    align-items: flex-end;">
                <div class="form-group">
                    <label for="title">Title:</label>
                    <input name="title" id="title" th:value="${party.title}"/>
@@ -81,7 +89,7 @@
                 <div th:each="partyItem : ${partyItems}">
                     <div th:text="${partyItem.item.name}"></div>
                     <div th:text="${partyItem.quantityRequired}"></div>
-                    <label for="delete[]">Delete Item</label><br>
+                    <label for="delete[]">Delete Item</label>
                     <input type="checkbox" id="delete[]" name="delete[]" th:value="${partyItem.id}">
                     <input type="hidden" name="partyItem[]" th:value="${partyItem.id}">
                     <input type="hidden" name="quantityRequired[]" th:value="${partyItem.quantityRequired}">
