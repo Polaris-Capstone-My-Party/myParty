@@ -45,7 +45,7 @@
     align-content: center;
     align-items: flex-start;">
         <label for="customUrl">Custom Party Url:</label>
-        <input class="container-fluid" type="text" id="customUrl" th:value="${url}"/>
+        <input style="width: 575px" type="text" id="customUrl" th:value="${url}"/>
         <button type="button" onclick="myFunction()">Copy url</button>
 
         <form th:action="@{|/parties/${party.urlKey}|}" th:method="post">
