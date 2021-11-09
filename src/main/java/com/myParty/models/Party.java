@@ -54,7 +54,7 @@ public class Party {
     @Getter @Setter private List<PartyMember> partyMembers;
 
     public Timestamp makeTimestampFromString(String datetime){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Date parsedDate = null;
         try {
             parsedDate = dateFormat.parse(datetime.replace("T", " "));
