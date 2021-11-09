@@ -5,16 +5,41 @@
 <head>
 <title layout:fragment="title">myParty | RSVP Success</title>
 <script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
+    <link href="/success.css" rel="stylesheet"/>
+
 </head>
 
-<section layout:fragment="content">
+<section layout:fragment="content" style="display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: space-around;
+    align-items: center;">
     <h1 id="partyon">You Registered for this Party!</h1>
-    <label for="editUrl">View/Edit Your RSVP With This Link:</label>
+    <label > Click to View/Edit Your RSVP</label>
     <!--     Confetti Animation-->
     <script>
         party.confetti(document.getElementById("partyon"))
     </script>
-    <div id="editUrl" th:text="${url}"/></div>
+
+    <!--     Copy url button-->
+    <script>
+        function myFunction() {
+            var copyText = document.getElementById("customUrl").value;
+            navigator.clipboard.writeText(copyText);
+            var tooltip = document.getElementById("myTooltip");
+            tooltip.innerHTML = "Copied: " + copyText;
+        }
+
+        function outFunc() {
+            var tooltip = document.getElementById("myTooltip");
+            tooltip.innerHTML = "Copy to clipboard";
+        }
+    </script>
+<!--    <div id="editUrl" th:text="${url}">    </div>-->
+
+    <a th:href="@{|${url}|}" class="neons">View RSVP</a>
+
 </section>
 
 <footer><p layout:fragment="custom-footer">This is actually working</p></footer>
