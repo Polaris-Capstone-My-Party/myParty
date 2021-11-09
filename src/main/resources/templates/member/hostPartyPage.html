@@ -67,10 +67,9 @@
 
             <div class="d-flex justify-content-center">
                 <div class="d-flex flex-column bd-highlight mb-3">
-                    <div class="p-2 bd-highlight" th:text="'Start Time: ' + ${party.startTime}"></div>
-                    <div class="p-2 bd-highlight" th:text="'End Time: ' + ${party.endTime}"></div>
-                    <div class="p-2 bd-highlight"
-                         th:text="${party.location.addressOne} + ', ' + ${party.location.city}+ ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}"
+                    <div class="p-2 bd-highlight" th:text="'Start Time: ' + ${party.startTime} + ' End Time: ' + ${party.endTime}"></div>
+                    <!--TODO: fix date format to show AM or PM instead of the extra zeros-->
+                    <div class="p-2 bd-highlight" th:text="${party.location.addressOne} + ', ' + ${party.location.city}+ ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}"
                          id="fullAddress"></div>
 
                     <!--Show Location on Map-->
