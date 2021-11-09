@@ -171,8 +171,7 @@ public class MembersController {
             @RequestParam(name = "firstName") String firstName,
             @RequestParam(name = "lastName") String lastName,
             @RequestParam(name = "phone") Long phone,
-            @RequestParam(name = "username") String username,
-            @RequestParam(name = "password") String password) {
+            @RequestParam(name = "username") String username) {
 
         //get member object
         Member memberToUpdate = memberDao.getById(id);
@@ -183,7 +182,6 @@ public class MembersController {
         memberToUpdate.setLastName(lastName);
         memberToUpdate.setPhone(phone);
         memberToUpdate.setUsername(username);
-        memberToUpdate.setPassword(password);
         memberDao.save(memberToUpdate);
 
         return "redirect:/profile";
