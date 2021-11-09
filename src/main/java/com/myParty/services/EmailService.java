@@ -44,8 +44,9 @@ public class EmailService {
                         + "Location: " + party.getLocation().getAddressOne() + "<br>"
                         + party.getLocation().getAddressTwo() + "<br>"
                         + party.getLocation().getCity() + " " + party.getLocation().getState() + " " + party.getLocation().getZipcode() + "<br>"
-                        + "Here is your custom party URL: " + successURL + "/" + party.getUrlKey();
+                        + "View your party " + "<a href=\"" + successURL + "/member/" + party.getUrlKey() + "/" + "\"><em>here</em></a>";
 
+//TODO: *NOTE* CHANGED TO VIEW YOUR PARTY HERE
         helper.setText(partyDetails, html);
 
         try {
@@ -144,7 +145,7 @@ public class EmailService {
                         + party.getLocation().getCity() + " " + party.getLocation().getState() + " " + party.getLocation().getZipcode() + "<br>"
                         + "<br>You have signed up to bring the following: <br>" + partyItemsDetails + "<br>"
                         + "Additional Guests: " + partyMember.getAdditionalGuests() + "<br>"
-                        + "View or edit your RSVP: " + "<a href=" + rsvpURL + "/rsvp/" + party.getUrlKey() + "/" + partyMember.getPartyMemberKey() + "/view" + "\">here</a>";
+                        + "View or edit your RSVP: " + "<a href=" + rsvpURL + "/rsvp/" + party.getUrlKey() + "/" + partyMember.getPartyMemberKey() + "/view" + "><em>here</em></a>";
 
         helper.setText(rsvpDetails, html);
 
