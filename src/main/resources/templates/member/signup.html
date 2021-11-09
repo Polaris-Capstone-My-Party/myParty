@@ -33,6 +33,7 @@
                     <label for="phone">Phone Number</label>
                     <input id="phone" type="number" th:field="*{phone}"/>
                 </div>
+
                 <div class="form-group">
                     <label for="psw">Password</label>
                     <input id="psw" type="password" th:field="*{password}"
@@ -41,50 +42,21 @@
                            required/>
                 </div>
 
-
                 <input value="Let's Party!" type="submit"/>
             </form>
+<!--            <div id="message">-->
+<!--                <p>Password must contain the following:</p>-->
+<!--                <p id="letter" class="invalid">A <b>lowercase</b> letter</p>-->
+<!--                <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>-->
+<!--                <p id="number" class="invalid">A <b>number</b></p>-->
+<!--                <p id="length" class="invalid">Minimum <b>5 characters</b></p>-->
+<!--            </div>-->
             <br>
             <a href="/login">Already have an account? Log in here</a>
-            <div id="message">
-                <h4>Password must contain the following:</h4>
-                <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
-                <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
-                <p id="number" class="invalid">A <b>number</b></p>
-                <p id="length" class="invalid">Minimum <b>5 characters</b></p>
-            </div>
+
         </div>
     </div>
 
-<!--    <script>-->
-<!--        // Example starter JavaScript for disabling form submissions if there are invalid fields-->
-<!--        (function () {-->
-<!--            'use strict';-->
-<!--            window.addEventListener('load', function () {-->
-<!--                // Fetch all the forms we want to apply custom Bootstrap validation styles to-->
-<!--                var forms = document.getElementById('form-to-check');-->
-<!--                console.log(forms);-->
-<!--                // Loop over them and prevent submission-->
-<!--                // var validation = Array.prototype.filter.call(forms, function(form) {-->
-<!--                forms.addEventListener('submit', function (event) {-->
-<!--                    console.log("something");-->
-<!--                    var isValid = true;-->
-<!--                    const passwordValue = document.getElementById('password').value;-->
-<!--                    console.log(passwordValue);-->
-
-<!--                    if (passwordValue === 'password') {-->
-<!--                        isValid = false;-->
-<!--                    }-->
-<!--                    if (isValid === false) {-->
-<!--                        event.preventDefault();-->
-<!--                        event.stopPropagation();-->
-<!--                    }-->
-<!--                    form.classList.add('was-validated');-->
-<!--                });-->
-<!--                // });-->
-<!--            }, false);-->
-<!--        })();-->
-<!--    </script>-->
 
     <script>
     var myInput = document.getElementById("psw");
