@@ -1,7 +1,10 @@
 package com.myParty.models;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,9 +28,11 @@ public class Party {
     @Getter @Setter private String description;
 
     @Column(nullable = false, name = "start_time")
+//    @DateTimeFormat(pattern = "MM-dd-yyyy HH:mm")
     @Getter @Setter private Timestamp startTime;
 
     @Column(nullable = false, name = "end_time")
+//    @DateTimeFormat(pattern = "MM-dd-yyyy HH:mm")
     @Getter @Setter private Timestamp endTime;
 
     @Column(nullable = false, name="url_key")
@@ -54,7 +59,7 @@ public class Party {
     @Getter @Setter private List<PartyMember> partyMembers;
 
     public Timestamp makeTimestampFromString(String datetime){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Date parsedDate = null;
         try {
             parsedDate = dateFormat.parse(datetime.replace("T", " "));
@@ -65,6 +70,18 @@ public class Party {
 
         return timestamp;
     }
+
+    public String convertTimestamp(Timestamp timestamp){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM-dd-yyyy hh:mm aa");
+
+        Date date = new Date(timestamp.getTime());
+        String formattedDate = dateFormat.format(date);
+
+        formattedDate = formattedDate.replace("-", " ");
+
+        return formattedDate;
+    }
+
 }
 
 

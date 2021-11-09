@@ -122,6 +122,8 @@ public class PartyMembersController {
         model.addAttribute("partyMember", partyMember); //get guest info
         model.addAttribute("itemBringers", itemBringerActual); //gets ItemBringer info associated with guestId
         model.addAttribute("partyItems", partyItems); //gets & sets partyItems for party
+        model.addAttribute("startTime", party.convertTimestamp(party.getStartTime()));
+        model.addAttribute("endTime", party.convertTimestamp(party.getEndTime()));
 
         return "partyMember/viewRsvp";
     }
@@ -161,6 +163,8 @@ public class PartyMembersController {
         model.addAttribute("additionalGuests", additionalGuests); //sets additional guests drop down
         model.addAttribute("itemBringers", itemBringerActual); //gets ItemBringer info associated with guestId
         model.addAttribute("partyItems", partyItems); //gets & sets partyItems for party
+        model.addAttribute("startTime", party.convertTimestamp(party.getStartTime()));
+        model.addAttribute("endTime", party.convertTimestamp(party.getEndTime()));
 
         return "partyMember/editRsvp";
     }
