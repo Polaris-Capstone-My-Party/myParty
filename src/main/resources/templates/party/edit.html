@@ -81,6 +81,8 @@
                 <div th:each="partyItem : ${partyItems}">
                     <div th:text="${partyItem.item.name}"></div>
                     <div th:text="${partyItem.quantityRequired}"></div>
+                    <label for="delete[]">Delete Item</label><br>
+                    <input type="checkbox" id="delete[]" name="delete[]" th:value="${partyItem.id}">
                     <input type="hidden" name="partyItem[]" th:value="${partyItem.id}">
                     <input type="hidden" name="quantityRequired[]" th:value="${partyItem.quantityRequired}">
                 </div>
