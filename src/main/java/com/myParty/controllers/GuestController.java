@@ -65,6 +65,8 @@ public class GuestController {
         model.addAttribute("additionalGuests", additionalGuests); //sets additional guests drop down
         model.addAttribute("partyItems", partyItemsActual); //sets partyItem info form
         model.addAttribute("guest", new Guest()); //thing to allow form to recognize new guest
+        model.addAttribute("startTime", party.convertTimestamp(party.getStartTime()));
+        model.addAttribute("endTime", party.convertTimestamp(party.getEndTime()));
 
         //Checks if Member is logged in or not
         if(!SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString().equals("anonymousUser")){
@@ -166,6 +168,8 @@ public class GuestController {
         model.addAttribute("party", party);
         model.addAttribute("guest", guest);
         model.addAttribute("itemBringers", itemBringerActual); //gets ItemBringer info associated with guestId
+        model.addAttribute("startTime", party.convertTimestamp(party.getStartTime()));
+        model.addAttribute("endTime", party.convertTimestamp(party.getEndTime()));
 
         return "guests/viewRsvp";
     }
@@ -189,6 +193,8 @@ public class GuestController {
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
         model.addAttribute("additionalGuests", additionalGuests); //sets additional guests drop down
         model.addAttribute("itemBringers", itemBringerActual); //gets ItemBringer info associated with guestId
+        model.addAttribute("startTime", party.convertTimestamp(party.getStartTime()));
+        model.addAttribute("endTime", party.convertTimestamp(party.getEndTime()));
         return "guests/editRsvp";
     }
 

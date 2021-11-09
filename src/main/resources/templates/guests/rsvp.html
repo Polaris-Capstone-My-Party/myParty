@@ -19,7 +19,7 @@
         <div class="card-body">
             <h1 class="card-title" th:text="${party.title}"></h1>
             <h3 class="card-text" th:text="${party.description}"></h3>
-            <h6 class="card-text" th:text="'Start Time: ' + ${party.startTime}"></h6>
+            <h6 class="card-text" th:text="'Start Time: ' + ${startTime} + ' End Time: ' + ${endTime}"></h6>
             <h6 class="card-text" th:text="'Organizer: ' + ${party.owner.firstName + ' ' + party.owner.lastName}"></h6>
             <h6 class="card-text" th:text="${party.location.addressOne} + ', ' + ${party.location.city} + ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}" id="fullAddress"></h6>
             <!--TODO: Logic to show addressTwo if not null-->

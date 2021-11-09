@@ -136,6 +136,8 @@ public class MembersController {
         model.addAttribute("partyMembers", completedPartyMembers); //sets partyMember information
         model.addAttribute("partyItems", completedPartyItems); //sets partyItem information
         model.addAttribute("url", url);
+        model.addAttribute("startTime", party.convertTimestamp(party.getStartTime()));
+        model.addAttribute("endTime", party.convertTimestamp(party.getEndTime()));
 
         return "member/hostPartyPage";
     }
