@@ -93,7 +93,7 @@
     </div>
 
     <script>
-        window.onload = (function() {
+        window.onload = (function () {
             const additionalItem = document.getElementById('addItemButton');
 
             const itemForm = `<div class="form-group">
@@ -105,7 +105,7 @@
                   <span class="remove">x</span>
                 </div>`
 
-            additionalItem.addEventListener('click', function(event) {
+            additionalItem.addEventListener('click', function (event) {
                 event.preventDefault();
 
                 const testyBoi = document.getElementById('addMoreItems');
@@ -114,13 +114,13 @@
                 testyBoi.appendChild(newItem);
 
                 //Removes item html when click X
-                $('.remove').on('click', function() {
+                $('.remove').on('click', function () {
                     console.log("clicked");
                     $(this).parent().remove();
                 });
             });
 
-            $('.remove').on('click', function() {
+            $('.remove').on('click', function () {
                 console.log("clicked");
                 $(this).parent().remove();
             });
