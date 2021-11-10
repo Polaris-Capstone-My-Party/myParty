@@ -8,7 +8,7 @@
 <section layout:fragment="content">
     <div class="container-fluid">
         <div class="hero-unit">
-            <h1>My Party Profile</h1>
+            <h1>myParty Profile</h1>
 
             <div>
                 <p>
@@ -36,14 +36,13 @@
                 </div>
                             </button>
                         </h2>
-                        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
                             <div class="accordion-body">
-                                        <div class="card-fluid" th:each="party : ${owner.party}">
-                                           <div class="card text-center" style="width: 18rem;">
-                                              <div class="card-body">
+                                        <div class="justify-content" th:each="party : ${owner.party}">
+                                           <div class="card text-center">
                                                 <h5><a th:text="${party.title}" class="card-title" th:href="@{|/member/${party.urlKey}/view|}"></a></h5>
                                                   <p th:text="${party.description}" class="card-text"></p>
-                                              </div>
+
                                            </div>
                                         </div>
 
@@ -63,7 +62,7 @@
                         <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
                             <div class="accordion-body">
                                 <div class="justify-content" th:each="partyMember : ${upcomingParties}">
-                                    <div class="card text-center" style="display: flex;">
+                                    <div class="card text-center">
                                             <h5><a th:text="${partyMember.party.title}" class="card-title" th:href="@{|/rsvp/${partyMember.party.urlKey}/member/${partyMember.partyMemberKey}/view|}"></a></h5>
                                             <p th:text="${partyMember.party.description}" class="card-text"></p>
 
@@ -85,7 +84,7 @@
                         <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
                             <div class="accordion-body">
                                 <div class="justify-content" th:each="partyMember : ${pastParties}">
-                                    <div class="card text-center" style="width: 18rem;">
+                                    <div class="card text-center">
                                         <div class="card-body">
                                             <h5><a th:text="${partyMember.party.title}" class="card-title" th:href="@{|/rsvp/${partyMember.party.urlKey}/member/${partyMember.partyMemberKey}/view|}"></a></h5>
                                             <p th:text="${partyMember.party.description}" class="card-text"></p>

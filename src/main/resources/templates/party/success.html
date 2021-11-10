@@ -35,20 +35,15 @@
         <hr/>
     </form>
 
-    <!--TODO: Need to change the above back to POST method, send back to profile and add a controller
-                once email functionality is completed to send emails too-->
-<form style="display: flex;
-    justify-content: flex-end;
-    justify-items: center;
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-content: center;
-    align-items: flex-start;">
+    <!--TODO: *NOTE* CANNOT HAVE A FORM WITHIN A FORM. CREATED A FORM WITH CLASS OF CUSTOMURL FOR THE COPY FUNCTION TO BE STYLED IN SUCCESS.CSS-->
+<form class="customURL">
         <label for="customUrl">Custom Party Url:</label>
         <input style="width: 575px" type="text" id="customUrl" th:value="${url}"/>
         <button type="button" onclick="myFunction()">Copy url</button>
+</form>
 
-        <form th:action="@{|/parties/${party.urlKey}|}" th:method="post">
+<!--    TODO: *NOTE* SEPARATE FORM WITH CLASS OF SENDINVITES TO BE STYLED IN SUCCESS.CSS -->
+        <form class="sendInvites" th:action="@{|/parties/${party.urlKey}|}" th:method="post">
             <div id="additionalEmails">
                 <div class="form-group">
                     <label for="email[]">Email Address:</label>
@@ -58,7 +53,7 @@
             <button id="addEmailButton">Add Another Email</button>
             <input type="submit" class="btn btn-info" value="Send Invites!">
         </form>
-</form>
+
 
 
 
