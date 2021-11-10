@@ -48,15 +48,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 /* Pages that can be viewed without having to log in */
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/", "/{party_id}/party", "/rsvp/{urlKey}") // anyone can see the homepage and the party page
+                    .antMatchers("/", "/{party_id}/party", "/rsvp/{urlKey}", "/sign-up") // anyone can see the homepage and the party page
                     .permitAll()
                 /* Pages that require authentication */
                 .and()
                     .authorizeRequests()
                     .antMatchers(
-                        "/party/edit/{id}", // only authenticated users can create parties
-                        "/party/delete/{id}","/party/create", // only authenticated users can edit parties
-                            "/profile", "/rsvp/{urlKey}/login"
+                        "/parties/create", "/parties/success/{urlKey}", "/parties/{urlKey}", // only authenticated users can create parties
+                        "/parties/edit/{id}", "/parties/delete/{id}", // only authenticated users can edit parties
+                            "/profile", "/rsvp/{urlKey}/login", "/member/{urlKey}/view", "/members/editProfile/{id}", "/member/delete/{id}", "/rsvp/{urlKey}/{memberId}",
+                            "/member/successRsvp/{urlKey}/{partyMemberKey}", "/rsvp/{urlKey}/member/{partyMemberKey}/view", "/rsvp/{urlKey}/member/{partyMemberKey}/edit"
                 )
                     .authenticated()
         ;

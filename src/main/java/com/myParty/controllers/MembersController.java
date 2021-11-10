@@ -96,7 +96,7 @@ public class MembersController {
         return "member/personalProfile";
     }
 
-    //show host party page to member
+    //show host party page to host
     @GetMapping("/member/{urlKey}/view")
     public String showHostPartyPage(Model model, @PathVariable String urlKey, HttpServletRequest request) {
 
