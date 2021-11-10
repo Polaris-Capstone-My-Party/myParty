@@ -3,16 +3,16 @@
 
 <head>
     <title layout:fragment="title">myParty | View RSVP (Member)</title>
-    <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
 </head>
-
+<body>
 <div class="container-fluid">
    <section layout:fragment="content">
        <div class="card align-center">
            <div class="card-header">
              This is your RSVP
            </div>
+           <a th:href="'/rsvp/' + ${urlKey} + '/member/' + ${partyMemberKey} + '/edit'" class="btn btn-dark">Edit Your RSVP</a>
 
        <!--Show RSVP Information-->
        <div class="card-body" style="font-size: 22px">
@@ -50,8 +50,6 @@
                </div>
            </div>
 
-    <a th:href="'/rsvp/' + ${urlKey} + '/member/' + ${partyMemberKey} + '/edit'" class="btn btn-dark">Edit Your RSVP</a>
-
     <!--Show The Party Info-->
            <div class="card-body" style="font-size: 16px">
            <div class="d-flex justify-content-around">
@@ -70,6 +68,7 @@
            <div id='map' style='width: 25%; height: 40vh'></div>
            </div>
 
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
 
     <!--Generate Map Information-->
     <script src="/keys.js"></script>
@@ -94,7 +93,7 @@
 
         });
     </script>
-
+</body>
 </section>
-<footer><p layout:fragment="custom-footer">This is actually working</p></footer>
+<footer><p layout:fragment="footer"></p></footer>
 </html>
