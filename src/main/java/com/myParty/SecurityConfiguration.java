@@ -54,9 +54,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                     .authorizeRequests()
                     .antMatchers(
-                        "/party/edit/{id}", // only authenticated users can create parties
-                        "/party/delete/{id}","/party/create", // only authenticated users can edit parties
-                            "/profile", "/rsvp/{urlKey}/login"
+                        "/parties/create", "/parties/success/{urlKey}", "/parties/{urlKey}", // only authenticated users can create parties
+                        "/parties/edit/{id}", "/parties/delete/{id}", // only authenticated users can edit parties
+                            "/profile", "/rsvp/{urlKey}/login", "/member/{urlKey}/view", "/members/editProfile/{id}", "/member/delete/{id}", "/rsvp/{urlKey}/{memberId}",
+                            "/member/successRsvp/{urlKey}/{partyMemberKey}", "/rsvp/{urlKey}/member/{partyMemberKey}/view", "/rsvp/{urlKey}/member/{partyMemberKey}/edit"
                 )
                     .authenticated()
         ;
