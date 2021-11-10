@@ -3,83 +3,97 @@
 
 <head>
     <title layout:fragment="title">myParty | View RSVP</title>
-    <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
-    <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet'/>
 </head>
+<body>
+<div class="container-fluid">
+    <section layout:fragment="content">
+        <div class="card align-center">
+            <div class="card-header">
+                This is your RSVP
+            </div>
+            <a th:href="'/rsvp/' + ${urlKey} + '/' + ${guestKey} + '/edit'" class="btn btn-dark">Edit Your RSVP</a>
 
-<section layout:fragment="content">
+            <!--Show Guest Information-->
+            <div class="card-body" style="font-size: 22px">
+                <!--Basic Guest Information -->
+                <div class="d-flex justify-content-around">
+                    <div th:text="'Name: ' + ${guest.firstName} + ' ' + ${guest.lastName}"></div>
+                    <div th:text="'Email: ' + ${guest.email}"></div>
+                    <div th:text="'RSVP Status: ' + ${guest.rsvpStatus}"></div>
+                    <div th:text="'Additional Guests Bringing: ' + ${guest.additionalGuests}"></div>
+                </div>
+            </div>
 
-    <h1>Your RSVP Information</h1>
-    <a th:href="'/rsvp/' + ${urlKey} + '/' + ${guestKey} + '/edit'" class="btn btn-primary">Edit Your RSVP</a>
+            <!--Guest Item Information-->
+            <div class="p-2 bd-highlight">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="table-responsive">
+                            <table id="example" class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Remaining Quantity Requested</th>
+                                    <th>Quantity You're Bringing</th>
+                                </tr>
+                                </thead>
+                                <tbody>
 
-    <!--Show The Party Info-->
-    <div>
-        <h3>Party Information</h3>
-        <div th:text="${party.title}"></div>
-        <div th:text="${party.description}"></div>
-        <div th:text="'Start Time: ' + ${startTime} + ' End Time: ' + ${endTime}"></div>
-        <div th:text="'Organizer: ' + ${party.owner.firstName + ' ' + party.owner.lastName}"></div>
-        <div th:text="${party.location.addressOne} + ', ' + ${party.location.city} + ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}" id="fullAddress"></div>
-        <!--TODO: Logic to show addressTwo if not null-->
+                                <tr th:each="itemBringer : ${itemBringers}">
+                                    <td th:text="${itemBringer.key.partyItem.item.name}"></td>
+                                    <td th:text="${itemBringer.key.partyItem.quantityRequired}"></td>
+                                    <td th:text="${itemBringer.key.quantity}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Show The Party Info-->
 
-        <div id='map' style='width: 25%; height: 40vh'></div>
-    </div>
+                <div class="card-body" style="font-size: 16px">
+                    <div class="d-flex justify-content-around">
+                <div th:text="${party.title}"></div>
+                <div th:text="${party.description}"></div>
+                <div th:text="'Start Time: ' + ${startTime} + ' End Time: ' + ${endTime}"></div>
+                <div th:text="'Organizer: ' + ${party.owner.firstName + ' ' + party.owner.lastName}"></div>
+                <div th:text="${party.location.addressOne} + ', ' + ${party.location.city} + ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}"
+                     id="fullAddress"></div>
+                <!--TODO: Logic to show addressTwo if not null-->
 
-    <!--Show Guest Information-->
-    <div>
-        <h3>RSVP Information</h3>
+                <div id='map' style='width: 25%; height: 40vh'></div>
+            </div>
 
-        <!--Basic Guest Information -->
-        <div>
-            <div th:text="'Name: ' + ${guest.firstName} + ' ' + ${guest.lastName}"></div>
-            <div th:text="'Email: ' + ${guest.email}"></div>
-            <div th:text="'RSVP Status: ' + ${guest.rsvpStatus}"></div>
-            <div th:text="'Additional Guests Bringing: ' + ${guest.additionalGuests}"></div>
+            <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+
+            <!--Generate Map Information-->
+            <script src="/keys.js"></script>
+            <script src="/js/jquery.js"></script>
+            <script src="/js/mapbox-geocoder-utils.js"></script>
+            <script>
+                const address = $("#fullAddress").html();
+
+                geocode(address, mapboxApiKey).then(function (result) {
+                    mapboxgl.accessToken = mapboxApiKey;
+
+                    var map = new mapboxgl.Map({
+                        container: 'map',
+                        style: 'mapbox://styles/mapbox/streets-v9',
+                        zoom: 15,
+                        center: (result)
+                    });
+
+                    var marker = new mapboxgl.Marker({
+                        draggable: true
+                    }).setLngLat(result).addTo(map);
+
+                });
+            </script>
+
         </div>
-
-        <!--Guest Item Information-->
-        <div>
-            <table>
-                <tr>
-                    <th>Item</th>
-                    <th>Remaining Quantity Requested</th>
-                    <th>Quantity You're Bringing</th>
-                </tr>
-
-                <tr th:each="itemBringer : ${itemBringers}">
-                    <td th:text="${itemBringer.key.partyItem.item.name}"></td>
-                    <td th:text="${itemBringer.key.partyItem.quantityRequired}"></td>
-                    <td th:text="${itemBringer.key.quantity}"></td>
-                    <br>
-                </tr>
-            </table>
-        </div>
-    </div>
-
-    <!--Generate Map Information-->
-    <script src="/keys.js"></script>
-    <script src="/js/jquery.js"></script>
-    <script src="/js/mapbox-geocoder-utils.js"></script>
-    <script>
-        const address = $("#fullAddress").html();
-
-        geocode(address, mapboxApiKey).then(function (result) {
-            mapboxgl.accessToken = mapboxApiKey;
-
-            var map = new mapboxgl.Map({
-                container: 'map',
-                style: 'mapbox://styles/mapbox/streets-v9',
-                zoom: 15,
-                center: (result)
-             });
-
-            var marker = new mapboxgl.Marker({
-                draggable: true
-            }).setLngLat(result).addTo(map);
-
-        });
-    </script>
-
-</section>
-<footer><p layout:fragment="custom-footer">This is actually working</p></footer>
+    </section>
+    <footer><p layout:fragment="custom-footer">This is actually working</p></footer>
 </html>
+

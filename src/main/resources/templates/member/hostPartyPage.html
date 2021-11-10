@@ -6,7 +6,6 @@
 <head>
     <meta charset="UTF-8">
     <title layout:fragment="title">My Party | Host View</title>
-    <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet'/>
 </head>
 
@@ -158,6 +157,8 @@
             </div>
 
             <div th:replace="partials/scripts :: scripts"></div>
+
+            <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
 
             <!--Generate Map Information -->
             <script src="/keys.js"></script>
