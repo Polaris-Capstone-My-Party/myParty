@@ -1,19 +1,7 @@
 <!DOCTYPE html>
 
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/html"
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
-<style>
-    row {
-        align-content: center;
-    }
-
-    #map {
-        position: relative;
-        top: 0;
-        bottom: 0;
-        width: 100%;
-    }
-</style>
 
 <head>
     <meta charset="UTF-8">
@@ -21,6 +9,7 @@
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet'/>
 </head>
+
 <div class="container-fluid">
     <section layout:fragment="content">
 
@@ -36,14 +25,7 @@
                 <h1 class="card-title" th:text="${party.title}"></h1>
                 <h3 class="card-text" th:text="${party.description}"></h3>
 
-<!--                <form style="display: flex;-->
-<!--                             flex-direction: column;-->
-<!--                             width: 50%;-->
-<!--                             align-content: center;-->
-<!--                             align-items: flex-start;-->
-<!--                             justify-content: flex-start;-->
-<!--                             flex-wrap: wrap;-->
-<!--                             margin: auto;">-->
+
 
                     <label for="customUrl">Custom Party Url:</label>
                     <input type="text" style="width: 575px" id="customUrl" th:value="${url}"/>
