@@ -9,14 +9,24 @@
 
 </head>
 
-<section layout:fragment="content" style="display: flex;
+<section layout:fragment="content" >
+    <div class="card bg-dark text-white">
+        <img class="card-img" src="/img/partay2.png" alt="Card image">
+        <div class="card-img-overlay">
+            <h1 id="partyon" class="card-title">You Registered for this Party!</h1>
+            <h4 class="card-text">View/Edit Your RSVP</h4>
+            <div style="
+    display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    justify-content: space-between;
-    align-content: space-around;
-    align-items: center;">
-    <h1 id="partyon">You Registered for this Party!</h1>
-    <label > Click to View/Edit Your RSVP</label>
+    align-content: stretch;
+    justify-content: flex-end;
+    align-items: center;
+}">
+                <a th:href="@{|${url}|}" class="neons">View RSVP</a>
+            </div>
+        </div>
+    </div>
     <!--     Confetti Animation-->
     <script>
         party.confetti(document.getElementById("partyon"))
@@ -36,9 +46,7 @@
             tooltip.innerHTML = "Copy to clipboard";
         }
     </script>
-<!--    <div id="editUrl" th:text="${url}">    </div>-->
 
-    <a th:href="@{|${url}|}" class="neons">View RSVP</a>
 
 </section>
 
