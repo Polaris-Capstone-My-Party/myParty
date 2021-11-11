@@ -2,10 +2,12 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title layout:fragment="title">myParty | View RSVP (Member)</title>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
 </head>
-<body>
+
 <div class="container-fluid">
    <section layout:fragment="content">
        <div class="card align-center">
@@ -93,7 +95,6 @@
 
         });
     </script>
-</body>
 </section>
 <footer><p layout:fragment="footer"></p></footer>
 </html>
