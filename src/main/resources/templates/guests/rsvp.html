@@ -59,34 +59,41 @@
                 </select>
             </div>
 
-            <!--Sign Up For Items -->
-            <div class="form-group">
-                <table>
-                    <tr>
-                        <th>Item</th>
-                        <th>Quantity Requested</th>
-                        <th>Quantity You're Bringing</th>
-                    </tr>
-
-                    <div th:each="partyItem : ${partyItems}">
-                        <tr class="form-group">
-                            <td th:text="${partyItem.key.item.name}"></td>
-                            <td th:text="${partyItem.key.quantityRequired}"></td>
-                            <td>
-                                <select name="quantity[]">
-                                    <option th:each="quantity : ${partyItem.value}" th:text="${quantity}" th:value="${quantity}"></option>
-                                </select>
-                            </td>
-                            <input type="hidden" name="partyItem[]" th:value="${partyItem.key.id}">
-                            <br>
-                        </tr>
+<!--            Party item details -->
+            <div class="p-2 bd-highlight">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="table-responsive">
+                            <table id="example" class="table table-bordered">
+                                <h3>Party Item Information</h3>
+                                <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Quantity Requested</th>
+                                    <th>Quantity You're Bringing</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="form-group" th:each="partyItem: ${partyItems}">
+                                    <td th:text="${partyItem.key.item.name}"></td>
+                                    <td th:text="${partyItem.key.quantityRequired}"></td>
+                                    <td>
+                                        <select name="quantity[]">
+                                            <option th:each="quantity : ${partyItem.value}" th:text="${quantity}" th:value="${quantity}"></option>
+                                        </select>
+                                    </td>
+                                    <input type="hidden" name="partyItem[]" th:value="${partyItem.key.id}">
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-
-                </table>
+                </div>
             </div>
             <input type="submit" value="Submit"/>
         </form>
     </div>
+
 
     <!--Guest RSVP Form-->
     <div sec:authorize="isAnonymous()">
@@ -133,34 +140,67 @@
 
 
             <!--Sign Up For Items -->
-            <div class="form-group">
-                <table>
-                    <tr>
-                        <th>Item</th>
-                        <th>Quantity Requested</th>
-                        <th>Quantity You're Bringing</th>
-                    </tr>
-
-                    <div th:each="partyItem : ${partyItems}">
-                        <tr class="form-group">
-                            <td th:text="${partyItem.key.item.name}"></td>
-                            <td th:text="${partyItem.key.quantityRequired}"></td>
-                            <td>
-                                <select name="quantity[]">
-                                    <option th:each="quantity : ${partyItem.value}" th:text="${quantity}" th:value="${quantity}"></option>
-                                </select>
-                            </td>
-                            <input type="hidden" name="partyItem[]" th:value="${partyItem.key.id}">
-                            <br>
-                        </tr>
+            <div class="p-2 bd-highlight">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="table-responsive">
+                            <table id="example2" class="table table-bordered">
+                                <h3>Party Item Information</h3>
+                                <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Quantity Requested</th>
+                                    <th>Quantity You're Bringing</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="form-group" th:each="partyItem: ${partyItems}">
+                                    <td th:text="${partyItem.key.item.name}"></td>
+                                    <td th:text="${partyItem.key.quantityRequired}"></td>
+                                    <td>
+                                        <select name="quantity[]">
+                                            <option th:each="quantity : ${partyItem.value}" th:text="${quantity}" th:value="${quantity}"></option>
+                                        </select>
+                                    </td>
+                                    <input type="hidden" name="partyItem[]" th:value="${partyItem.key.id}">
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-
-                </table>
+                </div>
             </div>
-
             <input type="submit" value="Submit"/>
         </form>
     </div>
+<!--            <div class="form-group">-->
+<!--                <table>-->
+<!--                    <tr>-->
+<!--                        <th>Item</th>-->
+<!--                        <th>Quantity Requested</th>-->
+<!--                        <th>Quantity You're Bringing</th>-->
+<!--                    </tr>-->
+
+<!--                    <div th:each="partyItem : ${partyItems}">-->
+<!--                        <tr class="form-group">-->
+<!--                            <td th:text="${partyItem.key.item.name}"></td>-->
+<!--                            <td th:text="${partyItem.key.quantityRequired}"></td>-->
+<!--                            <td>-->
+<!--                                <select name="quantity[]">-->
+<!--                                    <option th:each="quantity : ${partyItem.value}" th:text="${quantity}" th:value="${quantity}"></option>-->
+<!--                                </select>-->
+<!--                            </td>-->
+<!--                            <input type="hidden" name="partyItem[]" th:value="${partyItem.key.id}">-->
+<!--                            <br>-->
+<!--                        </tr>-->
+<!--                    </div>-->
+
+<!--                </table>-->
+<!--            </div>-->
+
+<!--            <input type="submit" value="Submit"/>-->
+<!--        </form>-->
+<!--    </div>-->
 
     <script src="/keys.js"></script>
     <script src="/js/jquery.js"></script>
