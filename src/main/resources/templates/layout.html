@@ -1,13 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<link th:href="@{http://fonts.googleapis.com/css?family=Sora}"
-      rel='stylesheet' type='text/css' />
-    <title layout:fragment="title">
-        Default
-    </title>
-    <th:block th:include="partials/head :: head"></th:block>
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--/* The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags */-->
+
+    <link th:href="@{http://fonts.googleapis.com/css?family=Sora}"
+          rel='stylesheet' type='text/css'/>
+    <link rel="stylesheet" href="/static/stylesheet.css">
+<title layout:fragment="title">
+    Default
+</title>
 </head>
+<th:block th:include="partials/head :: head"></th:block>
 
 <body>
 <div sec:authorize="isAuthenticated()">
@@ -18,29 +27,28 @@
     <nav th:replace="partials/guestNavbar :: navbar"></nav>
 </div>
 
-   <style>
+<style>
     body {
-        font-family: "Sora",sans-serif;
+        font-family: "Sora", sans-serif;
         text-align: center;
         background-color: #22262b;
     }
 
-    h1   {
+    h1 {
         color: #0e0d0d;
-        font-family: "Sora",sans-serif;
+        font-family: "Sora", sans-serif;
     }
 
-    p    {
-        font-family: "Sora",sans-serif;
+    p {
+        font-family: "Sora", sans-serif;
     }
 
     footer {
         height: 15em;
     }
 
-
     section {
-        font-family: "Sora",sans-serif;
+        font-family: "Sora", sans-serif;
         padding-top: 2em;
         align-content: center;
         background-color: #6bdada;
@@ -51,25 +59,17 @@
     button {
         background-color: #ee6eb6;
     }
-
-
-
-    </style>
-
+</style>
 
 <section layout:fragment="content">
     <style>
         body {
-            font-family: "Sora",sans-serif;
+            font-family: "Sora", sans-serif;
             text-align: center;
             background-color: #22262b;
-        }</section>
+        }
 
-</body>
-<!--<div class="fixed-bottom">-->
-<!--    <footer th:replace="partials/footer :: footer">-->
-<!--        <p>My footer</p>-->
-<!--        <p layout:fragment="custom-footer">Custom footer here</p>-->
-<!--    </footer>-->
-<!--</div>-->
+        </style>
+        </section>
+        </body>
 </html>
