@@ -6,11 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title layout:fragment="title">myParty | View RSVP (Member)</title>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+    <link href="/stylesheet.css" rel="stylesheet"/>
+
 </head>
 
-<div class="container-fluid">
    <section layout:fragment="content">
-       <div class="card align-center">
+       <div class="container">
+
+       <div class="card align-center" style="display: flow-root">
            <div class="card-header">
              This is your RSVP
            </div>
@@ -54,21 +57,26 @@
 
     <!--Show The Party Info-->
            <div class="card-body" style="font-size: 16px">
-           <div class="d-flex justify-content-around">
+           <div class="d-flex justify-content-around" style="display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: stretch;
+    justify-content: center;
+    align-items: center;">
            <div th:text="'Organizer: ' + ${party.owner.firstName + ' ' + party.owner.lastName}"></div>
            <div th:text="'Title: ' + ${party.title}"></div>
            <div th:text="'Details: ' + ${party.description}"></div>
            </div>
                <div class="d-flex justify-content-around">
-               <div th:text="'Start Time: ' + ${startTime}"></div>
-               <div th:text="'End Time: ' + ${endTime}"></div>
+               <div th:text="'Start: ' + ${startTime}"></div>
+               <div th:text="'End: ' + ${endTime}"></div>
            <div th:text="${party.location.addressOne} + ', ' + ${party.location.city} + ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}" id="fullAddress"></div>
                </div>
                </div>
         <!--TODO: Logic to show addressTwo if not null-->
            <div class="d-flex justify-content-center">
            <div id='map' style='width: 25%; height: 40vh'></div>
-           </div>
+           </div><br>
 
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
 
@@ -95,6 +103,8 @@
 
         });
     </script>
+       </div>
+       </div>
 </section>
 <footer><p layout:fragment="footer"></p></footer>
 </html>

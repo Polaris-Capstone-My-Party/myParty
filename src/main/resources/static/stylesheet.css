@@ -2,3 +2,10 @@
 .section {
     justify-items: stretch;
 }}
+
+.card-body {
+    background-image: url("img/confetti2pic.jpg");
+    background-size: 150%;
+    width: 100%;
+    height: 100%;
+}

@@ -5,11 +5,14 @@
     <title layout:fragment="title">myParty | View RSVP</title>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet'/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/stylesheet.css" rel="stylesheet"/>
+
 </head>
 <body>
-<div class="container-fluid">
     <section layout:fragment="content">
-        <div class="card align-center">
+        <div class="container" id="container-fluid">
+
+        <div class="card align-center" style="display: flow-root">
             <div class="card-header">
                 This is your RSVP
             </div>
@@ -55,10 +58,16 @@
             <!--Show The Party Info-->
 
                 <div class="card-body" style="font-size: 16px">
-                    <div class="d-flex justify-content-around">
+                    <div class="d-flex justify-content-around" style="display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: stretch;
+    justify-content: center;
+    align-items: center;">
                 <div th:text="${party.title}"></div>
                 <div th:text="${party.description}"></div>
-                <div th:text="'Start Time: ' + ${startTime} + ' End Time: ' + ${endTime}"></div>
+                <div th:text="'Start: ' + ${startTime} "></div>
+                <div th:text="'End: ' + ${endTime} "></div>
                 <div th:text="'Organizer: ' + ${party.owner.firstName + ' ' + party.owner.lastName}"></div>
                 <div th:text="${party.location.addressOne} + ', ' + ${party.location.city} + ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}"
                      id="fullAddress"></div>
@@ -94,6 +103,8 @@
                 });
             </script>
 
+        </div>
+        </div>
         </div>
     </section>
     <footer><p layout:fragment="custom-footer">This is actually working</p></footer>
