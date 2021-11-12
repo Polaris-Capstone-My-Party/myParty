@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"  layout:decorate="~{layout}">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
+      layout:decorate="~{layout}">
 
 <head>
     <meta charset="UTF-8">
@@ -11,6 +12,7 @@
     </style>
     <link href="/success.css" rel="stylesheet"/>
 </head>
+<body>
 
 <section layout:fragment="content">
 
@@ -193,10 +195,11 @@
         })
     </script>
     </div>
-</section>
 
+</section>
 <footer><p layout:fragment="custom-footer">This is actually working</p></footer>
 
+</body>
 </html>
 
 
