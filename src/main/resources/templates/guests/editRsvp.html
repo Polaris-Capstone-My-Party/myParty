@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
-
-<title layout:fragment="title">myParty | Edit RSVP</title>
+<head>
+    <link href="/success.css" rel="stylesheet"/>
+</head>
+    <title layout:fragment="title">myParty | Edit RSVP</title>
 <section layout:fragment="content">
 
-    <div class="container">
+    <div class="container" style="color: #0e0d0d">
 
         <div class="row">
             <div class="col">
@@ -17,7 +19,8 @@
             <div class="col">
                 <div th:text="${party.title}"></div>
                 <div th:text="${party.description}"></div>
-                <div th:text="'Start Time: ' + ${startTime} + ' End Time: ' + ${endTime}"></div>
+                <div th:text="'Start Time: ' + ${startTime}"></div>
+                <div th:text=" 'End Time: ' + ${endTime}"></div>
                 <div th:text="'Organizer: ' + ${party.owner.firstName + ' ' + party.owner.lastName}"></div>
                 <div th:text="'Location: ' + ${party.location.addressOne} + ', ' + ${party.location.city} + ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}"></div>
                 <!--TODO: Logic to show addressTwo if not null-->
@@ -25,9 +28,18 @@
         </div>
 
         <!--Form to RSVP for Party-->
-        <form th:action="@{|/rsvp/${party.urlKey}/${guest.guestKey}/edit|}" th:method="post" th:object="${guest}">
+        <form th:action="@{|/rsvp/${party.urlKey}/${guest.guestKey}/edit|}" th:method="post" th:object="${guest}" style="display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: space-around;
+    justify-content: space-around;
+    align-items: stretch;">
             <div class="row">
-                <div class="col">
+                <div class="col" style="display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: space-around;
+    align-items: center;">
 
                     <!--Enter First Name-->
                     <div class="form-group col">

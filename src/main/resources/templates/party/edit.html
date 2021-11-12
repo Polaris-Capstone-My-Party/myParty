@@ -2,13 +2,15 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/html"
       layout:decorate="~{layout}">
 <head>
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
     <style>
-        .remove:hover {background: darkred;}
+        .remove:hover {
+            background: darkred;
+        }
     </style>
 
     <link href="/success.css" rel="stylesheet"/>
-
 
     <title layout:fragment="title">myParty | Edit Party</title>
 </head>
@@ -25,12 +27,12 @@
         <form th:action="@{|/parties/edit/${party.id}|}" th:method="post">
 
             <!--Edit Basic Party Information-->
-           <div style="display: flex;
+            <div style="display: flex;
     flex-direction: column;
     flex-wrap: wrap;
     align-content: space-around;
     justify-content: flex-end;
-    align-items: flex-end;" >
+    align-items: flex-end;">
                <div class="row">
                    <div class="col">
 
@@ -156,7 +158,6 @@
                             <button id="addItemButton">Add Another Item</button>
                         </div>
                     </div>
-
                 </div>
             </div>
 
