@@ -134,7 +134,7 @@ public class GuestController {
                 itemBringer.setPartyItem(partyItem); // sets partyItem object
                 itemBringerDAO.save(itemBringer); // saves item bringer
 
-                partyItemsDetails += "\"Item: " + partyItem.getItem().getName() + "      Quantity: " + quantities[i] + "<br>";
+                partyItemsDetails += "Item: " + partyItem.getItem().getName() + "      Quantity: " + quantities[i] + "<br>";
             }
         }
 
