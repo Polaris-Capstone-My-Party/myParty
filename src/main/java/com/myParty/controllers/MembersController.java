@@ -92,7 +92,7 @@ public class MembersController {
 
         model.addAttribute("owner", memberToDisplay);
         model.addAttribute("upcomingParties", upcomingParties);
-        model.addAttribute("pastParties", pastParties); //TODO: Add logic to HTML form 
+        model.addAttribute("pastParties", pastParties);
         return "member/personalProfile";
     }
 
