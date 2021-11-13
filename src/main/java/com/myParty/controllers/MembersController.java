@@ -132,6 +132,7 @@ public class MembersController {
         String url = BaseURL.getBaseURL(request) + "/rsvp/" + party.getUrlKey();
 
         model.addAttribute("party", party); //sets party information
+        model.addAttribute("location", guestControllerDao.getLocation(party));
         model.addAttribute("guests", completedGuests); //sets guest information
         model.addAttribute("partyMembers", completedPartyMembers); //sets partyMember information
         model.addAttribute("partyItems", completedPartyItems); //sets partyItem information

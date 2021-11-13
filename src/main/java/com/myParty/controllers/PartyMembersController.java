@@ -91,6 +91,7 @@ public class PartyMembersController {
         return "partyMember/successRsvp";
     }
 
+    //Shows RSVP to Party Members
     @GetMapping(path = "/rsvp/{urlKey}/member/{partyMemberKey}/view")
     public String showPartyMemberRSVPInfo(@PathVariable String urlKey, @PathVariable String partyMemberKey, Model model) {
 
@@ -107,9 +108,7 @@ public class PartyMembersController {
         PartyMember checkMember = partyMemberDao.getByMemberAndParty(actualMember, party); //gets partyMember associated with logged in member & party (can only be one)
 
         //If logged in Member is not the member associated with the PartyMember, redirect to profile page
-
         if(checkMember == null){
-
             return "redirect:/profile";
         }
 
@@ -119,6 +118,7 @@ public class PartyMembersController {
         HashMap<ItemBringer, List<Long>> itemBringerActual = guestController.getItemBringerActual(itemBringers, quantities); //hashmap to store party items & list of long quantity values
 
         model.addAttribute("party", party); //get party info
+        model.addAttribute("location", guestController.getLocation(party));
         model.addAttribute("partyMember", partyMember); //get guest info
         model.addAttribute("itemBringers", itemBringerActual); //gets ItemBringer info associated with guestId
         model.addAttribute("partyItems", partyItems); //gets & sets partyItems for party
@@ -158,6 +158,7 @@ public class PartyMembersController {
         HashMap<ItemBringer, List<Long>> itemBringerActual = guestController.getItemBringerActual(itemBringers, quantities); //hashmap to store party items & list of long quantity values
 
         model.addAttribute("party", party); //get party info
+        model.addAttribute("location", guestController.getLocation(party));
         model.addAttribute("partyMember", partyMember); //get guest info
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
         model.addAttribute("additionalGuests", additionalGuests); //sets additional guests drop down
