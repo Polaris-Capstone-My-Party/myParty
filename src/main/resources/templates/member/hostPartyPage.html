@@ -48,8 +48,9 @@
 
             <div class="d-flex justify-content-center">
                 <div class="d-flex flex-column bd-highlight mb-3">
-                    <div class="p-2 bd-highlight" th:text="'Start Time: ' + ${startTime} + ' End Time: ' + ${endTime}"></div>
-                    <div class="p-2 bd-highlight" th:text="${location}" id="fullAddress"></div>
+                    <div class="p-2 bd-highlight" th:text="'Start: ' + ${startTime}"></div>
+                    <div class="p-2 bd-highlight" th:text="'End: ' + ${endTime}"></div>
+                <div class="p-2 bd-highlight" th:text="${location}" id="fullAddress"></div>
 
                     <!--Show Location on Map-->
                     <div id='map' style='width: 100%; height: 40vh'></div>
@@ -138,7 +139,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group mx-sm-3 mb-2">
-                                        <button id="addEmailButton">Add Another Email</button>
+                                        <button id="addEmailButton" style="background-color: #ce5ece">Add Another Email</button>
                                         <input type="submit" class="btn btn-info" value="Send Invites!">
                                     </div>
                                 </form>
@@ -149,8 +150,8 @@
             </div>
           
             <div class="d-flex justify-content-center">
-            <a th:href="@{|/parties/edit/${party.id}|}" class="btn btn-dark">Edit Party</a>
-                <a th:replace="partials/modalsUpdates :: modal"></a>
+            <a th:href="@{|/parties/edit/${party.id}|}" class="btn btn-dark" style="background-color: #ce5ece">Edit Party</a>
+                <a th:replace="partials/modalsUpdates :: modal" style="background-color: #c11a2b"></a>
             </div>
 
             <div th:replace="partials/scripts :: scripts"></div>
