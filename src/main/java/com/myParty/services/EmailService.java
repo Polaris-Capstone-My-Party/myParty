@@ -35,7 +35,7 @@ public class EmailService {
         boolean html = true;
         String successURL = BaseURL.getBaseURL(request);
         String partyDetails =
-                "<img src=\"" + successURL + "/img/MyParty.png\" >" +
+                "<img src=\"" + successURL + "/img/MyParty.svg\" >" +
                         "<h2>Your party " + party.getTitle() + " has been created.</h2>" +
                         " <br><br><i>Here are the details: </i><br>"
                         + "Description: " + party.getDescription() + "<br>"
@@ -68,7 +68,7 @@ public class EmailService {
         boolean html = true;
         String inviteURL = BaseURL.getBaseURL(request);
         String partyDetails =
-                "<img src=\"" + inviteURL + "/img/MyParty.png\" >" +
+                "<img src=\"" + inviteURL + "/img/MyParty.svg\" >" +
                         "<h2>You're Invited to " + party.getTitle() + " by " + party.getOwner().getUsername() + "</h2> "
                         + "<br><i>Here are the details: </i><br>"
                         + "<br>Description: " + party.getDescription() + "<br>"
@@ -108,7 +108,7 @@ public class EmailService {
         String resetURL = BaseURL.getBaseURL(request);
         //TODO: add domain to replace localhost
         String resetDetails =
-                "<img src=\"" + resetURL + "/img/MyParty.png\"><br>"
+                "<img src=\"" + resetURL + "/img/MyParty.svg\"><br>"
                         + "<h2>" +  member.getUsername() + ",</h2><br>"
                         + "Click to reset your password " + "<a href=\"" + resetURL + "/member/resetpassword/" + token + "\">HERE</a>";
 
@@ -133,7 +133,7 @@ public class EmailService {
 
         String rsvpURL = BaseURL.getBaseURL(request);
         String rsvpDetails =
-                "<img src=\"" + rsvpURL + "/img/MyParty.png\">"
+                "<img src=\"" + rsvpURL + "/img/MyParty.svg\">"
                         + "<h2 style=\"color: red\">You are RSVP'd to " + party.getTitle() + "!</h2> "
                         + "<br><br><i>Here are the details: </i><br>"
                         + "<br>"
@@ -169,7 +169,7 @@ public class EmailService {
         String rsvpGuestURL = BaseURL.getBaseURL(request);
 
         String rsvpDetails =
-                "<img src=\"" + rsvpGuestURL + "/img/MyParty.png\">"
+                "<img src=\"" + rsvpGuestURL + "/img/MyParty.svg\">"
                         + "<h2 style=\"color: red\">You are RSVP'd to " + party.getTitle() + "!</h2> "
                         + "<br><br><i>Here are the details: </i><br>"
                         + "<br>"
