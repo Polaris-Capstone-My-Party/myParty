@@ -22,7 +22,7 @@
                 <div th:text="'Start Time: ' + ${startTime}"></div>
                 <div th:text=" 'End Time: ' + ${endTime}"></div>
                 <div th:text="'Organizer: ' + ${party.owner.firstName + ' ' + party.owner.lastName}"></div>
-                <div th:text="'Location: ' + ${party.location.addressOne} + ', ' + ${party.location.city} + ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}"></div>
+                <div th:text="'Location: ' + ${location}"></div>
                 <!--TODO: Logic to show addressTwo if not null-->
             </div>
         </div>

@@ -56,7 +56,6 @@
                 </div>
             </div>
             <!--Show The Party Info-->
-
                 <div class="card-body" style="font-size: 16px">
                     <div class="d-flex justify-content-around" style="display: flex;
     flex-direction: column;
@@ -69,10 +68,7 @@
                 <div th:text="'Start: ' + ${startTime} "></div>
                 <div th:text="'End: ' + ${endTime} "></div>
                 <div th:text="'Organizer: ' + ${party.owner.firstName + ' ' + party.owner.lastName}"></div>
-                <div th:text="${party.location.addressOne} + ', ' + ${party.location.city} + ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}"
-                     id="fullAddress"></div>
-                <!--TODO: Logic to show addressTwo if not null-->
-
+                <div th:text="${location}" id="fullAddress"></div>
                 <div id='map' style='width: 25%; height: 40vh'></div>
             </div>
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
       layout:decorate="~{layout}">
 <head>
 <meta charset="UTF-8">
@@ -10,13 +10,15 @@
 
 <section layout:fragment="content">
     <div class="container-fluid">
+
         <div class="hero-unit">
             <h1>myParty Profile</h1>
+        </div>
 
             <div>
                 <p>
-                <div th:text="${owner.username}"></div>
-                <div th:text="${owner.email}"></div>
+                    <div th:text="${owner.username}"></div>
+                    <div th:text="${owner.email}"></div>
                 </p>
                 <div class="d-flex justify-content-center">
                     <a th:href="@{|/members/editProfile/${owner.id}|}" class="btn btn-dark">Edit Profile</a>
@@ -26,72 +28,74 @@
 
             <div th:replace="partials/scripts :: scripts"></div>
 
+            <div class="accordion" id="accordionPanelsStayOpenExample">
 
-
-                <div class="accordion" id="accordionPanelsStayOpenExample">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">Parties Created</h5>
-                    </div>
-                </div>
-                            </button>
-                        </h2>
-                        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
-                            <div class="accordion-body">
-                                        <div class="justify-content" th:each="party : ${owner.party}">
-                                           <div class="card text-center">
-                                                <h5><a th:text="${party.title}" class="card-title" th:href="@{|/member/${party.urlKey}/view|}"></a></h5>
-                                                  <p th:text="${party.description}" class="card-text"></p>
-
-                                           </div>
-                                        </div>
-
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h5 class="card-title">Parties Created</h5>
+                                </div>
                             </div>
-                        </div>
+                        </button>
+                    </h2>
 
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <h5 class="card-title">Parties Attending</h5>
-                        </div>
-                    </div>
-                            </button>
-                        </h2>
-                        <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
-                            <div class="accordion-body">
-                                <div class="justify-content" th:each="partyMember : ${upcomingParties}">
-                                    <div class="card text-center">
-                                            <h5><a th:text="${partyMember.party.title}" class="card-title" th:href="@{|/rsvp/${partyMember.party.urlKey}/member/${partyMember.partyMemberKey}/view|}"></a></h5>
-                                            <p th:text="${partyMember.party.description}" class="card-text"></p>
-
-                                    </div>
+                    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
+                        <div class="accordion-body">
+                            <div class="justify-content" th:each="party : ${owner.party}">
+                                <div class="card text-center">
+                                    <h5><a th:text="${party.title}" class="card-title" th:href="@{|/member/${party.urlKey}/view|}"></a></h5>
+                                    <p th:text="${party.description}" class="card-text"></p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h5 class="card-title">Parties Attending</h5>
+                                </div>
+                            </div>
+                        </button>
+                    </h2>
+
+                    <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+                        <div class="accordion-body">
+                            <h5 th:if="${upcomingParties.size() == 0}">No Upcoming Parties </h5>
+                            <div class="justify-content" th:each="partyMember : ${upcomingParties}">
+                                <div class="card text-center">
+                                    <h5><a th:text="${partyMember.party.title}" class="card-title" th:href="@{|/rsvp/${partyMember.party.urlKey}/member/${partyMember.partyMemberKey}/view|}"></a></h5>
+                                    <p th:text="${partyMember.party.description}" class="card-text"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
                             <div class="card text-center">
                                 <div class="card-body">
                                     <h5 class="card-title">Past Parties Attended</h5>
                                 </div>
                             </div>
-                            </button>
-                        </h2>
-                        <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
-                            <div class="accordion-body">
-                                <div class="justify-content" th:each="partyMember : ${pastParties}">
-                                    <div class="card text-center">
-                                        <div class="card-body">
-                                            <h5><a th:text="${partyMember.party.title}" class="card-title" th:href="@{|/rsvp/${partyMember.party.urlKey}/member/${partyMember.partyMemberKey}/view|}"></a></h5>
-                                            <p th:text="${partyMember.party.description}" class="card-text"></p>
-                                        </div>
+                        </button>
+                    </h2>
+
+                    <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+                        <div class="accordion-body">
+                            <h5 th:if="${pastParties.size() == 0}">No Past Parties </h5>
+                            <div class="justify-content" th:each="partyMember : ${pastParties}">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h5><a th:text="${partyMember.party.title}" class="card-title" th:href="@{|/rsvp/${partyMember.party.urlKey}/member/${partyMember.partyMemberKey}/view|}"></a></h5>
+                                        <p th:text="${partyMember.party.description}" class="card-text"></p>
                                     </div>
                                 </div>
                             </div>
@@ -99,7 +103,9 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 </section>
+
 <footer><p layout:fragment="footer"></p></footer>
-}
 </html>

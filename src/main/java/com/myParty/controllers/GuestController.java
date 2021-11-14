@@ -61,6 +61,7 @@ public class GuestController {
         }
 
         model.addAttribute("party", party); //sets party info for form
+        model.addAttribute("location", getLocation(party));
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
         model.addAttribute("additionalGuests", additionalGuests); //sets additional guests drop down
         model.addAttribute("partyItems", partyItemsActual); //sets partyItem info form
@@ -134,7 +135,7 @@ public class GuestController {
                 itemBringer.setPartyItem(partyItem); // sets partyItem object
                 itemBringerDAO.save(itemBringer); // saves item bringer
 
-                partyItemsDetails += "\"Item: " + partyItem.getItem().getName() + "      Quantity: " + quantities[i] + "<br>";
+                partyItemsDetails += "Item: " + partyItem.getItem().getName() + "      Quantity: " + quantities[i] + "<br>";
             }
         }
 
@@ -166,6 +167,7 @@ public class GuestController {
         HashMap<ItemBringer, List<Long>> itemBringerActual= getItemBringerActual(itemBringers, quantities); //hashmap to store party items & list of long quantity values
 
         model.addAttribute("party", party);
+        model.addAttribute("location", getLocation(party));
         model.addAttribute("guest", guest);
         model.addAttribute("itemBringers", itemBringerActual); //gets ItemBringer info associated with guestId
         model.addAttribute("startTime", party.convertTimestamp(party.getStartTime()));
@@ -189,6 +191,7 @@ public class GuestController {
         HashMap<ItemBringer, List<Long>> itemBringerActual= getItemBringerActual(itemBringers, quantities); //hashmap to store party items & list of long quantity values
 
         model.addAttribute("party", party); //get party info
+        model.addAttribute("location", getLocation(party));
         model.addAttribute("guest", guest); //get guest info
         model.addAttribute("rsvps", rsvpStatuses); //allows access to rsvp enum in form
         model.addAttribute("additionalGuests", additionalGuests); //sets additional guests drop down
@@ -241,6 +244,22 @@ public class GuestController {
     @GetMapping(path = "/rsvp/{urlKey}/login")
     public String redirectRSVP(@PathVariable String urlKey){
         return "redirect:/rsvp/" + urlKey;
+    }
+
+
+    //Generates String location
+    public String getLocation(Party party){
+        String location = "";
+        if(party.getLocation().getAddressTwo() != null){
+            location = party.getLocation().getAddressOne() + " " + party.getLocation().getAddressTwo() + ", " +
+                    party.getLocation().getCity() + ", " + party.getLocation().getState() + ", " + party.getLocation().getZipcode();
+        }
+        else{
+            location = party.getLocation().getAddressOne() + ", " + party.getLocation().getCity() + ", "
+                    + party.getLocation().getState() + ", " + party.getLocation().getZipcode();
+        }
+
+        return location;
     }
 
 
