@@ -20,21 +20,27 @@ public class PartyController {
     private final LocationRepository locationDao;
     private final ItemRepository itemDao;
     private final PartyItemRepository partyItemDao;
+    private final MemberRepository memberDao;
     private final EmailService emailService;
 
-    public PartyController(PartyRepository partyDao, LocationRepository locationDao, ItemRepository itemDao, PartyItemRepository partyItemDao, EmailService emailService) {
+    public PartyController(PartyRepository partyDao, LocationRepository locationDao, ItemRepository itemDao, PartyItemRepository partyItemDao, MemberRepository memberDao, EmailService emailService) {
         this.partyDao = partyDao;
         this.locationDao = locationDao;
         this.itemDao = itemDao;
         this.partyItemDao = partyItemDao;
+        this.memberDao = memberDao;
         this.emailService = emailService;
     }
 
     //show form for creating a party
     @GetMapping("/parties/create")
     public String showCreatePartyForm(Model model) {
+        Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member memberToDisplay = memberDao.getById(userInSession.getId());
+
         model.addAttribute("states", generateStates());
         model.addAttribute("party", new Party());
+        model.addAttribute("owner", memberToDisplay);
         return "party/create";
     }
 
@@ -83,20 +89,27 @@ public class PartyController {
     //show page when party successfully created
     @GetMapping("/parties/success/{urlKey}")
     public String showSuccessPartyForm(@PathVariable String urlKey, Model model, HttpServletRequest request) {
+        Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member memberToDisplay = memberDao.getById(userInSession.getId());
 
         Party party = partyDao.getByUrlKey(urlKey);
         String url = BaseURL.getBaseURL(request) + "/rsvp/" + party.getUrlKey();
 
         model.addAttribute("party", party);
         model.addAttribute("url", url);
+        model.addAttribute("owner", memberToDisplay);
         return "party/success";
     }
 
     //redirects to profile when submit button pushed
     @PostMapping("/parties/{urlKey}")
-    public String successParty(@PathVariable String urlKey, @RequestParam(name = "email[]") String[] emailAddresses, HttpServletRequest request) throws MessagingException {
+    public String successParty(@PathVariable String urlKey, @RequestParam(name = "email[]") String[] emailAddresses, Model model, HttpServletRequest request) throws MessagingException {
+        Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member memberToDisplay = memberDao.getById(userInSession.getId());
         Party party = partyDao.getByUrlKey(urlKey);
         emailService.sendInvites(party, emailAddresses, request);
+
+        model.addAttribute("owner", memberToDisplay);
         return "redirect:/profile";
     }
 

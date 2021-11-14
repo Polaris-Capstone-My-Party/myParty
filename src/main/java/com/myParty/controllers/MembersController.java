@@ -93,6 +93,7 @@ public class MembersController {
         model.addAttribute("owner", memberToDisplay);
         model.addAttribute("upcomingParties", upcomingParties);
         model.addAttribute("pastParties", pastParties);
+
         return "member/personalProfile";
     }
 
@@ -101,6 +102,9 @@ public class MembersController {
     public String showHostPartyPage(Model model, @PathVariable String urlKey, HttpServletRequest request) {
 
         Party party = partyDao.getByUrlKey(urlKey); //gets party by urlKey
+        Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member memberToDisplay = memberDao.getById(userInSession.getId());
+
 
         //Display Party Items Logic
         List<PartyItem> partyItems = partyItemDao.getByParty(party); //gets partyItems associated w/ party
@@ -139,6 +143,7 @@ public class MembersController {
         model.addAttribute("url", url);
         model.addAttribute("startTime", party.convertTimestamp(party.getStartTime()));
         model.addAttribute("endTime", party.convertTimestamp(party.getEndTime()));
+        model.addAttribute("owner", memberToDisplay);
 
         return "member/hostPartyPage";
     }
