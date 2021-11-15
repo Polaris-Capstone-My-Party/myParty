@@ -108,6 +108,7 @@ public class PartyController {
     public String successParty(@PathVariable String urlKey, @RequestParam(name = "email[]") String[] emailAddresses, Model model, HttpServletRequest request) throws MessagingException {
         Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member memberToDisplay = memberDao.getById(userInSession.getId());
+
         Party party = partyDao.getByUrlKey(urlKey);
         emailService.sendInvites(party, emailAddresses, request);
 
@@ -119,6 +120,8 @@ public class PartyController {
     @GetMapping("/parties/edit/{id}")
     public String showEditPartyForm(@PathVariable long id, String urlKey, Model model) {
 
+        Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member memberToDisplay = memberDao.getById(userInSession.getId());
         //Checks if party Exists
         if(!guestController.checkIfPartyExists(urlKey)){
             return "redirect:/parties/notFound";
@@ -139,6 +142,7 @@ public class PartyController {
         model.addAttribute("state", partyToEdit.getLocation().getState());
         model.addAttribute("zipcode", partyToEdit.getLocation().getZipcode());
         model.addAttribute("stateOptions", generateStates());
+        model.addAttribute("owner", memberToDisplay);
         List<PartyItem> partyItems = partyItemDao.getByParty(partyToEdit); //get partyItems associated with party
 
         model.addAttribute("partyItems", partyItems);
@@ -161,8 +165,12 @@ public class PartyController {
             @RequestParam(name = "zipcode") String zipcode,
             @RequestParam(name = "name[]",  required = false) String[] names,
             @RequestParam(name = "quantity[]",  required = false) String[] quantities,
-            @RequestParam(name = "delete[]",  required = false) String[] deletes){
+            @RequestParam(name = "delete[]",  required = false) String[] deletes, Model model){
 
+        Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member memberToDisplay = memberDao.getById(userInSession.getId());
+
+        model.addAttribute("owner", memberToDisplay);
         //get party object
         Party partyToUpdate = partyDao.getById(id);
 
@@ -197,14 +205,22 @@ public class PartyController {
 
     //deletes party
     @GetMapping("/parties/delete/{id}")
-    public String deleteParty(@PathVariable("id") long id) {
+    public String deleteParty(@PathVariable("id") long id, Model model) {
+        Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member memberToDisplay = memberDao.getById(userInSession.getId());
+
         partyDao.deleteById(id);
+        model.addAttribute("owner", memberToDisplay);
         return "redirect:/profile";
     }
 
     //Shows Error Page if Party is Not Found
     @GetMapping("/parties/notFound")
-    public String partyNotFound(){
+    public String partyNotFound(Model model){
+        Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member memberToDisplay = memberDao.getById(userInSession.getId());
+
+        model.addAttribute("owner", memberToDisplay);
         return "error/partyNotFound";
     }
 
