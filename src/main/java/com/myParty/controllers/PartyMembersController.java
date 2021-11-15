@@ -86,6 +86,12 @@ public class PartyMembersController {
     //shows RSVPSuccess page to PartyMembers
     @GetMapping(path = "/member/successRsvp/{urlKey}/{partyMemberKey}")
     public String showRSVPSuccess(Model model, @PathVariable String partyMemberKey, @PathVariable String urlKey, HttpServletRequest request) {
+
+        //Checks if party Exists
+        if(!guestController.checkIfPartyExists(urlKey)){
+            return "redirect:/parties/notFound";
+        }
+
         String url = BaseURL.getBaseURL(request) + "/rsvp/" + urlKey + "/member/" + partyMemberKey + "/view";
         model.addAttribute("url", url);
         return "partyMember/successRsvp";
@@ -94,6 +100,11 @@ public class PartyMembersController {
     //Shows RSVP to Party Members
     @GetMapping(path = "/rsvp/{urlKey}/member/{partyMemberKey}/view")
     public String showPartyMemberRSVPInfo(@PathVariable String urlKey, @PathVariable String partyMemberKey, Model model) {
+
+        //Checks if party Exists
+        if(!guestController.checkIfPartyExists(urlKey)){
+            return "redirect:/parties/notFound";
+        }
 
         Party party = partyDao.getByUrlKey(urlKey); //gets party
         PartyMember partyMember = partyMemberDao.getByPartyMemberKey(partyMemberKey); //gets partyMember
@@ -131,6 +142,11 @@ public class PartyMembersController {
     //Shows PartyMember Info & Allows to Edit
     @GetMapping(path = "/rsvp/{urlKey}/member/{partyMemberKey}/edit")
     public String showEditRSVP(@PathVariable String urlKey, @PathVariable String partyMemberKey, Model model) {
+
+        //Checks if party Exists
+        if(!guestController.checkIfPartyExists(urlKey)){
+            return "redirect:/parties/notFound";
+        }
 
         Party party = partyDao.getByUrlKey(urlKey); //gets party
         PartyMember partyMember = partyMemberDao.getByPartyMemberKey(partyMemberKey); //gets partyMember

@@ -101,6 +101,11 @@ public class MembersController {
     @GetMapping("/member/{urlKey}/view")
     public String showHostPartyPage(Model model, @PathVariable String urlKey, HttpServletRequest request) {
 
+        //Checks if party Exists
+        if(!guestControllerDao.checkIfPartyExists(urlKey)){
+            return "redirect:/parties/notFound";
+        }
+
         Party party = partyDao.getByUrlKey(urlKey); //gets party by urlKey
         Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member memberToDisplay = memberDao.getById(userInSession.getId());
