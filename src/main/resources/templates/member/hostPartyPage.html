@@ -123,6 +123,28 @@
                     </div>
                 </div>
             </div>
+            <p>
+                <button class="btn btn-light" type="button" data-toggle="collapse" data-target="#collapseExample"
+                        aria-expanded="false" aria-controls="collapseExample">
+                    Preview Email Invitation
+                </button>
+            </p>
+            <div class="collapse" id="collapseExample">
+                <div class="card card-body">
+                    <img src="/img/myPartyDark.png" alt="my party dark logo" height="45px" width="150px">
+                    <h2 th:text="'You are invited to ' + ${party.title} + ' by ' + ${party.getOwner.getUsername}"></h2>
+                    <br>
+                    <i>Here are the details: </i>
+                    <br>
+                    <p th:text="'Description: ' + ${party.description}"></p>
+                    <p th:text="'Start Time: ' + ${party.startTime}"></p>
+                    <p th:text="'End Time: ' + ${party.endTime}"></p>
+                    <p th:text="'Location: ' + ${party.location.addressOne}"></p>
+                    <p th:text="${party.location.addressTwo}"></p>
+                    <p th:text="${party.location.city} + ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}"></p>
+                    <a th:href="${url}" class="customURL">RSVP Here</a>
+                </div>
+            </div>
 
             <div class="container align-center">
                 <div class="row justify-content-center">
