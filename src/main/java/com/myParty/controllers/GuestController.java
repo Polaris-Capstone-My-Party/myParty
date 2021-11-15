@@ -5,6 +5,7 @@ import com.myParty.models.*;
 import com.myParty.repositories.*;
 import com.myParty.services.EmailService;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +38,12 @@ public class GuestController {
     //show RSVP form with corresponding Party & Party Item Information
     @GetMapping(path = "/rsvp/{urlKey}")
     public String showRSVP(@PathVariable String urlKey, Model model){
+
+        //Checks if party Exists
+        if(!checkIfPartyExists(urlKey)){
+            return "redirect:/parties/notFound";
+        }
+
         ArrayList<String> rsvpStatuses = getRsvpStatuses(); //list of RSVP enum values/options
         ArrayList<String> additionalGuests = getAdditionalGuests(); //list of RSVP enum values/options
 
@@ -124,7 +131,6 @@ public class GuestController {
         Guest guest1 =  guestDAO.save(guest); //save guest information & creates item to reference
         String partyItemsDetails = "";
 
-
         if(quantities != null){
             for(int i = 0; i < myPartyItems.length; i++){ //goes through partyItems guest submitted
                 ItemBringer itemBringer = new ItemBringer(); //new instance of Item Bringer
@@ -148,6 +154,11 @@ public class GuestController {
     @GetMapping(path = "/guests/successRsvp/{urlKey}/{guestKey}")
     public String showRSVPSuccess(Model model, @PathVariable String guestKey, @PathVariable String urlKey, HttpServletRequest request){
 
+        //Checks if party Exists
+        if(!checkIfPartyExists(urlKey)){
+            return "redirect:/parties/notFound";
+        }
+
         String url = BaseURL.getBaseURL(request) + "/rsvp/" + urlKey + "/" + guestKey + "/view";
         model.addAttribute("url", url);
         return "guests/successRsvp";
@@ -156,6 +167,11 @@ public class GuestController {
     //shows RSVP Information to guests
     @GetMapping(path = "/rsvp/{urlKey}/{guestKey}/view")
     public String showRSVPInfo(Model model, @PathVariable String urlKey, @PathVariable String guestKey){
+
+        //Checks if party Exists
+        if(!checkIfPartyExists(urlKey)){
+            return "redirect:/parties/notFound";
+        }
 
         //gets RSVP info
         Party party = partyDAO.getByUrlKey(urlKey);
@@ -179,6 +195,12 @@ public class GuestController {
     //Shows Guest Info & Allows to Edit
     @GetMapping(path = "/rsvp/{urlKey}/{guestKey}/edit")
     public String showEditRSVP(@PathVariable String urlKey, @PathVariable String guestKey, Model model){
+
+        //Checks if party Exists
+        if(!checkIfPartyExists(urlKey)){
+            return "redirect:/parties/notFound";
+        }
+
         ArrayList<String> rsvpStatuses = getRsvpStatuses(); //list of RSVP enum values/options
         ArrayList<String> additionalGuests = getAdditionalGuests(); //list of RSVP enum values/options
 
@@ -246,6 +268,13 @@ public class GuestController {
         return "redirect:/rsvp/" + urlKey;
     }
 
+    //Check if party exists
+    public boolean checkIfPartyExists(String urlKey){
+        if(partyDAO.getByUrlKey(urlKey) != null){ return true;
+        }
+        else{ return false;
+        }
+    }
 
     //Generates String location
     public String getLocation(Party party){
@@ -261,7 +290,6 @@ public class GuestController {
 
         return location;
     }
-
 
     //calculates actual quantity remaining
     public List<Long> calculateQuantity(List<PartyItem> partyItems){ //takes in List of partyItems

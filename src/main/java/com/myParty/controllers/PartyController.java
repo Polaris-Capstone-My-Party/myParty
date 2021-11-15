@@ -22,14 +22,16 @@ public class PartyController {
     private final PartyItemRepository partyItemDao;
     private final MemberRepository memberDao;
     private final EmailService emailService;
+    private final GuestController guestController;
 
-    public PartyController(PartyRepository partyDao, LocationRepository locationDao, ItemRepository itemDao, PartyItemRepository partyItemDao, MemberRepository memberDao, EmailService emailService) {
+    public PartyController(PartyRepository partyDao, LocationRepository locationDao, ItemRepository itemDao, PartyItemRepository partyItemDao, MemberRepository memberDao, EmailService emailService, GuestController guestController) {
         this.partyDao = partyDao;
         this.locationDao = locationDao;
         this.itemDao = itemDao;
         this.partyItemDao = partyItemDao;
         this.memberDao = memberDao;
         this.emailService = emailService;
+        this.guestController = guestController;
     }
 
     //show form for creating a party
@@ -116,6 +118,13 @@ public class PartyController {
     //show form for editing party
     @GetMapping("/parties/edit/{id}")
     public String showEditPartyForm(@PathVariable long id, String urlKey, Model model) {
+
+        //Checks if party Exists
+        if(!guestController.checkIfPartyExists(urlKey)){
+            return "redirect:/parties/notFound";
+        }
+
+
         Party partyToEdit = partyDao.getById(id);
         //TODO: Refactor later
         model.addAttribute("id", partyToEdit.getId());
@@ -191,6 +200,12 @@ public class PartyController {
     public String deleteParty(@PathVariable("id") long id) {
         partyDao.deleteById(id);
         return "redirect:/profile";
+    }
+
+    //Shows Error Page if Party is Not Found
+    @GetMapping("/parties/notFound")
+    public String partyNotFound(){
+        return "error/partyNotFound";
     }
 
     //Creates & saves new Items
