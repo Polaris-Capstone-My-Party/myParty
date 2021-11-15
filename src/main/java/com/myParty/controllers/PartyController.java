@@ -122,6 +122,7 @@ public class PartyController {
 
         Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member memberToDisplay = memberDao.getById(userInSession.getId());
+
         //Checks if party Exists
         if(!guestController.checkIfPartyExists(urlKey)){
             return "redirect:/parties/notFound";

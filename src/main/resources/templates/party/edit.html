@@ -143,18 +143,18 @@
                 <div class="col">
 
                     <div class="row justify-content-center">
-                        <div class="col-4 border border-secondary">Item</div>
-                        <div class="col-4 border border-secondary">Quantity Remaining</div>
-                        <div class="col-2 border border-secondary">Delete Item</div>
+                        <div class="col-4 border border-secondary" style="background-color: whitesmoke">Item</div>
+                        <div class="col-4 border border-secondary" style="background-color: whitesmoke">Quantity Remaining</div>
+                        <div class="col-2 border border-secondary" style="background-color: whitesmoke">Delete Item</div>
                     </div>
 
 
                     <div id="addMoreItems">
                         <th:block th:each="partyItem : ${partyItems}">
                             <div class="row justify-content-center">
-                                <div class="col-4 border border-secondary" th:text="${partyItem.item.name}"></div>
-                                <div class="col-4 border border-secondary" th:text="${partyItem.quantityRequired}"></div>
-                                <div class="col-2 border border-secondary">
+                                <div class="col-4 border border-secondary" style="background-color: whitesmoke" th:text="${partyItem.item.name}"></div>
+                                <div class="col-4 border border-secondary" style="background-color: whitesmoke" th:text="${partyItem.quantityRequired}"></div>
+                                <div class="col-2 border border-secondary" style="background-color: whitesmoke">
                                     <input type="checkbox" id="delete[]" name="delete[]" th:value="${partyItem.id}">
                                 </div>
                                 <input type="hidden" name="partyItem[]" th:value="${partyItem.id}">
@@ -167,7 +167,7 @@
 
                     <div class="row">
                         <div class="col">
-                            <button id="addItemButton" style="background-color: #ce5ece">Add Another Item</button>
+                            <button id="addItemButton">Add Another Item</button>
                         </div>
                     </div>
                 </div>
@@ -177,7 +177,7 @@
 
             <div class="row">
                 <div class="col">
-                    <input type="submit"/>
+                    <input id="createP" type="submit"/>
                 </div>
             </div>
             <br>
