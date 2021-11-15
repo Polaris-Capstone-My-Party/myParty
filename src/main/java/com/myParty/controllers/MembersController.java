@@ -163,6 +163,8 @@ public class MembersController {
     @GetMapping("/members/editProfile/{id}")
     public String showEditMemberForm(@PathVariable long id, String username, Model model) {
         Member memberToAdd = memberDao.getById(id);
+        Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member memberToDisplay = memberDao.getById(userInSession.getId());
         //TODO: Refactor later
         model.addAttribute("email", memberToAdd.getEmail());
         model.addAttribute("firstName", memberToAdd.getFirstName());
@@ -170,6 +172,7 @@ public class MembersController {
         model.addAttribute("phone", memberToAdd.getPhone());
         model.addAttribute("username", memberToAdd.getUsername());
         model.addAttribute("password", memberToAdd.getPassword());
+        model.addAttribute("owner", memberToDisplay);
 
         return "member/editProfile";
     }
@@ -178,12 +181,15 @@ public class MembersController {
     @PostMapping("/members/editProfile/{id}")
     public String editProfile(
             @PathVariable long id,
+            Model model,
             @RequestParam(name = "email") String email,
             @RequestParam(name = "firstName") String firstName,
             @RequestParam(name = "lastName") String lastName,
             @RequestParam(name = "phone") Long phone,
             @RequestParam(name = "username") String username) {
 
+        Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member memberToDisplay = memberDao.getById(userInSession.getId());
         //get member object
         Member memberToUpdate = memberDao.getById(id);
 
@@ -195,13 +201,18 @@ public class MembersController {
         memberToUpdate.setUsername(username);
         memberDao.save(memberToUpdate);
 
+        model.addAttribute("owner", memberToDisplay);
         return "redirect:/profile";
     }
 
     @GetMapping("/members/delete/{id}")
-    public String deleteMember(@PathVariable("id") long id, HttpSession httpSession) {
+    public String deleteMember(@PathVariable("id") long id, Model model, HttpSession httpSession) {
+        Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member memberToDisplay = memberDao.getById(userInSession.getId());
         httpSession.invalidate();
         memberDao.deleteById(id);
+
+        model.addAttribute(memberToDisplay);
         return "redirect:/";
     }
 }
