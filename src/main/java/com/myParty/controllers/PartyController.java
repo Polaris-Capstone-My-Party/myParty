@@ -117,8 +117,8 @@ public class PartyController {
     }
 
     //show form for editing party
-    @GetMapping("/parties/edit/{id}")
-    public String showEditPartyForm(@PathVariable long id, String urlKey, Model model) {
+    @GetMapping("/parties/edit/{urlKey}")
+    public String showEditPartyForm(@PathVariable String urlKey, Model model) {
 
         Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member memberToDisplay = memberDao.getById(userInSession.getId());
@@ -128,33 +128,20 @@ public class PartyController {
             return "redirect:/parties/notFound";
         }
 
-
-        Party partyToEdit = partyDao.getById(id);
-        //TODO: Refactor later
-        model.addAttribute("id", partyToEdit.getId());
-        model.addAttribute("party", partyToEdit.getUrlKey());
-        model.addAttribute("title", partyToEdit.getTitle());
-        model.addAttribute("description", partyToEdit.getDescription());
-        model.addAttribute("startTime", partyToEdit.getStartTime().toLocalDateTime());
-        model.addAttribute("endTime", partyToEdit.getEndTime().toLocalDateTime());
-        model.addAttribute("addressOne", partyToEdit.getLocation().getAddressOne());
-        model.addAttribute("addressTwo", partyToEdit.getLocation().getAddressTwo());
-        model.addAttribute("city", partyToEdit.getLocation().getCity());
-        model.addAttribute("state", partyToEdit.getLocation().getState());
-        model.addAttribute("zipcode", partyToEdit.getLocation().getZipcode());
-        model.addAttribute("stateOptions", generateStates());
-        model.addAttribute("owner", memberToDisplay);
+        Party partyToEdit = partyDao.getByUrlKey(urlKey);
         List<PartyItem> partyItems = partyItemDao.getByParty(partyToEdit); //get partyItems associated with party
 
-        model.addAttribute("partyItems", partyItems);
+        model.addAttribute("stateOptions", generateStates());
         model.addAttribute("party", partyToEdit);
+        model.addAttribute("partyItems", partyItems);
+        model.addAttribute("owner", memberToDisplay);
         return "party/edit";
     }
 
     //saves edited party information
-    @PostMapping("/parties/edit/{id}")
+    @PostMapping("/parties/edit/{urlKey}")
     public String editParty(
-            @PathVariable long id,
+            @PathVariable String urlKey,
             @RequestParam(name = "title") String title,
             @RequestParam(name = "description") String description,
             @RequestParam(name = "startTime") String startTime,
@@ -173,7 +160,7 @@ public class PartyController {
 
         model.addAttribute("owner", memberToDisplay);
         //get party object
-        Party partyToUpdate = partyDao.getById(id);
+        Party partyToUpdate = partyDao.getByUrlKey(urlKey);
 
         //saves location information
         Location locationToUpdate = new Location(0, addressOne, addressTwo, city, state, zipcode);

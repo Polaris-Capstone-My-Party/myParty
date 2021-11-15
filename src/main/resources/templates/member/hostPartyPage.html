@@ -25,9 +25,10 @@
                 <h3 class="card-text" th:text="${party.description}"></h3>
 
 
-                <label for="customUrl">Custom Party Url:</label>
-                <input type="text" style="width: 575px" id="customUrl" th:value="${url}"/>
-                <button type="button" onclick="myFunction()">Copy url</button>
+
+                    <label for="customUrl">Custom Party Url:</label>
+                    <input type="text" style="width: 575px" id="customUrl" th:value="${url}"/>
+                    <button type="button" onclick="myFunction()">Copy url</button>
             </div>
 
             <!--     Copy url button-->
@@ -49,7 +50,7 @@
                 <div class="d-flex flex-column bd-highlight mb-3">
                     <div class="p-2 bd-highlight" th:text="'Start: ' + ${startTime}"></div>
                     <div class="p-2 bd-highlight" th:text="'End: ' + ${endTime}"></div>
-                    <div class="p-2 bd-highlight" th:text="${location}" id="fullAddress"></div>
+                <div class="p-2 bd-highlight" th:text="${location}" id="fullAddress"></div>
 
                     <!--Show Location on Map-->
                     <div id='map' style='width: 100%; height: 40vh'></div>
@@ -108,9 +109,7 @@
                                     <!--              th:text="'Quantity Bringing: ' + ${itemBringer.quantity}"></td>-->
                                 </tr>
                                 <tr th:each="partyMember : ${partyMembers}">
-                                    <td th:text="${partyMember.key.member.firstName} + ' ' + ${partyMember.key.member.lastName}">
-                                        Name
-                                    </td>
+                                    <td th:text="${partyMember.key.member.firstName} + ' ' + ${partyMember.key.member.lastName}">Name</td>
                                     <td th:text="${partyMember.key.member.email}">Email</td>
                                     <td th:text="${partyMember.key.rsvpStatus}">RSVP Status</td>
                                     <td th:text="${partyMember.key.additionalGuests}">Additional Guests</td>
@@ -124,28 +123,7 @@
                     </div>
                 </div>
             </div>
-            <p>
-                <button class="btn btn-light" type="button" data-toggle="collapse" data-target="#collapseExample"
-                        aria-expanded="false" aria-controls="collapseExample">
-                    Preview Email Invitation
-                </button>
-            </p>
-            <div class="collapse" id="collapseExample">
-                <div class="card card-body">
-                    <img src="/img/myPartyDark.png" alt="my party dark logo" height="45px" width="150px">
-                    <h2 th:text="'You are invited to ' + ${party.title} + ' by ' + ${party.getOwner.getUsername}"></h2>
-                    <br>
-                    <i>Here are the details: </i>
-                    <br>
-                    <p th:text="'Description: ' + ${party.description}"></p>
-                    <p th:text="'Start Time: ' + ${party.startTime}"></p>
-                    <p th:text="'End Time: ' + ${party.endTime}"></p>
-                    <p th:text="'Location: ' + ${party.location.addressOne}"></p>
-                    <p th:text="${party.location.addressTwo}"></p>
-                    <p th:text="${party.location.city} + ', ' + ${party.location.state} + ', ' + ${party.location.zipcode}"></p>
-                    <a th:href="${url}" class="customURL">RSVP Here</a>
-                </div>
-            </div>
+
             <div class="container align-center">
                 <div class="row justify-content-center">
                     <div class="col-sm-6">
@@ -161,76 +139,72 @@
                                         </div>
                                     </div>
                                     <div class="form-group mx-sm-3 mb-2">
-                                        <button id="addEmailButton" style="background-color: #ce5ece">Add Another
-                                            Email
-                                        </button>
+                                        <button id="addEmailButton" style="background-color: #ce5ece">Add Another Email</button>
                                         <input type="submit" class="btn btn-info" value="Send Invites!">
                                     </div>
                                 </form>
-                            </div>
+                                </div>
                         </div>
                     </div>
                 </div>
             </div>
-
+          
             <div class="d-flex justify-content-center">
-                <a th:href="@{|/parties/edit/${party.id}|}" class="btn btn-dark" style="background-color: #ce5ece">Edit
-                    Party</a>
+            <a th:href="@{|/parties/edit/${party.urlKey}|}" class="btn btn-dark" style="background-color: #ce5ece">Edit Party</a>
                 <a th:replace="partials/modalsUpdates :: modal" style="background-color: #c11a2b"></a>
             </div>
-        </div>
 
-        <div th:replace="partials/scripts :: scripts"></div>
+            <div th:replace="partials/scripts :: scripts"></div>
 
-        <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+            <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
 
-        <!--Generate Map Information -->
-        <script src="/keys.js"></script>
-        <script src="/js/jquery.js"></script>
-        <script src="/js/mapbox-geocoder-utils.js"></script>
-        <script>
-            const address = $("#fullAddress").html();
+            <!--Generate Map Information -->
+            <script src="/keys.js"></script>
+            <script src="/js/jquery.js"></script>
+            <script src="/js/mapbox-geocoder-utils.js"></script>
+            <script>
+                const address = $("#fullAddress").html();
 
-            geocode(address, mapboxApiKey).then(function (result) {
-                mapboxgl.accessToken = mapboxApiKey;
+                geocode(address, mapboxApiKey).then(function (result) {
+                    mapboxgl.accessToken = mapboxApiKey;
 
-                var map = new mapboxgl.Map({
-                    container: 'map',
-                    style: 'mapbox://styles/mapbox/streets-v9',
-                    zoom: 15,
-                    center: (result)
+                    var map = new mapboxgl.Map({
+                        container: 'map',
+                        style: 'mapbox://styles/mapbox/streets-v9',
+                        zoom: 15,
+                        center: (result)
+                    });
+
+                    var marker = new mapboxgl.Marker({
+                        draggable: true
+                    }).setLngLat(result).addTo(map);
+
+
                 });
+            </script>
 
-                var marker = new mapboxgl.Marker({
-                    draggable: true
-                }).setLngLat(result).addTo(map);
+<!--            SEND ADDITIONAL EMAILS SCRIPT-->
+            <script>
+                window.onload = (function () {
+                    const additionalEmail = document.getElementById('addEmailButton');
 
-
-            });
-        </script>
-
-        <!--            SEND ADDITIONAL EMAILS SCRIPT-->
-        <script>
-            window.onload = (function () {
-                const additionalEmail = document.getElementById('addEmailButton');
-
-                const emailForm = `<div class="form-group">
+                    const emailForm = `<div class="form-group">
                   <label for="email[]">Email Address:</label>
                   <input type="email" name="email[]" id="email[]">
                 </div>`
 
 
-                additionalEmail.addEventListener('click', function (event) {
-                    event.preventDefault();
+                    additionalEmail.addEventListener('click', function (event) {
+                        event.preventDefault();
 
-                    const yeahBaby = document.getElementById('additionalEmails');
-                    let newEmail = document.createElement("div");
-                    newEmail.innerHTML = emailForm;
-                    yeahBaby.appendChild(newEmail);
-                });
-            })
-        </script>
-</div>
-</section>
+                        const yeahBaby = document.getElementById('additionalEmails');
+                        let newEmail = document.createElement("div");
+                        newEmail.innerHTML = emailForm;
+                        yeahBaby.appendChild(newEmail);
+                    });
+                })
+            </script>
+        </div>
+    </section>
 </div>
 </html>
