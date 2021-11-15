@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/html"
-      layout:decorate="~{layout}">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/html" layout:decorate="~{layout}">
+
 <head>
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js"
-            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
     <style>
         .remove:hover {
             background: darkred;
@@ -16,7 +15,15 @@
 </head>
 
 <section layout:fragment="content">
-    <a href="/profile" class="btn btn-dark">Return to Profile</a>
+
+    <div class="row">
+        <div class="col">
+            <a href="/profile" class="btn btn-dark">Return to Profile</a>
+        </div>
+    </div>
+
+    <br>
+
     <div class="container">
 
         <div class="row">
@@ -154,6 +161,8 @@
                         </th:block>
                     </div>
 
+                    <br>
+
                     <div class="row">
                         <div class="col">
                             <button id="addItemButton" style="background-color: #ce5ece">Add Another Item</button>
@@ -161,6 +170,8 @@
                     </div>
                 </div>
             </div>
+
+            <br>
 
             <div class="row">
                 <div class="col">
