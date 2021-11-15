@@ -124,33 +124,20 @@ public class PartyController {
             return "redirect:/parties/notFound";
         }
 
-
         Party partyToEdit = partyDao.getById(id);
-        //TODO: Refactor later
-        model.addAttribute("id", partyToEdit.getId());
-        model.addAttribute("party", partyToEdit.getUrlKey());
-        model.addAttribute("description", partyToEdit.getDescription());
-        model.addAttribute("startTime", partyToEdit.getStartTime().toLocalDateTime());
-        model.addAttribute("endTime", partyToEdit.getEndTime().toLocalDateTime());
-        model.addAttribute("addressOne", partyToEdit.getLocation().getAddressOne());
-        model.addAttribute("addressTwo", partyToEdit.getLocation().getAddressTwo());
-        model.addAttribute("city", partyToEdit.getLocation().getCity());
-        model.addAttribute("state", partyToEdit.getLocation().getState());
-        model.addAttribute("zipcode", partyToEdit.getLocation().getZipcode());
-        model.addAttribute("stateOptions", generateStates());
         List<PartyItem> partyItems = partyItemDao.getByParty(partyToEdit); //get partyItems associated with party
 
-        model.addAttribute("partyItems", partyItems);
+        model.addAttribute("stateOptions", generateStates());
         model.addAttribute("party", partyToEdit);
+        model.addAttribute("partyItems", partyItems);
         return "party/edit";
     }
 
     //saves edited party information
     @PostMapping("/parties/edit/{id}")
     public String editParty(
+            @ModelAttribute Party party,
             @PathVariable long id,
-            @RequestParam(name = "title") String title,
-            @RequestParam(name = "description") String description,
             @RequestParam(name = "startTime") String startTime,
             @RequestParam(name = "endTime") String endTime,
             @RequestParam(name = "addressOne") String addressOne,
