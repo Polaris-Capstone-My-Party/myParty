@@ -80,7 +80,7 @@ public class GuestController {
         if(!SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString().equals("anonymousUser")){
             Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); //get member in session
             Member actualMember = memberDao.getById(userInSession.getId()); //get member info associated with member in session
-
+            model.addAttribute("owner", actualMember); //BR
             PartyMember checkMember = partyMemberDao.getByMemberAndParty(actualMember, party);
 
             //check if member already has partyMember associated with this party

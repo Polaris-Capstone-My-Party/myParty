@@ -20,7 +20,10 @@
 
 <body>
 <div sec:authorize="isAuthenticated()">
-    <nav th:replace="partials/memberNavbar :: navbar"></nav>
+    <nav th:replace="partials/memberNavbar :: navbar">
+        <span th:text="${#authentication.principal.username}"/>
+    </nav>
+
 </div>
 
 <div sec:authorize="isAnonymous()">
