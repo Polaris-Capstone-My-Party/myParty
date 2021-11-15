@@ -52,28 +52,73 @@
                     <div sec:authorize="isAuthenticated()">
                         <form th:action="@{|/rsvp/${party.urlKey}/${member.id}|}" th:method="post" th:object="${partyMember}">
 
-                            <!--Prefilled Member Information-->
-                            <div th:text="'Name: ' + ${member.firstName} + ' ' + ${member.lastName} "></div>
-                            <div th:text="'Email: ' + ${member.email}"></div>
+                            <br>
+                            <div class="row justify-content-center align-items-center">
 
-                            <!--Enter RSVP Status-->
-                            <div class="form-group">
-                                <label for="rsvp1">RSVP: </label>
-                                <select id="rsvp1" name="rsvp">
-                                    <div th:each="rsvp: ${rsvps}">
-                                        <option th:value="${rsvp}" th:text="${rsvp}"></option>
+                                <!--Prefilled Member Information-->
+                                <div class="col">
+                                    <div class="row-4">
+                                        <div class="col text-end">
+                                            <label class="control-label" for="memberName">Name: </label>
+                                        </div>
                                     </div>
-                                </select>
+
+                                    <br>
+
+                                    <div class="row-4">
+                                        <div class="col text-end">
+                                            <label class="control-label" for="memberEmail">Email: </label>
+                                        </div>
+                                    </div>
+
+                                    <br>
+
+                                    <!--Enter RSVP Status-->
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <label class="control-label"for="rsvp">RSVP: </label>
+                                            <select id="rsvp" name="rsvp">
+                                                <div th:each="rsvp: ${rsvps}">
+                                                    <option th:value="${rsvp}" th:text="${rsvp}"></option>
+                                                </div>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col">
+
+                                    <div class="row-4">
+                                        <div class="col text-start">
+                                            <div id="memberName" th:text="${member.firstName} + ' ' + ${member.lastName}"></div>
+                                        </div>
+                                    </div>
+
+                                    <br>
+
+                                    <div class="row-4">
+                                        <div class="col text-start">
+                                            <div id="memberEmail" th:text="${member.email}"></div>
+                                        </div>
+                                    </div>
+
+                                    <br>
+
+                                    <div class="row">
+                                        <div class="col text-start">
+                                            <label class="control-label" for="additionalGuests">Additional Guests:</label>
+                                            <select id="additionalGuests" th:field="*{additionalGuests}">
+                                                <div th:each="additionalGuest : ${additionalGuests}">
+                                                    <option th:value="${additionalGuest}" th:text="${additionalGuest}"></option>
+                                                </div>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
 
-                            <div class="form-group">
-                                <label for="additionalGuests1">Additional Guests You're Bringing: </label>
-                                <select id="additionalGuests1" th:field="*{additionalGuests}">
-                                    <div th:each="additionalGuest : ${additionalGuests}">
-                                        <option th:value="${additionalGuest}" th:text="${additionalGuest}"></option>
-                                    </div>
-                                </select>
-                            </div>
+                            <br>
 
                             <!-- Party item details -->
                             <div class="p-2 bd-highlight">
@@ -81,7 +126,7 @@
                                     <div class="row justify-content-center">
                                         <div class="table-responsive">
                                             <table id="example" class="table table-bordered">
-                                                <h3>Party Item Information</h3>
+                                                <h3>Item Signup</h3>
                                                 <thead>
                                                 <tr>
                                                     <th>Item</th>
@@ -112,79 +157,109 @@
 
                     <!--Guest RSVP Form-->
                     <div sec:authorize="isAnonymous()">
-                        <form th:action="@{|/rsvp/${party.urlKey}|}" th:method="post" th:object="${guest}" >
-                             <a th:href="@{|/rsvp/${party.urlKey}/login|}">Have an account? Log in here</a>
-
-                            <!--Enter First Name-->
-                            <div class="form-group">
-                                <label for="firstName">First Name: </label>
-                                <input class="form-control" id="firstName" type="text" th:field="*{firstName}"/>
-                            </div>
-
-                            <!--Enter Last Name-->
-                            <div class="form-group">
-                                <label for="lastName">Last Name: </label>
-                                <input class="form-control" id="lastName" type="text" th:field="*{lastName}"/>
-                            </div>
-
-                            <!--Enter Email-->
-                            <div class="form-group">
-                                <label for="email">Email: </label>
-                                <input class="form-control" id="email" type="text" th:field="*{email}"/>
-                            </div>
-
-                             <!--Enter RSVP Status-->
-                            <div class="form-group">
-                                <label for="rsvp">RSVP: </label>
-                                <select id="rsvp" name="rsvp">
-                                    <div th:each="rsvp: ${rsvps}">
-                                        <option th:value="${rsvp}" th:text="${rsvp}"></option>
+                        <form th:action="@{|/rsvp/${party.urlKey}|}" th:method="post" th:object="${guest}">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col">
+                                        <a th:href="@{|/rsvp/${party.urlKey}/login|}">Have an account? Log in here</a>
                                     </div>
-                                </select>
-                            </div>
+                                </div>
 
-                            <div class="form-group">
-                                <label for="additionalGuests">Additional Guests You're Bringing: </label>
-                                <select id="additionalGuests" th:field="*{additionalGuests}">
-                                    <div th:each="additionalGuest : ${additionalGuests}">
-                                        <option th:value="${additionalGuest}" th:text="${additionalGuest}"></option>
+                                <br>
+
+                                <!--Enter First Name-->
+                                <div class="row form-group justify-content-center align-items-center">
+                                    <div class="col-2 text-start">
+                                        <label class="control-label" for="firstName">First Name: </label>
                                     </div>
-                                </select>
-                            </div>
+                                    <div class="col-4">
+                                        <input class="form-control" id="firstName" type="text" th:field="*{firstName}"/>
+                                    </div>
+                                </div>
 
-                            <!--Sign Up For Items -->
-                            <div class="p-2 bd-highlight">
-                                <div class="container">
-                                    <div class="row justify-content-center">
-                                        <div class="table-responsive">
-                                            <table id="example2" class="table table-bordered">
-                                                <h3>Party Item Information</h3>
-                                                <thead>
-                                                <tr>
-                                                    <th>Item</th>
-                                                    <th>Quantity Requested</th>
-                                                    <th>Quantity You're Bringing</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr class="form-group" th:each="partyItem: ${partyItems}">
-                                                    <td th:text="${partyItem.key.item.name}"></td>
-                                                    <td th:text="${partyItem.key.quantityRequired}"></td>
-                                                    <td>
-                                                        <select name="quantity[]">
-                                                            <option th:each="quantity : ${partyItem.value}" th:text="${quantity}" th:value="${quantity}"></option>
-                                                        </select>
-                                                    </td>
-                                                    <input type="hidden" name="partyItem[]" th:value="${partyItem.key.id}">
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                <br>
+
+                                <!--Enter Last Name-->
+                                <div class="row form-group justify-content-center align-items-center">
+                                    <div class="col-2 text-start">
+                                        <label class="control-label" for="lastName">Last Name: </label>
+                                    </div>
+                                    <div class="col-4">
+                                        <input class="form-control" id="lastName" type="text" th:field="*{lastName}"/>
+                                    </div>
+                                </div>
+
+                                <br>
+
+                                <!--Enter Email-->
+                                <div class="row form-group justify-content-center align-items-center">
+                                    <div class="col-2 text-start">
+                                        <label class="control-label" for="email">Email Address: </label>
+                                    </div>
+                                    <div class="col-4">
+                                        <input class="form-control" id="email" type="text" th:field="*{email}"/>
+                                    </div>
+                                </div>
+
+                                <br>
+
+                                <!--Enter RSVP Status-->
+                                <div class="row justify-content-center align-items-center">
+                                    <div class="col-3 text-end">
+                                        <label class="control-label"for="rsvp">RSVP: </label>
+                                        <select id="rsvp" name="rsvp">
+                                            <div th:each="rsvp: ${rsvps}">
+                                                <option th:value="${rsvp}" th:text="${rsvp}"></option>
+                                            </div>
+                                        </select>
+                                    </div>
+                                    <div class="col-4 text-center">
+                                        <label class="control-label" for="additionalGuests">Additional Guests:</label>
+                                        <select id="additionalGuests" th:field="*{additionalGuests}">
+                                            <div th:each="additionalGuest : ${additionalGuests}">
+                                                <option th:value="${additionalGuest}" th:text="${additionalGuest}"></option>
+                                            </div>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <br>
+
+                                <!--Sign Up For Items -->
+                                <div class="p-2 bd-highlight">
+                                    <div class="container">
+                                        <div class="row justify-content-center">
+                                            <div class="table-responsive">
+                                                <table id="example2" class="table table-bordered">
+                                                    <h3>Item Signup</h3>
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Item</th>
+                                                        <th>Quantity Requested</th>
+                                                        <th>Quantity You're Bringing</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr class="form-group" th:each="partyItem: ${partyItems}">
+                                                        <td th:text="${partyItem.key.item.name}"></td>
+                                                        <td th:text="${partyItem.key.quantityRequired}"></td>
+                                                        <td>
+                                                            <select name="quantity[]">
+                                                                <option th:each="quantity : ${partyItem.value}" th:text="${quantity}" th:value="${quantity}"></option>
+                                                            </select>
+                                                        </td>
+                                                        <input type="hidden" name="partyItem[]" th:value="${partyItem.key.id}">
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <input type="submit" value="Submit"/>
                             </div>
-                            <input type="submit" value="Submit"/>
                         </form>
+                        <br>
                     </div>
                 </div>
             </div>

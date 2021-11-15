@@ -23,11 +23,13 @@
                 <div th:text=" 'End Time: ' + ${endTime}"></div>
                 <div th:text="'Organizer: ' + ${party.owner.firstName + ' ' + party.owner.lastName}"></div>
                 <div th:text="'Location: ' + ${location}"></div>
-                <!--TODO: Logic to show addressTwo if not null-->
             </div>
         </div>
 
-        <!--Form to RSVP for Party-->
+        <br>
+
+
+        <!--Form to Edit RSVP for Party-->
         <form th:action="@{|/rsvp/${party.urlKey}/${guest.guestKey}/edit|}" th:method="post" th:object="${guest}" style="display: flex;
     flex-direction: column;
     flex-wrap: wrap;
@@ -35,94 +37,109 @@
     justify-content: space-around;
     align-items: stretch;">
             <div class="row">
-                <div class="col" style="display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-content: space-around;
-    align-items: center;">
+                <div class="col">
 
                     <!--Enter First Name-->
-                    <div class="form-group col">
-                        <label for="firstName">First Name: </label>
-                        <input class="form-control" id="firstName" type="text" th:field="*{firstName}"/>
+                    <div class="row form-group justify-content-center align-items-center">
+                        <div class="col-4 text-start">
+                            <label class="control-label" for="firstName">First Name: </label>
+                        </div>
+                        <div class="col-8">
+                            <input class="form-control" id="firstName" type="text" th:field="*{firstName}"/>
+                        </div>
                     </div>
+
+                    <br>
 
                     <!--Enter Last Name-->
-                    <div class="form-group">
-                        <label for="lastName">Last Name: </label>
-                        <input class="form-control" id="lastName" type="text" th:field="*{lastName}"/>
+                    <div class="row form-group justify-content-center align-items-center">
+                        <div class="col-4 text-start">
+                            <label class="control-label" for="lastName">Last Name: </label>
+                        </div>
+                        <div class="col-8">
+                            <input class="form-control" id="lastName" type="text" th:field="*{lastName}"/>
+                        </div>
                     </div>
+
+                    <br>
 
                     <!--Enter Email-->
-                    <div class="form-group">
-                        <label for="email">Email: </label>
-                        <input class="form-control" id="email" type="text" th:field="*{email}"/>
+                    <div class="row form-group justify-content-center align-items-center">
+                        <div class="col-4 text-start">
+                            <label class="control-label" for="email">Email Address: </label>
+                        </div>
+                        <div class="col-8">
+                            <input class="form-control" id="email" type="text" th:field="*{email}"/>
+                        </div>
                     </div>
 
-                    <!--Enter RSVP Status-->
-                    <div class="form-group">
-                        <label for="rsvp">RSVP: </label>
-                        <select id="rsvp" name="rsvp">
-                            <th:block th:each="rsvp: ${rsvps}">
-                                <th:block th:if="${guest.rsvpStatus.toString().equals(rsvp)}">
-                                    <option th:value="${rsvp}" th:text="${rsvp}" selected></option>
-                                </th:block>
-                                <th:block th:if="${!guest.rsvpStatus.toString().equals(rsvp)}">
+                    <br>
+
+                    <div class="row justify-content-center align-items-center">
+
+                        <!--Enter RSVP Status-->
+                        <div class="col-4 text-end">
+                            <label class="control-label"for="rsvp">RSVP: </label>
+                            <select id="rsvp" name="rsvp">
+                                <div th:each="rsvp: ${rsvps}">
                                     <option th:value="${rsvp}" th:text="${rsvp}"></option>
-                                </th:block>
-                            </th:block>
-                        </select>
-                    </div>
+                                </div>
+                            </select>
+                        </div>
 
-                    <!--Add Additional Guests-->
-                    <div class="form-group">
-                        <label for="additionalGuests1">Additional Guests You're Bringing: </label>
-                        <select id="additionalGuests1" th:field="*{additionalGuests}">
-                            <div th:each="additionalGuest : ${additionalGuests}">
-                                <option th:value="${additionalGuest}" th:text="${additionalGuest}"></option>
-                            </div>
-                        </select>
+                        <!--Add Additional Guests-->
+                        <div class="col-7 text-center">
+                            <label class="control-label" for="additionalGuests">Additional Guests:</label>
+                            <select id="additionalGuests" th:field="*{additionalGuests}">
+                                <div th:each="additionalGuest : ${additionalGuests}">
+                                    <option th:value="${additionalGuest}" th:text="${additionalGuest}"></option>
+                                </div>
+                            </select>
+                        </div>
                     </div>
-
                     <input type="hidden" th:field="*{id}" th:placeholder="${guest.id}">
                 </div>
             </div>
 
-            <br>
-            <!-- Display Party Items -->
-            <div class="row">
-                <div class="col">
-
-                    <div class="row">
-                        <div class="col border border-secondary">Item</div>
-                        <div class="col border border-secondary">Remaining Quantity Requested</div>
-                        <div class="col border border-secondary">Quantity You're Bringing</div>
+            <!--Sign Up For Items -->
+            <div class="p-2">
+                <div class="row justify-content-center">
+                    <div class="table-responsive">
+                        <table id="example2" class="table table-bordered border-secondary">
+                            <h3>Item Signup</h3>
+                            <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Quantity Requested</th>
+                                <th>Quantity You're Bringing</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="form-group" th:each="itemBringer : ${itemBringers}">
+                                <td th:text="${itemBringer.key.partyItem.item.name}"></td>
+                                <td th:text="${itemBringer.key.partyItem.quantityRequired}"></td>
+                                <td>
+                                    <select name="quantity[]">
+                                        <option th:each="quantity : ${itemBringer.value}" th:text="${quantity}" th:value="${quantity}" th:selected="${itemBringer.key.quantity == quantity}"></option>
+                                    </select>
+                                </td>
+                                <input type="hidden" name="itemBringer[]" th:value="${itemBringer.key.id}">
+                                <input type="hidden" name="partyItem[]" th:value="${itemBringer.key.partyItem.id}">
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-
-                    <th:block th:each="itemBringer : ${itemBringers}">
-                        <div class="row">
-
-                            <div class="col border border-secondary" th:text="${itemBringer.key.partyItem.item.name}"></div>
-                            <div class="col border border-secondary" th:text="${itemBringer.key.partyItem.quantityRequired}"></div>
-                            <div class="col border border-secondary">
-                                <select name="quantity[]">
-                                    <option th:each="quantity : ${itemBringer.value}" th:text="${quantity}" th:value="${quantity}" th:selected="${itemBringer.key.quantity == quantity}"></option>
-                                </select>
-                            </div>
-
-                            <input type="hidden" name="itemBringer[]" th:value="${itemBringer.key.id}">
-                            <input type="hidden" name="partyItem[]" th:value="${itemBringer.key.partyItem.id}">
-
-                        </div>
-                    </th:block>
                 </div>
             </div>
+
+            <br>
 
             <div class="row">
                 <div class="col">
                     <input type="submit" value="Submit"/>
                 </div>
             </div>
+            <br>
 
         </form>
     </div>
@@ -130,3 +147,32 @@
 
 <footer><p layout:fragment="custom-footer">This is actually working</p></footer>
 </html>
+
+<!-- Display Party Items -->
+<!--            <div class="row">-->
+<!--                <div class="col">-->
+
+<!--                    <div class="row">-->
+<!--                        <div class="col border border-secondary">Item</div>-->
+<!--                        <div class="col border border-secondary">Remaining Quantity Requested</div>-->
+<!--                        <div class="col border border-secondary">Quantity You're Bringing</div>-->
+<!--                    </div>-->
+
+<!--                    <th:block th:each="itemBringer : ${itemBringers}">-->
+<!--                        <div class="row">-->
+
+<!--                            <div class="col border border-secondary" th:text="${itemBringer.key.partyItem.item.name}"></div>-->
+<!--                            <div class="col border border-secondary" th:text="${itemBringer.key.partyItem.quantityRequired}"></div>-->
+<!--                            <div class="col border border-secondary">-->
+<!--                                <select name="quantity[]">-->
+<!--                                    <option th:each="quantity : ${itemBringer.value}" th:text="${quantity}" th:value="${quantity}" th:selected="${itemBringer.key.quantity == quantity}"></option>-->
+<!--                                </select>-->
+<!--                            </div>-->
+
+<!--                            <input type="hidden" name="itemBringer[]" th:value="${itemBringer.key.id}">-->
+<!--                            <input type="hidden" name="partyItem[]" th:value="${itemBringer.key.partyItem.id}">-->
+
+<!--                        </div>-->
+<!--                    </th:block>-->
+<!--                </div>-->
+<!--            </div>-->
