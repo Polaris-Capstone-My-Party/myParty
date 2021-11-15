@@ -129,7 +129,6 @@ public class PartyController {
         //TODO: Refactor later
         model.addAttribute("id", partyToEdit.getId());
         model.addAttribute("party", partyToEdit.getUrlKey());
-        model.addAttribute("title", partyToEdit.getTitle());
         model.addAttribute("description", partyToEdit.getDescription());
         model.addAttribute("startTime", partyToEdit.getStartTime().toLocalDateTime());
         model.addAttribute("endTime", partyToEdit.getEndTime().toLocalDateTime());

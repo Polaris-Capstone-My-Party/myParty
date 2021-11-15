@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <form th:action="@{|/parties/edit/${party.id}|}" th:method="post">
+        <form th:action="@{|/parties/edit/${party.id}|}" th:object="${party}" th:method="post">
 
             <!--Edit Basic Party Information-->
             <div style="display: flex;
