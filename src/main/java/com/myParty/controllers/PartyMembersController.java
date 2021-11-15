@@ -36,7 +36,10 @@ public class PartyMembersController {
 
     //saves PartyMember & ItemBringer information
     @PostMapping(path = "/rsvp/{urlKey}/{memberId}")
-    public String createPartyMember(@PathVariable String urlKey, @PathVariable String memberId, @ModelAttribute PartyMember partyMember, @RequestParam String rsvp, @RequestParam(name = "partyItem[]") String[] myPartyItems, @RequestParam(name = "quantity[]") String[] quantities, HttpServletRequest request) throws MessagingException {
+    public String createPartyMember(@PathVariable String urlKey, @PathVariable String memberId, @ModelAttribute PartyMember partyMember, @RequestParam String rsvp, @RequestParam(name = "partyItem[]") String[] myPartyItems, @RequestParam(name = "quantity[]") String[] quantities, Model model, HttpServletRequest request) throws MessagingException {
+        Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member memberToDisplay = memberDao.getById(userInSession.getId());
+
 
         Member member = memberDao.getById(Long.valueOf(memberId));
         Party party = partyDao.getByUrlKey(urlKey);
@@ -76,6 +79,7 @@ public class PartyMembersController {
 
             partyItemsDetails += "Item: " + partyItem.getItem().getName() + " Quantity: " + quantities[i] + "<br>";
         }
+        model.addAttribute("owner", memberToDisplay);
         System.out.println(partyItemsDetails);
 
         emailService.sendRSVPConfirmMember(member, partyMember, party, partyItemsDetails, request);
@@ -86,7 +90,10 @@ public class PartyMembersController {
     //shows RSVPSuccess page to PartyMembers
     @GetMapping(path = "/member/successRsvp/{urlKey}/{partyMemberKey}")
     public String showRSVPSuccess(Model model, @PathVariable String partyMemberKey, @PathVariable String urlKey, HttpServletRequest request) {
+        Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member memberToDisplay = memberDao.getById(userInSession.getId());
 
+        model.addAttribute("owner", memberToDisplay);
         //Checks if party Exists
         if(!guestController.checkIfPartyExists(urlKey)){
             return "redirect:/parties/notFound";
@@ -100,6 +107,9 @@ public class PartyMembersController {
     //Shows RSVP to Party Members
     @GetMapping(path = "/rsvp/{urlKey}/member/{partyMemberKey}/view")
     public String showPartyMemberRSVPInfo(@PathVariable String urlKey, @PathVariable String partyMemberKey, Model model) {
+        Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member memberToDisplay = memberDao.getById(userInSession.getId());
+
 
         //Checks if party Exists
         if(!guestController.checkIfPartyExists(urlKey)){
@@ -114,7 +124,7 @@ public class PartyMembersController {
             return "redirect:/login";
         }
 
-        Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); //get member in session
+//        Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); //get member in session
         Member actualMember = memberDao.getById(userInSession.getId()); //get member info associated with member in session
         PartyMember checkMember = partyMemberDao.getByMemberAndParty(actualMember, party); //gets partyMember associated with logged in member & party (can only be one)
 
@@ -135,6 +145,7 @@ public class PartyMembersController {
         model.addAttribute("partyItems", partyItems); //gets & sets partyItems for party
         model.addAttribute("startTime", party.convertTimestamp(party.getStartTime()));
         model.addAttribute("endTime", party.convertTimestamp(party.getEndTime()));
+        model.addAttribute("owner", memberToDisplay);
 
         return "partyMember/viewRsvp";
     }
@@ -158,6 +169,7 @@ public class PartyMembersController {
 
         Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); //get member in session
         Member actualMember = memberDao.getById(userInSession.getId()); //get member info associated with member in session
+        model.addAttribute("owner", actualMember);
         PartyMember checkMember = partyMemberDao.getByMemberAndParty(actualMember, party); //gets partyMember associated with logged in member & party (can only be one)
 
         //If logged in Member is not the member associated with the PartyMember, redirect to profile page
@@ -183,13 +195,14 @@ public class PartyMembersController {
         model.addAttribute("startTime", party.convertTimestamp(party.getStartTime()));
         model.addAttribute("endTime", party.convertTimestamp(party.getEndTime()));
 
+
         return "partyMember/editRsvp";
     }
 
     //saves partyMember edited information
     @PostMapping(path = "/rsvp/{urlKey}/member/{partyMemberKey}/edit")
     public String saveEditRSVP(@ModelAttribute PartyMember partyMember, @RequestParam String rsvp, @RequestParam(name = "itemBringer[]") String[] itemBringer, @RequestParam(name = "quantity[]") String[] quantities,
-                               @RequestParam(name = "partyItem[]") String[] partyItem, @PathVariable String urlKey, @PathVariable String partyMemberKey) {
+                               @RequestParam(name = "partyItem[]") String[] partyItem, @PathVariable String urlKey, @PathVariable String partyMemberKey, Model model) {
 
         Party party = partyDao.getByUrlKey(urlKey);
 
@@ -209,6 +222,7 @@ public class PartyMembersController {
 
         Member userInSession = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member member = memberDao.getById(userInSession.getId());
+        model.addAttribute("owner", member);
 
         partyMember.setRsvpStatus(RsvpStatuses.valueOf(rsvp));
         partyMember.setParty(party);
