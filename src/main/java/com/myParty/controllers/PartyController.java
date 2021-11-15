@@ -116,15 +116,15 @@ public class PartyController {
     }
 
     //show form for editing party
-    @GetMapping("/parties/edit/{id}")
-    public String showEditPartyForm(@PathVariable long id, String urlKey, Model model) {
+    @GetMapping("/parties/edit/{urlKey}")
+    public String showEditPartyForm(@PathVariable String urlKey, Model model) {
 
         //Checks if party Exists
         if(!guestController.checkIfPartyExists(urlKey)){
             return "redirect:/parties/notFound";
         }
 
-        Party partyToEdit = partyDao.getById(id);
+        Party partyToEdit = partyDao.getByUrlKey(urlKey);
         List<PartyItem> partyItems = partyItemDao.getByParty(partyToEdit); //get partyItems associated with party
 
         model.addAttribute("stateOptions", generateStates());
@@ -134,10 +134,11 @@ public class PartyController {
     }
 
     //saves edited party information
-    @PostMapping("/parties/edit/{id}")
+    @PostMapping("/parties/edit/{urlKey}")
     public String editParty(
-            @ModelAttribute Party party,
-            @PathVariable long id,
+            @PathVariable String urlKey,
+            @RequestParam(name = "title") String title,
+            @RequestParam(name = "description") String description,
             @RequestParam(name = "startTime") String startTime,
             @RequestParam(name = "endTime") String endTime,
             @RequestParam(name = "addressOne") String addressOne,
@@ -150,7 +151,7 @@ public class PartyController {
             @RequestParam(name = "delete[]",  required = false) String[] deletes){
 
         //get party object
-        Party partyToUpdate = partyDao.getById(id);
+        Party partyToUpdate = partyDao.getByUrlKey(urlKey);
 
         //saves location information
         Location locationToUpdate = new Location(0, addressOne, addressTwo, city, state, zipcode);
