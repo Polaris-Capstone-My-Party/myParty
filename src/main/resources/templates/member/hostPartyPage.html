@@ -7,23 +7,23 @@
     <meta charset="UTF-8">
     <title layout:fragment="title">My Party | Host View</title>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet'/>
+    <link href="/success.css" rel="stylesheet"/>
 </head>
+<section layout:fragment="content">
 
 <div class="container-fluid">
-    <section layout:fragment="content">
 
-        <a href="/profile" class="btn btn-dark">Return to Profile</a>
+        <a href="/profile" class="button glow-button">Return to Profile</a>
 
         <!--  Show Party Info-->
-        <div class="card align-center">
-            <div class="card-header">
+        <div class="card align-center bg-transparent">
+            <div class="card-header bg-dark text-white">
                 You are viewing this party page as the host.
             </div>
 
-            <div class="card-body">
-                <h1 class="card-title" th:text="${party.title}"></h1>
+            <div class="card-body bg-transparent text-white">
+                <h1 class="neonText" th:text="${party.title}"></h1>
                 <h3 class="card-text" th:text="${party.description}"></h3>
-
 
 
                     <label for="customUrl">Custom Party Url:</label>
@@ -46,7 +46,7 @@
                 }
             </script>
 
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center text-white">
                 <div class="d-flex flex-column bd-highlight mb-3">
                     <div class="p-2 bd-highlight" th:text="'Start: ' + ${startTime}"></div>
                     <div class="p-2 bd-highlight" th:text="'End: ' + ${endTime}"></div>
@@ -56,11 +56,11 @@
                     <div id='map' style='width: 100%; height: 40vh'></div>
                 </div>
             </div>
-            <div class="p-2 bd-highlight">
-                <div class="container">
+            <div class="p-2 bd-highlight text-white">
+                <div class="container-fluid">
                     <div class="row justify-content-center">
                         <div class="table-responsive">
-                            <table id="example" class="table table-bordered">
+                            <table id="example" class="table text-white">
                                 <h1>Party Item Information</h1>
                                 <thead>
                                 <tr>
@@ -83,10 +83,10 @@
             </div>
 
             <div class="p-2 bd-highlight">
-                <div class="container">
+                <div class="container-fluid">
                     <div class="row justify-content-center">
                         <div class="table-responsive">
-                            <table id="example2" class="table table-bordered">
+                            <table id="example2" class="table text-white">
                                 <h1>Guest Information</h1>
                                 <thead>
                                 <tr>
@@ -124,7 +124,7 @@
                 </div>
             </div>
             <p>
-                <button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#collapseExample"
+                <button class="btn btn-light" type="button" data-toggle="collapse" data-target="#collapseExample"
                         aria-expanded="false" aria-controls="collapseExample">
                     Preview Email Invitation
                 </button>
@@ -146,11 +146,11 @@
                 </div>
             </div>
 
-            <div class="container align-center">
+            <div class="container-fluid align-center bg-transparent">
                 <div class="row justify-content-center">
-                    <div class="col-sm-6">
+                    <div class="col-sm-6 bg-transparent">
                         <div class="card align-center">
-                            <div class="card-body">
+                            <div class="card-body bg-transparent">
                                 <h5 class="card-title">Send Invites</h5>
                                 <p class="card-text">
                                 <form class="form-inline" th:action="@{|/parties/${party.urlKey}|}" th:method="post">
@@ -161,7 +161,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group mx-sm-3 mb-2">
-                                        <button id="addEmailButton" style="background-color: #ce5ece">Add Another Email</button>
+                                        <button type="button" id="addEmailButton" style="background-color: #ce5ece">Add Another Email</button>
                                         <input type="submit" class="btn btn-info" value="Send Invites!">
                                     </div>
                                 </form>

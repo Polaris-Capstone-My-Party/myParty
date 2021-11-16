@@ -8,10 +8,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!--/* The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags */-->
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat+Subrayada&family=Vibur&family=Warnes&display=swap" rel="stylesheet">
     <link th:href="@{http://fonts.googleapis.com/css?family=Sora}"
           rel='stylesheet' type='text/css'/>
-    <link rel="stylesheet" href="/static/stylesheet.css">
     <title layout:fragment="title">
         Default
     </title>
@@ -38,7 +39,7 @@
     }
 
     h1 {
-        color: #0e0d0d;
+        color: #f5f6f6;
         font-family: "Sora", sans-serif;
     }
 
@@ -47,15 +48,16 @@
     }
 
     footer {
-        height: 15em;
+        padding: 0px;
     }
 
     section {
         font-family: "Sora", sans-serif;
-        padding-top: 2em;
+        padding-top: 3em;
         align-content: center;
-        background-color: #6bdada;
-        padding-bottom: 2em;
+        background-image: url("/img/brickwall.png");
+        /*background-color: #6bdada;*/
+        padding-bottom: 3em;
 
     }
 

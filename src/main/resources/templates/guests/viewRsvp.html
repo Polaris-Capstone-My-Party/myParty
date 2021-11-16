@@ -5,21 +5,21 @@
     <title layout:fragment="title">myParty | View RSVP</title>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet'/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="/stylesheet.css" rel="stylesheet"/>
+    <link href="/success.css" rel="stylesheet"/>
 
 </head>
 <body>
     <section layout:fragment="content">
         <div class="container" id="container-fluid">
 
-        <div class="card align-center" style="display: flow-root">
-            <div class="card-header">
+        <div class="card align-center bg-transparent" style="display: flow-root">
+            <div class="neonText">
                 This is your RSVP
             </div>
-            <a th:href="'/rsvp/' + ${urlKey} + '/' + ${guestKey} + '/edit'" class="btn btn-dark">Edit Your RSVP</a>
+            <a class="button glow-button" th:href="'/rsvp/' + ${urlKey} + '/' + ${guestKey} + '/edit'">Edit Your RSVP</a>
 
             <!--Show Guest Information-->
-            <div class="card-body" style="font-size: 22px">
+            <div class="card-body bg-transparent text-white" style="font-size: 20px">
                 <!--Basic Guest Information -->
                 <div class="d-flex justify-content-around">
                     <div th:text="'Name: ' + ${guest.firstName} + ' ' + ${guest.lastName}"></div>
@@ -31,10 +31,10 @@
 
             <!--Guest Item Information-->
             <div class="p-2 bd-highlight">
-                <div class="container">
+                <div class="container-fluid">
                     <div class="row justify-content-center">
                         <div class="table-responsive">
-                            <table id="example" class="table table-bordered">
+                            <table id="example" class="table text-white">
                                 <thead>
                                 <tr>
                                     <th>Item</th>
@@ -56,7 +56,7 @@
                 </div>
             </div>
             <!--Show The Party Info-->
-                <div class="card-body" style="font-size: 16px">
+                <div class="card-body text-white" style="font-size: 16px">
                     <div class="d-flex justify-content-around" style="display: flex;
     flex-direction: column;
     flex-wrap: wrap;

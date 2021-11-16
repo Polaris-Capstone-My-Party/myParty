@@ -9,7 +9,7 @@
 
 <section layout:fragment="content">
 
-    <div class="container">
+    <div class="container-fluid bg-transparent">
 
         <div class="row">
             <div class="col">
@@ -23,10 +23,10 @@
                     </div>
 
                     <!--Show The Party Info-->
-                    <div class="card-body">
+                    <div class="card-body bg-transparent">
                         <div class="row">
-                            <div class="col my-auto">
-                                <h1 class="card-title" th:text="${party.title}"></h1>
+                            <div class="col bg-transparent my-auto">
+                                <h2 class="card-title" th:text="${party.title}"></h2>
                                 <h3 class="card-text" th:text="${party.description}"></h3>
                                 <h6 class="card-text" th:text="'Start Time: ' + ${startTime}"></h6>
                                 <h6 class="card-text" th:text="'End Time: ' + ${endTime}"></h6>
@@ -45,8 +45,8 @@
         </div>
 
 
-        <div class="row">
-            <div class="col">
+        <div class="row bg-transparent">
+            <div class="col bg-transparent">
                 <div class="card text-center">
                     <!--Member RSVP Form-->
                     <div sec:authorize="isAuthenticated()">
@@ -122,7 +122,7 @@
 
                             <!-- Party item details -->
                             <div class="p-2 bd-highlight">
-                                <div class="container">
+                                <div class="container-fluid">
                                     <div class="row justify-content-center">
                                         <div class="table-responsive">
                                             <table id="example" class="table table-bordered">
