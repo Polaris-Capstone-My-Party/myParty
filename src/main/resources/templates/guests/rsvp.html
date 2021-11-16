@@ -5,26 +5,24 @@
     <title layout:fragment="title">myParty | RSVP</title>
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet'/>
+    <link href="/success.css" rel="stylesheet"/
 </head>
 
-<section layout:fragment="content">
+<section class="bg-transparent text-white" layout:fragment="content">
 
-    <div class="container-fluid bg-transparent">
+    <div class="container-fluid">
 
         <div class="row">
             <div class="col">
-                <div class="card text-center">
+                <div class="card text-center bg-transparent">
                     <div class="row">
-                        <div class="col">
-                            <div class="card-header">
-                                Complete Your RSVP
-                            </div>
+                            <h1 class="neonText">Submit your Rsvp</h1>
                         </div>
                     </div>
 
                     <!--Show The Party Info-->
                     <div class="card-body bg-transparent">
-                        <div class="row">
+                        <div class="row bg-transparent">
                             <div class="col bg-transparent my-auto">
                                 <h2 class="card-title" th:text="${party.title}"></h2>
                                 <h3 class="card-text" th:text="${party.description}"></h3>
@@ -34,7 +32,7 @@
                                 <h6 class="card-text" th:text="${location}" id="fullAddress"></h6>
                             </div>
 
-                            <div class="col">
+                            <div class="col bg-transparent">
                                 <div id='map' style='width: 100%; height: 40vh'></div>
                             </div>
                         </div>
@@ -47,7 +45,7 @@
 
         <div class="row bg-transparent">
             <div class="col bg-transparent">
-                <div class="card text-center">
+                <div class="card text-center bg-transparent">
                     <!--Member RSVP Form-->
                     <div sec:authorize="isAuthenticated()">
                         <form th:action="@{|/rsvp/${party.urlKey}/${member.id}|}" th:method="post" th:object="${partyMember}">
@@ -125,7 +123,7 @@
                                 <div class="container-fluid">
                                     <div class="row justify-content-center">
                                         <div class="table-responsive">
-                                            <table id="example" class="table table-bordered">
+                                            <table id="example" class="table text-white">
                                                 <h3>Item Signup</h3>
                                                 <thead>
                                                 <tr>
@@ -151,7 +149,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <input class="btn btn-dark" style="background-color: #ce5ece" type="submit" value="Submit"/>
+                            <input style="background-color: #ce5ece" type="submit" value="Submit"/>
                         </form>
                         <br>
                     </div>
@@ -229,10 +227,10 @@
 
                                 <!--Sign Up For Items -->
                                 <div class="p-2 bd-highlight">
-                                    <div class="container">
+                                    <div class="container-fluid">
                                         <div class="row justify-content-center">
                                             <div class="table-responsive">
-                                                <table id="example2" class="table table-bordered">
+                                                <table id="example2" class="table text-white">
                                                     <h3>Item Signup</h3>
                                                     <thead>
                                                     <tr>
@@ -258,7 +256,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <input class="btn btn-dark" style="background-color: #ce5ece" type="submit" value="Submit"/>
+                                <p>
+                                <input style="background-color: #ce5ece" type="submit" value="Submit"/>
+                                </p>
                             </div>
                         </form>
                         <br>
