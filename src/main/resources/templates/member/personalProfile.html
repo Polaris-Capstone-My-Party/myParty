@@ -37,7 +37,7 @@
 
             <div class="accordion accordion-flush" id="accordionFlushExample">
 
-                <div class="accordion-item bg-transparent">
+                <div class="accordion-item">
                     <h2 class="accordion-header" id="flush-headingOne">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="true" aria-controls="flush-collapseOne">
                             <div class="card text-center">
@@ -49,9 +49,8 @@
                     </h2>
 
                     <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-mdb-parent="#accordionFlushExample">
-
                         <div class="accordion-body">
-                            <h5 th:if="${owner.party.size() == 0}">No Parties Created</h5>
+                            <h5 th:if="${partiesCreated.size() == 0}">No Parties Created</h5>
                             <div class="justify-content" th:each="party : ${owner.party}">
                                 <div class="card text-center">
                                     <h5><a th:text="${party.title}" class="card-title" th:href="@{|/member/${party.urlKey}/view|}"></a></h5>
