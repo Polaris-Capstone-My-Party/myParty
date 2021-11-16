@@ -5,105 +5,101 @@
     <meta charset="UTF-8">
     <link href="/success.css" rel="stylesheet"/>
     <title layout:fragment="title">myParty | Party Created!</title>
-
-<!--    <script src="https://code.jquery.com/jquery-2.2.4.min.js"-->
-<!--            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>-->
-
-<!--    <script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>-->
-
 </head>
 
-<body id="success" style="height: 100vh; justify-content: center; justify-items: center; ">
+<body id="success" style="height: 100vh; justify-content: center; justify-items: center;">
 
-<section class="text-white" layout:fragment="content">
+    <section class="text-white" layout:fragment="content">
 
-    <a href="/profile" class="button glow-button">Return to Profile</a>
+        <a href="/profile" class="button glow-button">Return to Profile</a>
+        <br>
 
-    <h1 id="partymessage">Let's Get This Party Started!!!</h1>
-    <form class="align-items-center text-white">
-        <h2 class="text-white" th:text="${party.title} + ' has been successfully created!'"></h2>
-        <h3 class="text-white">Now let's invite people!</h3>
-        </div>
-        <hr/>
-    </form>
+        <h1 id="partymessage">Let's Get This Party Started!!!</h1>
 
-    <div class="container">
-
-    <!--TODO: *NOTE* CANNOT HAVE A FORM WITHIN A FORM. CREATED A FORM WITH CLASS OF CUSTOMURL FOR THE COPY FUNCTION TO BE STYLED IN SUCCESS.CSS-->
-   <div>
-    <label for="customUrl">Custom Party Url:</label>
-    <input type="text" style="width: 575px" id="customUrl" th:value="${url}"/>
-    <button type="button" onclick="myFunction()" class="btn btn-dark" style="background-color: #ce5ece">Copy url</button>
-    </div>
+        <form class="align-items-center text-white">
+            <h2 class="text-white" th:text="${party.title} + ' has been successfully created!'"></h2>
+            <h3 class="text-white">Now let's invite people!</h3>
+        </form>
 
         <br>
 
-<!--    TODO: *NOTE* SEPARATE FORM WITH CLASS OF SENDINVITES TO BE STYLED IN SUCCESS.CSS -->
-    <form class="form-inline" th:action="@{|/parties/${party.urlKey}|}" th:method="post">
-        <div id="additionalEmails">
-            <div class="form-group mx-sm-3 mb-2">
-                <label for="email[]" class="sr-only text-white" value="Email Address">Email Address:</label>
-                <input type="email" name="email[]" id="email[]">
+
+        <div class="container">
+            <!--TODO: *NOTE* CANNOT HAVE A FORM WITHIN A FORM. CREATED A FORM WITH CLASS OF CUSTOMURL FOR THE COPY FUNCTION TO BE STYLED IN SUCCESS.CSS-->
+            <div>
+                <br>
+                <label for="customUrl">Custom Party Url:</label>
+                <input type="text" style="width: 575px" id="customUrl" th:value="${url}"/>
+                <button type="button" onclick="myFunction()" class="btn btn-dark" style="background-color: #ce5ece">Copy url</button>
             </div>
+
+            <br>
+
+            <!--TODO: *NOTE* SEPARATE FORM WITH CLASS OF SENDINVITES TO BE STYLED IN SUCCESS.CSS -->
+            <form class="form-inline" th:action="@{|/parties/${party.urlKey}|}" th:method="post">
+                <div id="additionalEmails">
+                    <h5 style="color:white">Send Invites</h5>
+                    <div class="form-group mb-2">
+                        <label for="email[]">Email Address:</label>
+                        <input type="email" name="email[]" id="email[]">
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="row form-group mx-sm-3 mb-2">
+                    <div class="col text-end pr-1">
+                        <button type="button" id="addEmailButton" class="btn btn-dark" style="background-color: #ce5ece">Add Another Email</button>
+                    </div>
+                    <div class="col text-start pl-1">
+                        <input type="submit" class="btn btn-info" value="Send Invites!">
+                    </div>
+                </div>
+            </form>
         </div>
-        <br>
-        <div class="form-group mx-sm-3 mb-2">
-            <button type="button" id="addEmailButton" class="btn btn-dark" style="background-color: #ce5ece">Add Another Email</button>
-            <input type="submit" class="btn btn-info" value="Send Invites!">
-        </div>
-    </form>
-    </div>
 
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
 
+        <!--     Confetti Animation-->
+        <script>party.confetti(document.getElementById("partymessage"))</script>
 
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js"
-            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+        <!--     Copy url button-->
+        <script>
+            function myFunction() {
+                var copyText = document.getElementById("customUrl").value;
+                navigator.clipboard.writeText(copyText);
+                var tooltip = document.getElementById("myTooltip");
+                tooltip.innerHTML = "Copied: " + copyText;
+            }
 
-    <script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
+            function outFunc() {
+                var tooltip = document.getElementById("myTooltip");
+                tooltip.innerHTML = "Copy to clipboard";
+            }
+        </script>
 
-    <!--     Confetti Animation-->
-    <script>
-        party.confetti(document.getElementById("partymessage"))
-    </script>
+        <script>
+            window.onload = (function () {
+                const additionalEmail = document.getElementById('addEmailButton');
 
-    <!--     Copy url button-->
-    <script>
-        function myFunction() {
-            var copyText = document.getElementById("customUrl").value;
-            navigator.clipboard.writeText(copyText);
-            var tooltip = document.getElementById("myTooltip");
-            tooltip.innerHTML = "Copied: " + copyText;
-        }
+                const emailForm = `<div class="form-group mb-2">
+                      <label for="email[]">Email Address:</label>
+                      <input type="email" name="email[]" id="email[]">
 
-        function outFunc() {
-            var tooltip = document.getElementById("myTooltip");
-            tooltip.innerHTML = "Copy to clipboard";
-        }
-    </script>
+                    </div>`
 
-    <script>
-        window.onload = (function () {
-            const additionalEmail = document.getElementById('addEmailButton');
+                additionalEmail.addEventListener('click', function (event) {
+                    event.preventDefault();
 
-            const emailForm = `<div class="form-group">
-                  <label for="email[]">Email Address:</label>
-                  <input type="email" name="email[]" id="email[]">
-
-                </div>`
-
-            additionalEmail.addEventListener('click', function (event) {
-                event.preventDefault();
-
-                const yeahBaby = document.getElementById('additionalEmails');
-                let newEmail = document.createElement("div");
-                newEmail.innerHTML = emailForm;
-                yeahBaby.appendChild(newEmail);
-            });
-        })
-    </script>
-</section>
-
+                    const yeahBaby = document.getElementById('additionalEmails');
+                    let newEmail = document.createElement("div");
+                    newEmail.innerHTML = emailForm;
+                    yeahBaby.appendChild(newEmail);
+                });
+            })
+        </script>
+    </section>
 </body>
 <footer><p layout:fragment="custom-footer">This is actually working</p></footer>
-
 </html>

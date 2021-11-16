@@ -38,7 +38,7 @@
         <button class="accordion bg-transparent text-white">Parties Created</button>
   
         <div class="panel">
-            <h5 th:if="${owner.party.size() == 0}">No Parties Created</h5>
+            <h5 class="text-white" th:if="${owner.party.size() == 0}">No Parties Created</h5>
             <div class="justify-content" th:each="party : ${owner.party}">
                 <div class="card text-center">
                     <h5><a th:text="${party.title}" class="card-title" th:href="@{|/member/${party.urlKey}/view|}"></a>
@@ -50,7 +50,7 @@
 
         <button class="accordion bg-transparent text-white">Parties Attending</button>
         <div class="panel">
-            <h5 th:if="${upcomingParties.size() == 0}">No Upcoming Parties </h5>
+            <h5 class="text-white" th:if="${upcomingParties.size() == 0}">No Upcoming Parties </h5>
             <div class="justify-content" th:each="partyMember : ${upcomingParties}">
                 <div class="card text-center">
                     <h5><a th:text="${partyMember.party.title}" class="info-link"
