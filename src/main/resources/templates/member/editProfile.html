@@ -17,57 +17,68 @@
   <br>
 
   <div class="container">
+        <div class="hero-unit">
+           <h1 class="neonText">Edit Profile</h1>
+        </div>
 
-    <div class="hero-unit">
-      <h1 class="neonText">Edit Profile</h1>
-    </div>
+        <form th:action="@{|/members/editProfile/${id}|}" th:method="post" style="display: flex;
+               flex-direction: column;
+               flex-wrap: wrap;
+               align-items: flex-end;
+               align-content: space-around;
+               justify-content: space-around;">
+          <div class="row">
+            <div class="col form-group" style="color: white">
+              <label for="email">Email:</label>
+              <input name="email" type="text" id="email" th:value="${email}"/>
+            </div>
+          </div>
 
-    <form th:action="@{|/members/editProfile/${id}|}" th:method="post" style="display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    align-content: space-around;
-    justify-content: space-around;">
+          <br>
 
-      <div class="form-group" style="color: white">
-        <label for="email">Email:</label>
-        <input name="email" type="text" id="email" th:value="${email}"/>
+          <div class="row">
+            <div class="col form-group" style="color: white">
+              <label for="firstName">First Name:</label>
+              <input name="firstName" type="text" id="firstName" th:value="${firstName}"/>
+            </div>
+          </div>
+
+          <br>
+
+          <div class="row">
+            <div class="col form-group" style="color: white">
+              <label for="lastName">Last Name:</label>
+              <input name="lastName" id="lastName" type="text" th:value="${lastName}"/>
+            </div>
+          </div>
+
+          <br>
+
+          <div class="row">
+            <div class="col form-group" style="color: white">
+              <label for="phone">Phone:</label>
+              <input name="phone" id="phone" type="number" th:value="${phone}"/>
+            </div>
+          </div>
+
+          <br>
+
+          <div class="row">
+            <div class="col form-group" style="color: white">
+              <label for="username">Username:</label>
+              <input name="username" id="username" type="text" th:value="${username}"/>
+            </div>
+          </div>
+
+          <br>
+
+          <div class="row mx-auto">
+              <input type="submit" style="background-color: #ce5ece; color: #0e0d0d"/>
+          </div>
+
+        </form>
+        <br>
       </div>
-
-      <br>
-
-      <div class="form-group" style="color: white">
-        <label for="firstName">First Name:</label>
-        <input name="firstName" type="text" id="firstName" th:value="${firstName}"/>
-      </div>
-
-      <br>
-
-      <div class="form-group" style="color: white">
-        <label for="lastName">Last Name:</label>
-        <input name="lastName" id="lastName" type="text" th:value="${lastName}"/>
-      </div>
-
-      <br>
-
-      <div class="form-group" style="color: white">
-        <label for="phone">Phone:</label>
-        <input name="phone" id="phone" type="number" th:value="${phone}"/>
-      </div>
-
-      <br>
-
-      <div class="form-group" style="color: white">
-        <label for="username">Username:</label>
-        <input name="username" id="username" type="text" th:value="${username}"/>
-      </div>
-
-      <br>
-
-      <input type="submit" style="background-color: #ce5ece; color: #0e0d0d"/>
-    </form>
-
-  </div>
 </section>
 
 <footer><p layout:fragment="footer"></p></footer>

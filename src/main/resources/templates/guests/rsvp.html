@@ -4,7 +4,7 @@
 <head>
     <title layout:fragment="title">myParty | RSVP</title>
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
-    <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet'/>
 </head>
 
 <section layout:fragment="content">
@@ -151,14 +151,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <input type="submit" value="Submit"/>
+                            <input style="background-color: #ce5ece" type="submit" value="Submit"/>
                         </form>
+                        <br>
                     </div>
 
                     <!--Guest RSVP Form-->
                     <div sec:authorize="isAnonymous()">
                         <form th:action="@{|/rsvp/${party.urlKey}|}" th:method="post" th:object="${guest}">
                             <div class="container">
+                                <br>
                                 <div class="row">
                                     <div class="col">
                                         <a th:href="@{|/rsvp/${party.urlKey}/login|}">Have an account? Log in here</a>
@@ -256,7 +258,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <input type="submit" value="Submit"/>
+                                <input style="background-color: #ce5ece" type="submit" value="Submit"/>
                             </div>
                         </form>
                         <br>

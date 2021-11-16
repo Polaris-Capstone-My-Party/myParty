@@ -108,24 +108,26 @@
                     <div class="table-responsive text-white">
                         <table id="example2" class="table text-white">
                             <h3>Item Signup</h3>
-                            <thead>
-                            <tr>
-                                <th>Item</th>
-                                <th>Quantity Requested</th>
-                                <th>Quantity You're Bringing</th>
-                            </tr>
+
+                            <thead  style="background-color: whitesmoke">
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Quantity Requested</th>
+                                    <th>Quantity You're Bringing</th>
+                                </tr>
                             </thead>
-                            <tbody>
-                            <tr class="form-group" th:each="itemBringer : ${itemBringers}">
-                                <td th:text="${itemBringer.key.partyItem.item.name}"></td>
-                                <td th:text="${itemBringer.key.partyItem.quantityRequired}"></td>
-                                <td>
-                                    <select name="quantity[]">
-                                        <option th:each="quantity : ${itemBringer.value}" th:text="${quantity}" th:value="${quantity}" th:selected="${itemBringer.key.quantity == quantity}"></option>
-                                    </select>
-                                </td>
-                                <input type="hidden" name="itemBringer[]" th:value="${itemBringer.key.id}">
-                                <input type="hidden" name="partyItem[]" th:value="${itemBringer.key.partyItem.id}">
+
+                            <tbody  style="background-color: whitesmoke">
+                                <tr class="form-group" th:each="itemBringer : ${itemBringers}">
+                                    <td th:text="${itemBringer.key.partyItem.item.name}"></td>
+                                    <td th:text="${itemBringer.key.partyItem.quantityRequired}"></td>
+                                    <td>
+                                        <select name="quantity[]">
+                                            <option th:each="quantity : ${itemBringer.value}" th:text="${quantity}" th:value="${quantity}" th:selected="${itemBringer.key.quantity == quantity}"></option>
+                                        </select>
+                                    </td>
+                                    <input type="hidden" name="itemBringer[]" th:value="${itemBringer.key.id}">
+                                    <input type="hidden" name="partyItem[]" th:value="${itemBringer.key.partyItem.id}">
                                 </tr>
                             </tbody>
                         </table>
@@ -137,7 +139,7 @@
 
             <div class="row">
                 <div class="col">
-                    <input type="submit" value="Submit"/>
+                    <input id="createP" type="submit" value="Submit"/>
                 </div>
             </div>
             <br>
@@ -148,32 +150,3 @@
 
 <footer><p layout:fragment="custom-footer">This is actually working</p></footer>
 </html>
-
-<!-- Display Party Items -->
-<!--            <div class="row">-->
-<!--                <div class="col">-->
-
-<!--                    <div class="row">-->
-<!--                        <div class="col border border-secondary">Item</div>-->
-<!--                        <div class="col border border-secondary">Remaining Quantity Requested</div>-->
-<!--                        <div class="col border border-secondary">Quantity You're Bringing</div>-->
-<!--                    </div>-->
-
-<!--                    <th:block th:each="itemBringer : ${itemBringers}">-->
-<!--                        <div class="row">-->
-
-<!--                            <div class="col border border-secondary" th:text="${itemBringer.key.partyItem.item.name}"></div>-->
-<!--                            <div class="col border border-secondary" th:text="${itemBringer.key.partyItem.quantityRequired}"></div>-->
-<!--                            <div class="col border border-secondary">-->
-<!--                                <select name="quantity[]">-->
-<!--                                    <option th:each="quantity : ${itemBringer.value}" th:text="${quantity}" th:value="${quantity}" th:selected="${itemBringer.key.quantity == quantity}"></option>-->
-<!--                                </select>-->
-<!--                            </div>-->
-
-<!--                            <input type="hidden" name="itemBringer[]" th:value="${itemBringer.key.id}">-->
-<!--                            <input type="hidden" name="partyItem[]" th:value="${itemBringer.key.partyItem.id}">-->
-
-<!--                        </div>-->
-<!--                    </th:block>-->
-<!--                </div>-->
-<!--            </div>-->
