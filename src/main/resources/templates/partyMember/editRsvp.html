@@ -2,33 +2,32 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 
 <head>
-    <link href="/success.css" rel="stylesheet"/>
     <title layout:fragment="title">myParty | Edit RSVP (Member)</title>
+    <link href="/success.css" rel="stylesheet"/>
+
 </head>
 
-<section layout:fragment="content">
-
-    <div class="row justify-content-center">
-        <div class="col">
-            <a href="/profile" class="btn btn-dark">Return to Profile</a>
+<section class="bg-transparent text-white" layout:fragment="content">
+    <p>
+    <div class="row justify-content-center bg-transparent">
+        <div class="col bg-transparent">
+            <a href="/profile" class="button glow-button">Return to Profile</a>
         </div>
     </div>
-
-    <br>
-
-    <div class="container" style="color: #0e0d0d">
+    </p>
+    <div class="container">
         <br>
 
         <div class="row">
             <div class="col">
-                <h1>Edit Your RSVP</h1>
+                <h1 class="neonText">Edit your Rsvp</h1>
             </div>
         </div>
 
         <!--Show The Party Info-->
-        <div class="row">
+        <div class="row text-white">
             <div class="col">
-                <div class="card-body">
+                <div class="card-body text-white">
                     <div th:text="${party.title}"></div>
                     <div th:text="${party.description}"></div>
                     <div th:text="'Start Time: ' + ${startTime}"></div>
@@ -46,7 +45,7 @@
     align-content: space-around;
     justify-content: space-around;
     align-items: stretch;">
-            <div class="row justify-content-center align-items-center">
+            <div class="row justify-content-center align-items-center text-white">
                 <!--Prefilled Member Information-->
                 <div class="col">
                     <div class="row-4">
@@ -116,13 +115,13 @@
             <br>
 
             <!--Sign Up For Items -->
-            <div class="p-2">
+            <div class="p-2 bg-transparent text-white">
                 <div class="row justify-content-center">
                     <div class="table-responsive">
-                        <table id="example2" class="table table-bordered border-secondary">
+                        <table id="example2" class="table text-white">
                             <h3>Item Signup</h3>
 
-                            <thead style="background-color: whitesmoke">
+                            <thead>
                                 <tr>
                                     <th>Item</th>
                                     <th>Quantity Requested</th>
@@ -131,7 +130,7 @@
                             </thead>
 
                             <tbody>
-                                <tr class="form-group" style="background-color: whitesmoke" th:each="itemBringer : ${itemBringers}">
+                                <tr class="form-group" th:each="itemBringer : ${itemBringers}">
                                     <td th:text="${itemBringer.key.partyItem.item.name}"></td>
                                     <td th:text="${itemBringer.key.partyItem.quantityRequired}"></td>
                                     <td>

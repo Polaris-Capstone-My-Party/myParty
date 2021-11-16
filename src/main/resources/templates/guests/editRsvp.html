@@ -109,7 +109,7 @@
                         <table id="example2" class="table text-white">
                             <h3>Item Signup</h3>
 
-                            <thead  style="background-color: whitesmoke">
+                            <thead>
                                 <tr>
                                     <th>Item</th>
                                     <th>Quantity Requested</th>
@@ -117,7 +117,7 @@
                                 </tr>
                             </thead>
 
-                            <tbody  style="background-color: whitesmoke">
+                            <tbody>
                                 <tr class="form-group" th:each="itemBringer : ${itemBringers}">
                                     <td th:text="${itemBringer.key.partyItem.item.name}"></td>
                                     <td th:text="${itemBringer.key.partyItem.quantityRequired}"></td>
