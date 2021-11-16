@@ -74,6 +74,7 @@ public class MembersController {
         List<PartyMember> partyMembers = memberToDisplay.getPartyMembers();
         List<PartyMember> upcomingParties = new ArrayList<>();
         List<PartyMember> pastParties = new ArrayList<>();
+        List<Party> partiesCreated = memberToDisplay.getParty();
 
         //checks & orders parties if they are upcoming or past parties
         Date date = new Date();
@@ -90,9 +91,13 @@ public class MembersController {
             }
         }
 
+        System.out.println(memberToDisplay.getParty());
+        System.out.println(memberToDisplay.getParty().size());
+
         model.addAttribute("owner", memberToDisplay);
         model.addAttribute("upcomingParties", upcomingParties);
         model.addAttribute("pastParties", pastParties);
+        model.addAttribute("partiesCreated", partiesCreated);
 
         return "member/personalProfile";
     }
