@@ -141,9 +141,13 @@
                     <a th:href="${url}" class="customURL">RSVP Here</a>
                 </div>
             </div>
+<<<<<<< HEAD
+<div class="container">
+=======
 
             <br>
 
+>>>>>>> 9dea1800104fb3f4f2d0f2d165dab37eeccbf2e0
             <div class="container-fluid align-center bg-transparent">
                 <div class="row justify-content-center">
                     <div class="col-sm-6 bg-transparent">
@@ -154,7 +158,7 @@
                                 <form class="form-inline" th:action="@{|/parties/${party.urlKey}|}" th:method="post">
                                     <div id="additionalEmails">
                                         <div class="form-group mb-2">
-                                            <label for="email[]" class="sr-only">Email Address:</label>
+                                            <label for="email[]">Email Address:</label>
                                             <input type="email" name="email[]" id="email[]">
                                         </div>
                                     </div>
@@ -168,9 +172,10 @@
                     </div>
                 </div>
             </div>
+</div>
 
             <br>
-          
+
             <div class="row d-flex justify-content-center">
                 <div class="col text-end">
                     <a th:href="@{|/parties/edit/${party.urlKey}|}" class="btn btn-dark" style="background-color: #ce5ece">Edit Party</a>
