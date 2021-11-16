@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
-
+<head>
 <meta charset="UTF-8"/>
 <title layout:fragment="title">myParty | Sign Up</title>
-
+<link href="/success.css" rel="stylesheet"/>
+</head>
 <section layout:fragment="content">
     <div class="container">
         <div class="d-flex justify-content-center">
@@ -11,13 +12,13 @@
 
                 <div class="row">
                     <div class="col">
-                        <div class="p-2 bd-highlight"><h1>Create an account</h1></div>
+                        <div class="p-2 bd-highlight"><h1 class="neonText">Create an account</h1></div>
                     </div>
                 </div>
 
                 <form id="form-to-check" th:action="@{/sign-up}" method="POST" th:object="${member}">
                     <div class="row">
-                        <div class="col">
+                        <div class="col text-white">
 
                             <!--Username-->
                             <div class="row form-group justify-content-center align-items-center">
@@ -107,7 +108,7 @@
 
                 <div class="row">
                     <div class="col">
-                        <a href="/login">Already have an account? Log in here</a>
+                        <a class="text-info" href="/login">Already have an account? Log in here</a>
                     </div>
                 </div>
             </div>

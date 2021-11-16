@@ -6,10 +6,10 @@
     <link href="/success.css" rel="stylesheet"/>
     <title layout:fragment="title">myParty | Party Created!</title>
 
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js"
-            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<!--    <script src="https://code.jquery.com/jquery-2.2.4.min.js"-->
+<!--            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>-->
 
-    <script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
+<!--    <script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>-->
 
 </head>
 
@@ -17,45 +17,43 @@
 
 <section layout:fragment="content">
 
-    <a href="/profile" class="btn btn-dark">Return to Profile</a>
+    <a href="/profile" class="button glow-button">Return to Profile</a>
 
     <h1 id="partymessage">Let's Get This Party Started!!!</h1>
-    <form style=" display: flex;
-          flex-direction: column;
-          width: 50%;
-          align-content: space-around;
-          align-items: stretch;
-          justify-content: space-between;
-          flex-wrap: wrap;
-          margin: auto;
-          }">
-        <h2 th:text="${party.title} + ' has been successfully created!'"></h2>
-        <h3>Now let's invite people!</h3>
+    <form class="align-items-center text-white">
+        <h2 class="text-white" th:text="${party.title} + ' has been successfully created!'"></h2>
+        <h3 class="text-white">Now let's invite people!</h3>
         </div>
         <hr/>
     </form>
 
     <!--TODO: *NOTE* CANNOT HAVE A FORM WITHIN A FORM. CREATED A FORM WITH CLASS OF CUSTOMURL FOR THE COPY FUNCTION TO BE STYLED IN SUCCESS.CSS-->
-<form class="customURL">
-        <label for="customUrl">Custom Party Url:</label>
-        <input style="width: 575px" type="text" id="customUrl" th:value="${url}"/>
-        <button type="button" onclick="myFunction()">Copy url</button>
-</form>
+   <div
+    <label for="customUrl">Custom Party Url:</label>
+    <input type="text" style="width: 575px" id="customUrl" th:value="${url}"/>
+    <button type="button" onclick="myFunction()">Copy url</button>
+    </div>
 
 <!--    TODO: *NOTE* SEPARATE FORM WITH CLASS OF SENDINVITES TO BE STYLED IN SUCCESS.CSS -->
-        <form class="sendInvites" th:action="@{|/parties/${party.urlKey}|}" th:method="post">
-            <div id="additionalEmails">
-                <div class="form-group">
-                    <label for="email[]">Email Address:</label>
-                    <input type="email" name="email[]" id="email[]">
-                </div>
+    <form class="form-inline" th:action="@{|/parties/${party.urlKey}|}" th:method="post">
+        <div id="additionalEmails">
+            <div class="form-group mb-2">
+                <label for="email[]" class="sr-only">Email Address:</label>
+                <input type="email" name="email[]" id="email[]">
             </div>
-            <button id="addEmailButton">Add Another Email</button>
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+            <button type="button" id="addEmailButton" style="background-color: #ce5ece">Add Another Email</button>
             <input type="submit" class="btn btn-info" value="Send Invites!">
-        </form>
+        </div>
+    </form>
 
 
 
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
 
     <!--     Confetti Animation-->
     <script>
