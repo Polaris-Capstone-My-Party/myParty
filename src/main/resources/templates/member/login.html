@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8"/>
 <title layout:fragment="title">myParty | Login</title>
-<link rel="stylesheet" href="/static/stylesheet.css">
+    <link href="/success.css" rel="stylesheet"/>
 </head>
 
 
@@ -14,12 +14,12 @@
     <div class="d-flex justify-content-center">
 
         <div class="d-flex flex-column bd-highlight mb-3">
-            <div class="mx-auto" style="width: 125px;">
+            <div class="mx-auto" style="width: 100px;">
                 <img src="/img/MP.png" class="img-fluid" alt="small logo">
 
             </div>
 
-            <div class="p-2 bd-highlight"><h1>Log In</h1></div>
+            <div class="p-2 bd-highlight"><h1 class="neonText">Log In</h1></div>
 
             <div th:if="${param.error}">Invalid Username and Password.</div>
             <div th:if="${param.logout}">You have been logged out.</div>
@@ -28,23 +28,22 @@
 
                 <form th:action="@{/login}" method="post" class="form-signin">
 
-                    <div class="p-2 bd-highlight"><label for="username" autofocus="true">Username</label></div>
+                    <div class="p-2 bd-highlight" style="color: white"><label for="username" autofocus="true">Username</label></div>
                     <input id="username" name="username" type="text"/>
-                    <div class="p-2 bd-highlight"><label for="password">Password</label></div>
+                    <div class="p-2 bd-highlight" style="color: white"><label for="password">Password</label></div>
                     <input id="password" name="password" type="password"/>
                     <div class="p-2 bd-highlight"><input style="background-color: #ce5ece" type="submit" value="Log In"/></div>
                 </form>
-                <a th:href="@{/member/forgotpassword}">Forgot Password?</a>
+                <a class="text-info" th:href="@{/member/forgotpassword}">Forgot Password?</a>
 
             </div>
+        
+            <div class="p-2 bd-highlight"><a class="text-info" href="/sign-up">Don't have an account? Sign up here</a>
 
-            <div class="p-2 bd-highlight">
-                <a href="/sign-up">Don't have an account? Sign up here</a>
-            </div>
         </div>
     </div>
     </div>
 </section>
-<footer><p layout:fragment="custom-footer">This is actually working</p></footer>
+<footer layout:fragment="footer"></footer>
 
 </html>

@@ -10,7 +10,7 @@
 <section layout:fragment="content">
   <div class="row">
     <div class="col">
-      <a href="/profile" class="btn btn-dark">Return to Profile</a>
+      <a href="/profile" class="button glow-button">Return to Profile</a>
     </div>
   </div>
 
@@ -18,7 +18,7 @@
 
   <div class="container">
         <div class="hero-unit">
-            <h1>Edit Profile</h1>
+           <h1 class="neonText">Edit Profile</h1>
         </div>
 
         <form th:action="@{|/members/editProfile/${id}|}" th:method="post" style="display: flex;
@@ -28,7 +28,7 @@
                align-content: space-around;
                justify-content: space-around;">
           <div class="row">
-            <div class="col form-group">
+            <div class="col form-group" style="color: white">
               <label for="email">Email:</label>
               <input name="email" type="text" id="email" th:value="${email}"/>
             </div>
@@ -37,7 +37,7 @@
           <br>
 
           <div class="row">
-            <div class="col form-group">
+            <div class="col form-group" style="color: white">
               <label for="firstName">First Name:</label>
               <input name="firstName" type="text" id="firstName" th:value="${firstName}"/>
             </div>
@@ -46,7 +46,7 @@
           <br>
 
           <div class="row">
-            <div class="col form-group">
+            <div class="col form-group" style="color: white">
               <label for="lastName">Last Name:</label>
               <input name="lastName" id="lastName" type="text" th:value="${lastName}"/>
             </div>
@@ -55,7 +55,7 @@
           <br>
 
           <div class="row">
-            <div class="col form-group">
+            <div class="col form-group" style="color: white">
               <label for="phone">Phone:</label>
               <input name="phone" id="phone" type="number" th:value="${phone}"/>
             </div>
@@ -64,7 +64,7 @@
           <br>
 
           <div class="row">
-            <div class="col form-group">
+            <div class="col form-group" style="color: white">
               <label for="username">Username:</label>
               <input name="username" id="username" type="text" th:value="${username}"/>
             </div>
@@ -78,7 +78,6 @@
 
         </form>
         <br>
-
       </div>
 </section>
 

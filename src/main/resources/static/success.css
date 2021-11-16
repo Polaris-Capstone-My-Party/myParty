@@ -1,20 +1,22 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: #F5F5DC;
+    background-color: none;
 }
 
 #partymessage {
+    margin: 10px;
     font-size: 5rem;
     text-align: center;
-    height: 60vh;
-    line-height: 60vh;
+    vertical-align: center;
+    height: 20vh;
+    /*line-height: 60vh;*/
     color: #fcedd8;
-    background-color: #263238;
+    /*background-color: #131212;*/
     font-family: "Niconne", cursive;
     font-weight: 700;
-    text-shadow: 5px 5px 0 #ab2beb, 10px 10px 0 #efa032, 15px 15px 0 #46b59b,
-    20px 20px 0 #e86a57, 25px 25px 0 #020c10, 30px 30px 0 #c11aa5;
+    text-shadow: 5px 5px 0 #f158f1, 10px 10px 0 #6bdada, 15px 15px 0 #0e8f9b,
+    20px 20px 0 #f5f6f6, 25px 25px 0 #020c10, 30px 30px 0 #c11aa5;
 }
 
 h3, h2 {
@@ -22,8 +24,8 @@ h3, h2 {
     display: flex;
     justify-content: center;
     font-size: 1.17em;
-    margin-block-start: 1em;
-    margin-block-end: 1em;
+    /*margin-block-start: 1em;*/
+    /*margin-block-end: 1em;*/
     margin-inline-start: 0px;
     margin-inline-end: 0px;
     font-weight: bold;
@@ -78,14 +80,55 @@ h3, h2 {
 }
 
 .container {
-    background-image: url("img/confetti2pic.jpg");
-    background-size: 100%;
-    width: 100%;
-    height: 100%;
-    border: 7px solid;
+    /*background-image: url("/img/brickwall.png");*/
+    font-palette: light;
+    border: 4px solid;
     border-radius: 10% / 50%;
-    border-color: #ce5ece;
+    margin-inside: 5px;
+    border-color: #c11aa5;
+    box-shadow:
+            0 0 7px #fff,
+            0 0 10px #fff,
+            0 0 21px #fff,
+            0 0 42px #0e8f9b,
+            0 0 82px #0e8f9b,
+            0 0 92px #0e8f9b,
+            0 0 102px #0e8f9b,
+            0 0 151px #0e8f9b;
+}
 
+.neonText {
+    font-family: 'Warnes', cursive;
+    padding:5px;
+    font-size: 56px ;
+    margin: 10px;
+    color: #fff;
+    text-shadow:
+            0 0 7px #fff,
+            0 0 10px #fff,
+            0 0 21px #fff,
+            0 0 42px #0e8f9b,
+            0 0 82px #0e8f9b,
+            0 0 92px #0e8f9b,
+            0 0 102px #0e8f9b,
+            0 0 151px #0e8f9b;
+}
+
+
+
+.glow-button:hover {
+    color: rgba(255, 255, 255, 1);
+    box-shadow: 0 5px 15px rgb(193, 26, 165);
+}
+
+.button {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.8);
+    background: rgb(19, 18, 18);
+    padding: 15px 40px;
+    border-radius: 4px;
+    font-weight: normal;
+    transition: all 0.2s ease-in-out;
 }
 
 #addItemButton {
@@ -94,5 +137,15 @@ h3, h2 {
 }
 
 #createP {
-    background-color: #ce5ece;
+    background-color: #c11aa5;
+}
+
+footer {
+    padding: 0px;
+    margin: 20px;
+    position: absolute;
+}
+
+btn-link btn {
+    color: #0e8f9b;
 }

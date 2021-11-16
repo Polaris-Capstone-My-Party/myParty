@@ -5,21 +5,21 @@
     <title layout:fragment="title">myParty | View RSVP</title>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet'/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="/stylesheet.css" rel="stylesheet"/>
+    <link href="/success.css" rel="stylesheet"/>
 </head>
-
+  
 <section layout:fragment="content">
     <div class="container" id="container-fluid">
-        <div class="card align-center" style="display: flow-root">
-            <div class="card-header">
+        <div class="card align-center bg-transparent" style="display: flow-root">
+            <div class="neonText">
                 This is your RSVP
             </div>
 
             <!--Show Guest Information-->
-            <div class="card-body">
+            <div class="card-body bg-transparent text-white" style="font-size: 20px">
                 <div class="row">
                     <div class="col">
-                        <a th:href="'/rsvp/' + ${urlKey} + '/' + ${guestKey} + '/edit'" class="btn btn-dark" style="background-color: #ce5ece">Edit Your RSVP</a>
+                        <a class="button glow-button" th:href="'/rsvp/' + ${urlKey} + '/' + ${guestKey} + '/edit'">Edit Your RSVP</a>
                     </div>
                 </div>
 
@@ -44,24 +44,23 @@
                     <div class="col-1"></div>
                     <div class="col text-start">
                         <div th:text="'Additional Guests Bringing: ' + ${guest.additionalGuests}"></div>
-                    </div>
-                </div>
+                  </div>              
 
                 <!--Guest Item Information-->
                 <div class="row">
                     <div class="p-2 bd-highlight">
-                        <div class="container">
+                        <div class="container-fluid">
                             <div class="row justify-content-center">
                                 <div class="table-responsive">
-                                    <table id="example" class="table table-bordered">
-                                        <thead  style="background-color: whitesmoke">
+                                    <table id="example" class="table text-white">
+                                        <thead>
                                         <tr>
                                             <th>Item</th>
                                             <th>Remaining Quantity Requested</th>
                                             <th>Quantity You're Bringing</th>
                                         </tr>
                                         </thead>
-                                        <tbody  style="background-color: whitesmoke">
+                                        <tbody>
 
                                         <tr th:each="itemBringer : ${itemBringers}">
                                             <td th:text="${itemBringer.key.partyItem.item.name}"></td>
@@ -86,7 +85,7 @@
                         <div th:text="${location}" id="fullAddress"></div>
                     </div>
                     <div class="col">
-                        <div  class="border border-secondary" id='map' style='width: 100%; height: 40vh'></div>
+                        <div id='map' style='width: 100%; height: 40vh'></div>
                     </div>
                 </div>
             </div>
