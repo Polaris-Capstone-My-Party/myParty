@@ -2,42 +2,53 @@
 <head th:replace="partials/head :: head">
     <meta charset="UTF-8"/>
     <title>profile</title>
-    <style>
-        span {color: #ee6eb6;}
-
-        .d-flex {display: flex; justify-content: space-evenly;}
-    </style>
+    <!--    <style>-->
+    <!--        span {color: #ee6eb6;}-->
+    <!--    </style>-->
 </head>
 <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-    <a class="navbar-brand" href="/">
-        <img src="/img/MyParty.png" alt="" width="150" height="45" class="d-inline-block align-text-top"></a>
+        <a class="navbar-brand" href="/">
+            <img src="/img/MyParty.png" alt="" width="150" height="45" class="d-inline-block align-text-top"></a>
 
 
-    <div class="d-flex bd-highlight" id="navbarSupportedContent">
+        <div class="d-flex bd-highlight" id="navbarSupportedContent">
 
-        <ul class="navbar-nav mr-auto ">
-            <li class="nav-item">
-                <a type="button" class="btn btn-outline-info nav-link" href="/parties/create">CREATE A PARTY</a>
-            </li>
-        </ul>
-        <div class="d-flex">
-            <ul class="navbar-nav mr-auto">
+            <ul class="navbar-nav mr-auto ">
+                <li class="nav-item">
+                    <a type="button" class="btn btn-outline-info nav-link" href="/parties/create">CREATE A PARTY</a>
+                </li>
+            </ul>
 
-            <li class="nav-item">
-                <a class="nav-link" href="/profile"><i class="fas fa-user"></i></a>
-                <span th:text="${owner.username}"></span>
-            </li>
+            <div class="dropdown show">
+                <a class="btn dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-user"></i>
+                    <span th:text="${owner.username}"></span>
+                </a>
 
-            <li class="nav-item">
-                <form th:action="@{/logout}" th:method="post">
-                    <button class="btn-link btn" >Logout</button>
-                </form>
-            </li>
-        </ul>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="/profile">Profile</a>
+                    <a class="dropdown-item" th:action="@{/logout}" th:method="post">Logout</a>
+                </div>
             </div>
-
-    </div>
+<!--            <div class="d-flex">-->
+<!--                <ul class="navbar-nav mr-auto">-->
+<!--                    -->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" href="/profile">-->
+<!--                            -->
+<!--                            -->
+<!--                        </a>-->
+<!--                        -->
+<!--                    </li>-->
+<!--                    &lt;!&ndash;            <li class="nav-item">&ndash;&gt;-->
+<!--                    &lt;!&ndash;                <form th:action="@{/logout}" th:method="post">&ndash;&gt;-->
+<!--                    &lt;!&ndash;                    <button class="btn-link btn" >Logout</button>&ndash;&gt;-->
+<!--                    &lt;!&ndash;                </form>&ndash;&gt;-->
+<!--                    &lt;!&ndash;            </li>&ndash;&gt;-->
+<!--                </ul>-->
+<!--            </div>-->
+        </div>
     </div>
 </nav>
 </html>
