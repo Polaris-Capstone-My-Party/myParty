@@ -6,76 +6,95 @@
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet'/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/stylesheet.css" rel="stylesheet"/>
-
 </head>
-<body>
-    <section layout:fragment="content">
-        <div class="container" id="container-fluid">
 
+<section layout:fragment="content">
+    <div class="container" id="container-fluid">
         <div class="card align-center" style="display: flow-root">
             <div class="card-header">
                 This is your RSVP
             </div>
-            <a th:href="'/rsvp/' + ${urlKey} + '/' + ${guestKey} + '/edit'" class="btn btn-dark">Edit Your RSVP</a>
 
             <!--Show Guest Information-->
-            <div class="card-body" style="font-size: 22px">
-                <!--Basic Guest Information -->
-                <div class="d-flex justify-content-around">
-                    <div th:text="'Name: ' + ${guest.firstName} + ' ' + ${guest.lastName}"></div>
-                    <div th:text="'Email: ' + ${guest.email}"></div>
-                    <div th:text="'RSVP Status: ' + ${guest.rsvpStatus}"></div>
-                    <div th:text="'Additional Guests Bringing: ' + ${guest.additionalGuests}"></div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <a th:href="'/rsvp/' + ${urlKey} + '/' + ${guestKey} + '/edit'" class="btn btn-dark" style="background-color: #ce5ece">Edit Your RSVP</a>
+                    </div>
                 </div>
-            </div>
 
-            <!--Guest Item Information-->
-            <div class="p-2 bd-highlight">
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="table-responsive">
-                            <table id="example" class="table table-bordered">
-                                <thead>
-                                <tr>
-                                    <th>Item</th>
-                                    <th>Remaining Quantity Requested</th>
-                                    <th>Quantity You're Bringing</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                <br>
 
-                                <tr th:each="itemBringer : ${itemBringers}">
-                                    <td th:text="${itemBringer.key.partyItem.item.name}"></td>
-                                    <td th:text="${itemBringer.key.partyItem.quantityRequired}"></td>
-                                    <td th:text="${itemBringer.key.quantity}"></td>
-                                </tr>
-                                </tbody>
-                            </table>
+                <div class="row">
+                    <div class="col text-end">
+                        <div th:text="'Name: ' + ${guest.firstName} + ' ' + ${guest.lastName}"></div>
+                    </div>
+                    <div class="col-1"></div>
+                    <div class="col text-start">
+                        <div th:text="'Email: ' + ${guest.email}"></div>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="row">
+                    <div class="col text-end">
+                        <div th:text="'RSVP Status: ' + ${guest.rsvpStatus}"></div>
+                    </div>
+                    <div class="col-1"></div>
+                    <div class="col text-start">
+                        <div th:text="'Additional Guests Bringing: ' + ${guest.additionalGuests}"></div>
+                    </div>
+                </div>
+
+                <!--Guest Item Information-->
+                <div class="row">
+                    <div class="p-2 bd-highlight">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="table-responsive">
+                                    <table id="example" class="table table-bordered">
+                                        <thead  style="background-color: whitesmoke">
+                                        <tr>
+                                            <th>Item</th>
+                                            <th>Remaining Quantity Requested</th>
+                                            <th>Quantity You're Bringing</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody  style="background-color: whitesmoke">
+
+                                        <tr th:each="itemBringer : ${itemBringers}">
+                                            <td th:text="${itemBringer.key.partyItem.item.name}"></td>
+                                            <td th:text="${itemBringer.key.partyItem.quantityRequired}"></td>
+                                            <td th:text="${itemBringer.key.quantity}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!--Show The Party Info-->
-                <div class="card-body" style="font-size: 16px">
-                    <div class="d-flex justify-content-around" style="display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-content: stretch;
-    justify-content: center;
-    align-items: center;">
-                <div th:text="${party.title}"></div>
-                <div th:text="${party.description}"></div>
-                <div th:text="'Start: ' + ${startTime} "></div>
-                <div th:text="'End: ' + ${endTime} "></div>
-                <div th:text="'Organizer: ' + ${party.owner.firstName + ' ' + party.owner.lastName}"></div>
-                <div th:text="${location}" id="fullAddress"></div>
-                <div id='map' style='width: 25%; height: 40vh'></div>
-            </div>
 
-            <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+                <div class="row">
+                    <div class="col my-auto mx-auto">
+                        <div th:text="${party.title}"></div>
+                        <div th:text="${party.description}"></div>
+                        <div th:text="'Start: ' + ${startTime} "></div>
+                        <div th:text="'End: ' + ${endTime} "></div>
+                        <div th:text="'Organizer: ' + ${party.owner.firstName + ' ' + party.owner.lastName}"></div>
+                        <div th:text="${location}" id="fullAddress"></div>
+                    </div>
+                    <div class="col">
+                        <div  class="border border-secondary" id='map' style='width: 100%; height: 40vh'></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
             <!--Generate Map Information-->
-            <script
+            <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
             <script src="/keys.js"></script>
             <script src="/js/jquery.js"></script>
             <script src="/js/mapbox-geocoder-utils.js"></script>
@@ -98,12 +117,8 @@
 
                 });
             </script>
+</section>
 
-        </div>
-        </div>
-        </div>
-    </section>
-</body>
-    <footer><p layout:fragment="custom-footer">This is actually working</p></footer>
+<footer><p layout:fragment="custom-footer">This is actually working</p></footer>
 </html>
 
