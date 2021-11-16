@@ -20,11 +20,18 @@
                     <div class="text-white" th:text="${owner.username}"></div>
                     <div class="text-white" th:text="${owner.email}"></div>
                 </p>
-                <div class="d-flex justify-content-center">
-                    <a th:href="@{|/members/editProfile/${owner.id}|}" class="btn btn-dark" style="background-color: #ce5ece" >Edit Profile</a>
-                    <a th:replace="partials/deleteProfileModal :: modal"></a>
+
+                <div class="row d-flex justify-content-center">
+                    <div class="col text-end pr-1">
+                        <a th:href="@{|/members/editProfile/${owner.id}|}" class="btn btn-dark" style="background-color: #ce5ece" >Edit Profile</a>
+                    </div>
+                    <div class="col text-start pl-1">
+                        <a th:replace="partials/deleteProfileModal :: modal"></a>
+                    </div>
                 </div>
             </div>
+
+        <br>
 
             <div th:replace="partials/scripts :: scripts"></div>
 
