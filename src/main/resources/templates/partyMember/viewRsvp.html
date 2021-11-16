@@ -6,20 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title layout:fragment="title">myParty | View RSVP (Member)</title>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
-    <link href="/stylesheet.css" rel="stylesheet"/>
+    <link href="/success.css" rel="stylesheet"/>
 </head>
 
-<section layout:fragment="content">
-
-    <a href="/profile" class="btn btn-dark">Return to Profile</a>
-
+<section class="bg-transparent text-white" layout:fragment="content">
+<p>
+    <a href="/profile" class="button glow-button">Return to Profile</a>
+</p>
     <div class="container">
         <br>
-       <div class="card align-center" style="display: flow-root">
-           <div class="card-header">This is your RSVP</div>
-
+       <div class="card align-center bg-transparent text-white">
+           <h1 class="neonText">This is your Rsvp</h1>
            <!--Show RSVP Information-->
-           <div class="card-body">
+           <div class="card-body bg-transparent text-white">
                <div class="row">
                    <div class="col">
                        <a th:href="'/rsvp/' + ${urlKey} + '/member/' + ${partyMemberKey} + '/edit'" class="btn btn-dark" style="background-color: #ce5ece">Edit Your RSVP</a>
@@ -53,18 +52,18 @@
 
                <!--Item Information-->
                <div class="p-2 bd-highlight">
-                   <div class="container">
+<!--                   <div class="container">-->
                        <div class="row justify-content-center">
                            <div class="table-responsive">
-                               <table id="example" class="table table-bordered">
-                                   <thead style="background-color: whitesmoke">
+                               <table id="example" class="table text-white">
+                                   <thead>
                                    <tr>
                                        <th>Item to Bring </th>
                                        <th>Quantity Requested</th>
                                        <th>Quantity Remaining</th>
                                    </tr>
                                    </thead>
-                                   <tbody style="background-color: whitesmoke">
+                                   <tbody>
                                    <tr th:each="itemBringer : ${itemBringers}">
                                        <td th:text="${itemBringer.key.partyItem.item.name}"></td>
                                        <td th:text="${itemBringer.key.partyItem.quantityRequired}"></td>
