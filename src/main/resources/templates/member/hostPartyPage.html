@@ -9,10 +9,16 @@
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet'/>
 </head>
 
-<div class="container-fluid">
-    <section layout:fragment="content">
+<section layout:fragment="content">
+    <div class="container-fluid">
 
-        <a href="/profile" class="btn btn-dark">Return to Profile</a>
+        <div class="row">
+            <div class="col">
+                <a href="/profile" class="btn btn-dark">Return to Profile</a>
+            </div>
+        </div>
+
+        <br>
 
         <!--  Show Party Info-->
         <div class="card align-center">
@@ -21,41 +27,35 @@
             </div>
 
             <div class="card-body">
-                <h1 class="card-title" th:text="${party.title}"></h1>
-                <h3 class="card-text" th:text="${party.description}"></h3>
+                <div class="row">
+                    <div class="col">
+                        <label for="customUrl">Custom Party Url:</label>
+                        <input type="text" style="width: 575px" id="customUrl" th:value="${url}"/>
+                        <button type="button" onclick="myFunction()">Copy url</button>
+                    </div>
+                </div>
 
+                <br>
 
-
-                    <label for="customUrl">Custom Party Url:</label>
-                    <input type="text" style="width: 575px" id="customUrl" th:value="${url}"/>
-                    <button type="button" onclick="myFunction()">Copy url</button>
-            </div>
-
-            <!--     Copy url button-->
-            <script>
-                function myFunction() {
-                    var copyText = document.getElementById("customUrl").value;
-                    navigator.clipboard.writeText(copyText);
-                    var tooltip = document.getElementById("myTooltip");
-                    tooltip.innerHTML = "Copied: " + copyText.value;
-                }
-
-                function outFunc() {
-                    var tooltip = document.getElementById("myTooltip");
-                    tooltip.innerHTML = "Copy to clipboard";
-                }
-            </script>
-
-            <div class="d-flex justify-content-center">
-                <div class="d-flex flex-column bd-highlight mb-3">
-                    <div class="p-2 bd-highlight" th:text="'Start: ' + ${startTime}"></div>
-                    <div class="p-2 bd-highlight" th:text="'End: ' + ${endTime}"></div>
-                <div class="p-2 bd-highlight" th:text="${location}" id="fullAddress"></div>
-
-                    <!--Show Location on Map-->
-                    <div id='map' style='width: 100%; height: 40vh'></div>
+                <div class="row">
+                    <div class="col">
+                        <h1 class="card-title" th:text="${party.title}"></h1>
+                        <h3 class="card-text" th:text="${party.description}"></h3>
+                    </div>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col mx-auto my-auto">
+                    <div class="p-2 bd-highlight" th:text="'Start: ' + ${startTime}"></div>
+                    <div class="p-2 bd-highlight" th:text="'End: ' + ${endTime}"></div>
+                    <div class="p-2 bd-highlight" th:text="${location}" id="fullAddress"></div>
+                </div>
+                <div class="col">
+                    <div id='map' style='width: 90%; height: 40vh'></div>
+                </div>
+            </div>
+
             <div class="p-2 bd-highlight">
                 <div class="container">
                     <div class="row justify-content-center">
@@ -94,28 +94,20 @@
                                     <th>Email</th>
                                     <th>RSVP Status</th>
                                     <th>Additional Guests</th>
-                                    <!--              <th>Item Bringing</th>-->
-                                    <!--              <th>Quantity Bringing</th>-->
                                 </tr>
                                 </thead>
+
                                 <tbody>
                                 <tr th:each="guest : ${guests}">
                                     <td th:text="${guest.key.firstName} + ' ' + ${guest.key.lastName}">Name</td>
                                     <td th:text="${guest.key.email}">Email</td>
                                     <td th:text="${guest.key.rsvpStatus}">RSVP Status</td>
                                     <td th:text="${guest.key.additionalGuests}">Additional Guests</td>
-                                    <!--              <td th:block th:if="${itemBringer.quantity != 0}"-->
-                                    <!--              th:text="'Item Bringing: ' + ${itemBringer.partyItem.item.name}"-->
-                                    <!--              th:text="'Quantity Bringing: ' + ${itemBringer.quantity}"></td>-->
-                                </tr>
                                 <tr th:each="partyMember : ${partyMembers}">
                                     <td th:text="${partyMember.key.member.firstName} + ' ' + ${partyMember.key.member.lastName}">Name</td>
                                     <td th:text="${partyMember.key.member.email}">Email</td>
                                     <td th:text="${partyMember.key.rsvpStatus}">RSVP Status</td>
                                     <td th:text="${partyMember.key.additionalGuests}">Additional Guests</td>
-                                    <!--              <td th:block th:if="${itemBringer.quantity != 0}"-->
-                                    <!--              th:text="'Item Bringing: ' + ${itemBringer.partyItem.item.name}"-->
-                                    <!--              th:text="'Quantity Bringing: ' + ${itemBringer.quantity}"></td>-->
                                 </tr>
                                 </tbody>
                             </table>
@@ -123,12 +115,14 @@
                     </div>
                 </div>
             </div>
+
             <p>
                 <button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#collapseExample"
                         aria-expanded="false" aria-controls="collapseExample">
                     Preview Email Invitation
                 </button>
             </p>
+
             <div class="collapse" id="collapseExample">
                 <div class="card card-body">
                     <img src="/img/myPartyDark.png" alt="my party dark logo" height="45px" width="150px">
@@ -165,68 +159,90 @@
                                         <input type="submit" class="btn btn-info" value="Send Invites!">
                                     </div>
                                 </form>
-                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <br>
           
-            <div class="d-flex justify-content-center">
-            <a th:href="@{|/parties/edit/${party.urlKey}|}" class="btn btn-dark" style="background-color: #ce5ece">Edit Party</a>
-                <a th:replace="partials/modalsUpdates :: modal" style="background-color: #c11a2b"></a>
+            <div class="row d-flex justify-content-center">
+                <div class="col text-end">
+                    <a th:href="@{|/parties/edit/${party.urlKey}|}" class="btn btn-dark" style="background-color: #ce5ece">Edit Party</a>
+                </div>
+                <div class="col text-start">
+                    <a th:replace="partials/modalsUpdates :: modal"></a>
+                </div>
             </div>
+
+            <br>
 
             <div th:replace="partials/scripts :: scripts"></div>
 
-            <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
-
-            <!--Generate Map Information -->
-            <script src="/keys.js"></script>
-            <script src="/js/jquery.js"></script>
-            <script src="/js/mapbox-geocoder-utils.js"></script>
-            <script>
-                const address = $("#fullAddress").html();
-
-                geocode(address, mapboxApiKey).then(function (result) {
-                    mapboxgl.accessToken = mapboxApiKey;
-
-                    var map = new mapboxgl.Map({
-                        container: 'map',
-                        style: 'mapbox://styles/mapbox/streets-v9',
-                        zoom: 15,
-                        center: (result)
-                    });
-
-                    var marker = new mapboxgl.Marker({
-                        draggable: true
-                    }).setLngLat(result).addTo(map);
-
-
-                });
-            </script>
-
-<!--            SEND ADDITIONAL EMAILS SCRIPT-->
-            <script>
-                window.onload = (function () {
-                    const additionalEmail = document.getElementById('addEmailButton');
-
-                    const emailForm = `<div class="form-group">
-                  <label for="email[]">Email Address:</label>
-                  <input type="email" name="email[]" id="email[]">
-                </div>`
-
-
-                    additionalEmail.addEventListener('click', function (event) {
-                        event.preventDefault();
-
-                        const yeahBaby = document.getElementById('additionalEmails');
-                        let newEmail = document.createElement("div");
-                        newEmail.innerHTML = emailForm;
-                        yeahBaby.appendChild(newEmail);
-                    });
-                })
-            </script>
         </div>
-    </section>
-</div>
+    </div>
+
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+
+    <!--Copy url button-->
+    <script>
+        function myFunction() {
+            var copyText = document.getElementById("customUrl").value;
+            navigator.clipboard.writeText(copyText);
+            var tooltip = document.getElementById("myTooltip");
+            tooltip.innerHTML = "Copied: " + copyText.value;
+        }
+
+        function outFunc() {
+            var tooltip = document.getElementById("myTooltip");
+            tooltip.innerHTML = "Copy to clipboard";
+        }
+    </script>
+
+    <!--Generate Map Information -->
+    <script src="/keys.js"></script>
+    <script src="/js/jquery.js"></script>
+    <script src="/js/mapbox-geocoder-utils.js"></script>
+    <script>
+        const address = $("#fullAddress").html();
+
+        geocode(address, mapboxApiKey).then(function (result) {
+            mapboxgl.accessToken = mapboxApiKey;
+
+            var map = new mapboxgl.Map({
+                container: 'map',
+                style: 'mapbox://styles/mapbox/streets-v9',
+                zoom: 15,
+                center: (result)
+            });
+
+            var marker = new mapboxgl.Marker({
+                draggable: true
+            }).setLngLat(result).addTo(map);
+
+
+        });
+    </script>
+
+    <!--SEND ADDITIONAL EMAILS SCRIPT-->
+    <script>
+        window.onload = (function () {
+            const additionalEmail = document.getElementById('addEmailButton');
+             const emailForm = `<div class="form-group">
+                 <label for="email[]">Email Address:</label>
+                 <input type="email" name="email[]" id="email[]">
+               </div>`
+
+
+            additionalEmail.addEventListener('click', function (event) {
+                event.preventDefault();
+                 const yeahBaby = document.getElementById('additionalEmails');
+                let newEmail = document.createElement("div");
+                newEmail.innerHTML = emailForm;
+                yeahBaby.appendChild(newEmail);
+            });
+        })
+    </script>
+</section>
 </html>
